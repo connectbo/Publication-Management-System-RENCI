@@ -1,6 +1,6 @@
 # Project Title
 
-One Paragraph of project description
+RENCI Publication Management System
 
 ## Getting Started
 
@@ -8,11 +8,8 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-What things you need to install the software and how to install them
+Need Npm installed
 
-```
-Give examples
-```
 
 ### Installing
 
@@ -21,13 +18,14 @@ A step by step series of examples that tell you how to get a development env run
 Say what the step will be
 
 ```
-Show the corresponding commands
+Npm Install
 ```
-
-And repeat
-
+Use both commands to get React Frontend and Server Running.
 ```
-until complete
+Npm run client
+```
+```
+Npm run server
 ```
 
 End with an example of getting some data out of the system or using it for a little demo
