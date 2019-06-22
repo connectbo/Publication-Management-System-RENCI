@@ -1,6 +1,6 @@
-# Project Title
+# RENCI Publication Management System
 
-RENCI Publication Management System
+A redesigned publication management for RENCI.
 
 ## Getting Started
 
@@ -28,8 +28,6 @@ Npm run client
 Npm run server
 ```
 
-End with an example of getting some data out of the system or using it for a little demo
-
 ## Deployment
 
 Add additional notes about how to deploy this on a live system
@@ -43,4 +41,4 @@ Add additional notes about how to deploy this on a live system
 
 ## Author
 
-* **Bo Zhou** - link portfolio?
+* **Bo Zhou** - www.connectbo.com

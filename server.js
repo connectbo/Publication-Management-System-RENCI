@@ -22,7 +22,7 @@ router.get('/reference/:id/:id2/save=yes', function (req, Res, next) {
         }
         else {
             newData = JSON.parse(JSON.stringify(newData));
-            newData["status"] = 'Stored in RENCI Database';
+            newData["status"] = 'Stored in RENCI Database'; 
             Res.send(newData);
         }
     });
