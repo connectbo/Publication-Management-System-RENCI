@@ -13,13 +13,12 @@ Need Npm installed
 
 ### Installing
 
-A step by step series of examples that tell you how to get a development env running. This is hopefully only a few steps and easy to understand.
-
-Say what the step will be
-
+First use
 ```
 Npm Install
 ```
+to install all dependecies that are required for this project.
+
 Use both commands to get React Frontend and Server Running.
 ```
 Npm run client
