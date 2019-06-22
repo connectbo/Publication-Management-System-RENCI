@@ -13,8 +13,19 @@ connectDB();
 const publication_schema = mongoose.Schema({ Title: Array, Authors: Array, DOI: String, Type: String });
 const publication_model = mongoose.model('Publication', publication_schema)
 
+let newData;
+
 router.get('/reference/:id/:id2/save=yes', function (req, Res, next) {
-    
+    newData.save(function (err) {
+        if (err) {
+            throw err;
+        }
+        else {
+            newData = JSON.parse(JSON.stringify(newData));
+            newData["status"] = 'Stored in RENCI Database';
+            Res.send(newData);
+        }
+    });
 })
 
 router.get('/reference/:id/:id2', function (req, Res, next) {
@@ -42,17 +53,7 @@ router.get('/reference/:id/:id2', function (req, Res, next) {
                 result['status'] = 'Found 1 matching result from Crossref API';
                 result['save'] = '0';
                 Res.send(result);
-
-                // const newData = new publication_model({ Title: parsedData['title'], Authors: fullnameAuthors, DOI: parsedData['DOI'], Type: parsedData['type'] })
-                // newData.save(function (err) {
-                //     if (err) {
-                //         throw err;
-                //     }
-                //     else {
-                //         console.log('Publications added to MongoDB!');
-                //         Res.send(newData);
-                //     }
-                // });
+                newData = new publication_model({ Title: parsedData['title'], Authors: fullnameAuthors, DOI: parsedData['DOI'], Type: parsedData['type'] })
             })
         }
     });

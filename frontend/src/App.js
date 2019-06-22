@@ -50,9 +50,6 @@ function App() {
   const [result, setResultState] = useState('');
   const [authorString, setAuthorStringState] = useState('');
 
-  let isLoading = false;
-  //const [authorArrayStringify, setAuthorState] = useState('');
-
   const handleChange = event => {
     setrefState(event.target.value);
   }
@@ -63,14 +60,16 @@ function App() {
       .then(res => res.json())
       .then(data => {
         setResultState(data);
-        isLoading = true;
         setAuthorStringState(data.Authors.join(', '));
       })
   }
 
   const savePub = event => {
     fetch(`http://localhost:5000/reference/${ref}/save=yes`)
-    .then(res => console.log(res));
+    .then(res => res.json())
+    .then(data => {
+      setResultState(data);
+    });
   }
 
   return (
@@ -100,7 +99,7 @@ function App() {
             <Typography className={classes.body}><strong>Type: </strong> {result.Type}</Typography>
           </CardContent>
           <CardActions>
-          {result.save ? <Button onClick="savePub" size="small" color="primary">Save it</Button> : null}
+          {result.save ? <Button onClick={savePub} size="small" color="secondary">Save it</Button> : null}
           </CardActions>
         </Card>
       </Container>
