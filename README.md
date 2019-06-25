@@ -31,11 +31,11 @@ Npm run server
 
 ## Built With
 
-- Node: [Node](https://nodejs.org/) - The web framework used
-- Express: [https://expressjs.com/](https://expressjs.com/)
-- React: [https://reactjs.org/](https://reactjs.org/)
-- Material UI: [https://material-ui.com/](https://material-ui.com/)
-- MongoDB: [https://www.mongodb.com/](https://www.mongodb.com/)
+- Node: [Node](https://nodejs.org/) - The backend language used
+- Express: [https://expressjs.com/](https://expressjs.com/) - The NodeJS framework used
+- React: [https://reactjs.org/](https://reactjs.org/) - Reactive frontend framework built by Facebook
+- Material UI: [https://material-ui.com/](https://material-ui.com/) - Material Design used
+- MongoDB: [https://www.mongodb.com/](https://www.mongodb.com/) - NoSQL Database connected
 
 ## Author
 
