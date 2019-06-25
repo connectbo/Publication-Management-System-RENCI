@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Card from '@material-ui/core/Card';
@@ -22,11 +23,13 @@ const useStyles = makeStyles({
 function Home() {
     const classes = useStyles();
     const [pubs, setPubState] = useState('');
+    const [status, setStatus] = useState('');
 
     const getPubs = async () => {
         const PubResult = await fetch(`http://localhost:5000`)
             .then(res => res.json());
         setPubState(PubResult);
+        setStatus('Showing results in RENCI Database');
     }
 
     useEffect(getPubs, []);
@@ -35,18 +38,24 @@ function Home() {
     Object.keys(pubs).forEach(function (key) {
         pubArray.push(pubs[key]);
     })
-    console.log(pubs);
-    console.log(typeof pubs);
+
+    const searchbyType = async (event, type) => {
+        const PubResult = await fetch(`http://localhost:5000/reference/type/${type}`)
+            .then(res => res.json());
+        setPubState(PubResult);
+        setStatus('Filtered by '+type);
+    } 
 
     return (
         <Container>
+            <Typography className={classes.body}><strong>{status}</strong> </Typography>
             {
                 pubArray.map(pub => <Card className={classes.card}>
                     <CardContent>
                         <Typography className={classes.body}><strong>Title: </strong> {pub.Title}</Typography>
                         <Typography className={classes.body}><strong>DOI: </strong>{pub.DOI}</Typography>
                         <Typography className={classes.body}><strong>Author(s): </strong>{pub.Authors.join(", ")}</Typography>
-                        <Typography className={classes.body}><strong>Type: </strong> {pub.Type}</Typography>
+                        <Typography className={classes.body}><strong>Type: </strong> <Link onClick={(e) => {searchbyType(e,pub.Type)}}> {pub.Type}</Link> </Typography>
                     </CardContent>
                 </Card>)
             }

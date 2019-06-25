@@ -15,6 +15,20 @@ const publication_model = mongoose.model('Publication', publication_schema)
 
 let newData;
 
+router.get('/reference/type/:type', function (req, res, next) {
+    const _TYPE = req.params.type;
+    publication_model.find({ Type: _TYPE }, function (err, publication){
+        if(err){
+            console.log(err);
+            throw err;
+        }
+        else{
+            byType = JSON.parse(JSON.stringify(publication));
+            res.send(byType);
+        }
+    });
+})
+
 router.get('/reference/:id/:id2/save=yes', function (req, Res, next) {
     newData.save(function (err) {
         if (err) {
