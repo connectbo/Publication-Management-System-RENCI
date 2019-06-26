@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+  backend:
+    container_name: express
+    build:
+      context: ./backend/
+      dockerfile: Dockerfile
+    volumes:
+      - ./backend:/usr/src/app
+      - /usr/src/app/node_modules/
+    ports:
+      - "5000:5000"
+
+  frontend:
+    container_name: frontend
+    build:
+      context: ./frontend/
+      dockerfile: Dockerfile
+    volumes:
+      - ./frontend:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - "3000:3000"
