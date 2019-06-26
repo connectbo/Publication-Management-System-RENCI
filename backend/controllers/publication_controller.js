@@ -52,10 +52,16 @@ exports.getSave = function (req, Res){
         for (i = 0; i < parsedAuthors.length; i++) {
             fullnameAuthors.push(parsedAuthors[i]['given'] + " " + parsedAuthors[i]['family']);
         }
-        let result = {
-            'Title': parsedData['title'], 'Authors': fullnameAuthors, 'DOI': parsedData['DOI'], 'Type': parsedData['type'], "status": 'Stored in RENCI Database' 
-        };
-        Res.send(result);
+        const saveResult = new Publication({
+            'Title': parsedData['title'], 'Authors': fullnameAuthors, 'DOI': parsedData['DOI'], 'Type': parsedData['type'] 
+        });
+        saveResult.save(function (err){
+            if (err) throw err;
+        });
+        const renderResult = {
+            'Title': parsedData['title'], 'Authors': fullnameAuthors, 'DOI': parsedData['DOI'], 'Type': parsedData['type'], 'status' : "Stored in RENCI Database"
+        }
+        Res.send(renderResult);
     });
 }
 

@@ -6,11 +6,9 @@ const cors = require('cors');
 const PubRouter = require('./routes/publication_router');
 
 connectDB();
-
 app.use(cors());
 
 app.use('/', PubRouter);
-
 
 const API_PORT = process.env.API_PORT || 5000;
 
