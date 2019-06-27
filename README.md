@@ -40,6 +40,7 @@ docker-compose up
 
 ## Strucuture
 
+```
 .
 ├── README.md
 ├── backend                                                 ## Express Backend Server
@@ -80,6 +81,7 @@ docker-compose up
         ├── index.js
         ├── logo.svg
         └── serviceWorker.js
+```
 
 ## Built With
 
