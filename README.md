@@ -37,7 +37,7 @@ https://hub.docker.com/editions/community/docker-ce-desktop-mac
 ```
 
 ### Usage
-After installing you can easily get project setup and running by using Docker-Compose. By this, you will only need one line command to get it running.
+After installing you can easily get project setup and running by using Docker-Compose. By this, you will only need one line command to get two services(frontend, backend) running.
 
 Change to your the cloned directory and then use
 
