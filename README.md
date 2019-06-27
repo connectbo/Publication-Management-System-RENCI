@@ -6,7 +6,7 @@ A redesigned publication management for RENCI. MERN Stack has been used in this 
 
 ### Prerequisites
 
-Before using the protoype version, you need to install.
+Before using the protoype version, you need to install npm and docker.
 ```
 npm install npm@latest -g
 ```
