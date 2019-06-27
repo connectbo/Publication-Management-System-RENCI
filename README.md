@@ -31,14 +31,21 @@ npm install npm@latest -g
 ```
 
 #### Notes for Mac User
-    If you are a Mac user, you might need to install Docker Desktop, which is available at https://hub.docker.com/editions/community/docker-ce-desktop-mac
+If you are a Mac user, you might need to install Docker Desktop, which is available at
+```
+https://hub.docker.com/editions/community/docker-ce-desktop-mac
+```
 
 ### Usage
 After installing you can easily get project setup and running by using Docker-Compose. By this, you will only need one line command to get it running.
 
+Change to your the cloned directory and then use
+
 ```
 docker-compose up
 ```
+
+If both frontend and backend are compiled successfully, you should be able to see the system running Port 3000 on your localhost along with the server running at Port 5000.
 
 
 ## Structure
