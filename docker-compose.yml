@@ -9,8 +9,10 @@ services:
     volumes:
       - ./backend:/usr/src/app
       - /usr/src/app/node_modules/
+    environment:
+      - $API_PORT={API_PORT}
     ports:
-      - "5000:5000"
+      - "$API_PORT:$API_PORT"
 
   frontend:
     container_name: frontend
