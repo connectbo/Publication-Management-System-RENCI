@@ -1,7 +1,6 @@
 const Publication = require('../models/publication/schema');
 const request = require('request');
 
-let newData;
 
 exports.getAll = function (req, res) {
     return Publication.find({}, function (err, pubs) {
@@ -31,18 +30,17 @@ exports.getOne = function (req, Res) {
                     fullnameAuthors.push(parsedAuthors[i]['given'] + " " + parsedAuthors[i]['family']);
                 }
                 let result = {
-                    Title: parsedData['title'], Authors: fullnameAuthors, DOI: parsedData['DOI'], Type: parsedData['type']
+                    Title: parsedData['title'], Authors: fullnameAuthors, DOI: parsedData['DOI'], Type: parsedData['type'], Created_Date: parsedData['created']['date-time'].substring(0,10)
                 };
                 result['status'] = 'Found 1 matching result from Crossref API';
                 result['save'] = '0';
                 Res.send(result);
-                newData = new Publication({ Title: parsedData['title'], Authors: fullnameAuthors, DOI: parsedData['DOI'], Type: parsedData['type'] })
             })
         }
     });
 }
 
-exports.getSave = function (req, Res){
+exports.getSave = function (req, Res) {
     const _DOI = req.params.id + "/" + req.params.id2;
     const apiUrl = 'https://api.crossref.org/v1/works/' + _DOI;
     request.get(apiUrl, function (error, res, body) {
@@ -53,26 +51,26 @@ exports.getSave = function (req, Res){
             fullnameAuthors.push(parsedAuthors[i]['given'] + " " + parsedAuthors[i]['family']);
         }
         const saveResult = new Publication({
-            'Title': parsedData['title'], 'Authors': fullnameAuthors, 'DOI': parsedData['DOI'], 'Type': parsedData['type'] 
+            'Title': parsedData['title'], 'Authors': fullnameAuthors, 'DOI': parsedData['DOI'], 'Type': parsedData['type'], Created_Date: parsedData['created']['date-time'].substring(0,10)
         });
-        saveResult.save(function (err){
+        saveResult.save(function (err) {
             if (err) throw err;
         });
         const renderResult = {
-            'Title': parsedData['title'], 'Authors': fullnameAuthors, 'DOI': parsedData['DOI'], 'Type': parsedData['type'], 'status' : "Stored in RENCI Database"
+            'Title': parsedData['title'], 'Authors': fullnameAuthors, 'DOI': parsedData['DOI'], 'Type': parsedData['type'], 'status': "Stored in RENCI Database", 'Created_Date': parsedData['created']['date-time'].substring(0,10)
         }
         Res.send(renderResult);
     });
 }
 
-exports.sortbyType = function (req, res){
-    const _TYPE = req.params.type;  
-    Publication.find({ Type: _TYPE }, function (err, publication){
-        if(err){
+exports.sortbyType = function (req, res) {
+    const _TYPE = req.params.type;
+    Publication.find({ Type: _TYPE }, function (err, publication) {
+        if (err) {
             console.log(err);
             throw err;
         }
-        else{
+        else {
             res.send(publication);
         }
     });
