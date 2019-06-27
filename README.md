@@ -47,6 +47,13 @@ docker-compose up
 
 If both frontend and backend are compiled successfully, you should be able to see the system running Port 3000 on your localhost along with the server running at Port 5000.
 
+## Functionality
+
+The homepage would list all articles already stored in RENCI's database. For those articles that are not retrieved and stored yet, you could use search and add function to store them.
+
+### Search with DOI
+Use the SEARCH button on the top right and enter in DOI you want to search for. The system would return an result according to this DOI. If an article is found from CrossRef API and not stored in RENCI database yet, you would have a chance to store it into our Database by clicking the 'SAVE IT' button.
+
 
 ## Structure
 
