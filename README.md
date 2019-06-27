@@ -20,8 +20,11 @@ sudo curl -L "https://github.com/docker/compose/releases/download/1.24.0/docker-
 ```
 
 ```
+
+Set the permissions to make the binary executable:
 sudo chmod +x /usr/local/bin/docker-compose
 ```
+
 
 ```
 npm install npm@latest -g
