@@ -41,7 +41,7 @@ docker-compose up
 ```
 
 
-## Strucuture
+## Structure
 
 ```
 .
@@ -51,11 +51,11 @@ docker-compose up
 │   ├── config
 │   │   ├── db.js                                           ## Connection with MongoDB
 │   │   └── default.json
-│   ├── controllers                                         ## Controllers for various function
+│   ├── controllers                                         
 │   │   └── publication_controller.js
 │   ├── models
 │   │   └── publication
-│   │       └── schema.js                                   ## Publication Schema and Model
+│   │       └── schema.js                                  
 │   ├── package-lock.json
 │   ├── package.json
 │   ├── routes
@@ -73,7 +73,7 @@ docker-compose up
     └── src
         ├── App.js
         ├── App.test.js
-        ├── components                                      ## Separate Components
+        ├── components                                      
         │   ├── Header.js
         │   ├── Home.js
         │   └── Search.js
@@ -88,11 +88,11 @@ docker-compose up
 
 ## Built With
 
-- Node: [Node](https://nodejs.org/) - The backend language used
-- Express: [https://expressjs.com/](https://expressjs.com/) - The NodeJS framework used
-- React: [https://reactjs.org/](https://reactjs.org/) - Reactive frontend framework built by Facebook
-- Material UI: [https://material-ui.com/](https://material-ui.com/) - Material Design used
-- MongoDB: [https://www.mongodb.com/](https://www.mongodb.com/) - NoSQL Database connected
+- [Node](https://nodejs.org/) - The backend language used
+- [Express](https://expressjs.com/) - The NodeJS framework used
+- [React](https://reactjs.org/) - Reactive frontend framework built by Facebook
+- [Material UI](https://material-ui.com/) - Material Design used
+- [MongoDB](https://www.mongodb.com/) - NoSQL Database connected
 
 ## Author
 
