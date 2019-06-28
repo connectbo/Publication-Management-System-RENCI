@@ -33,7 +33,6 @@ exports.getOne = function (req, Res) {
                     Title: parsedData['title'], Authors: fullnameAuthors, DOI: parsedData['DOI'], Type: parsedData['type'], Created_Date: parsedData['created']['date-time'].substring(0,10)
                 };
                 result['status'] = 'Found 1 matching result from Crossref API';
-                result['save'] = '0';
                 Res.send(result);
             })
         }

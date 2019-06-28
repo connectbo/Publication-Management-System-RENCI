@@ -48,15 +48,6 @@ function Search() {
           setAuthorStringState(data.Authors.join(', '));
         })
     }
-  
-    const savePub = event => {
-      fetch(`http://localhost:5000/reference/${ref}/save=yes`)
-        .then(res => res.json())
-        .then(data => {
-          setResultState(data);
-        });
-    }
-  
     return (
       <div>
         <Container className={classes.root}>
@@ -74,9 +65,6 @@ function Search() {
               <Typography className={classes.body}><strong>Author(s): </strong>{authorString}</Typography>
               <Typography className={classes.body}><strong>Type: </strong> {result.Type}</Typography>
             </CardContent>
-            <CardActions>
-              {result.save ? <Button onClick={savePub} size="small" color="secondary">Save it</Button> : null}
-            </CardActions>
           </Card>
         </Container>
       </div>
