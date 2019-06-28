@@ -10,9 +10,10 @@ services:
       - ./backend:/usr/src/app
       - /usr/src/app/node_modules/
     environment:
-      - $API_PORT={API_PORT}
+      - API_PORT=${API_PORT}
+      - MONGO_URI=${MONGO_URI}
     ports:
-      - "$API_PORT:$API_PORT"
+      - $API_PORT:$API_PORT
 
   frontend:
     container_name: frontend
@@ -22,5 +23,7 @@ services:
     volumes:
       - ./frontend:/usr/src/app
       - /usr/src/app/node_modules
+    environment:
+      - REACT_APP_PORT=${REACT_APP_PORT}
     ports:
-      - "3000:3000"
+      - $REACT_APP_PORT:3000
