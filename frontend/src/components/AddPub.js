@@ -52,7 +52,7 @@ const useStyles = makeStyles({
         <div>
           <Container className={classes.root}>
             <Typography><strong>PubFinder</strong></Typography>
-            <InputBase className={classes.input} id="ref" type="text" placeholder="Enter DOI to start searching.." value={ref} onChange={handleChange}></InputBase>
+            <InputBase className={classes.input} id="ref" type="text" placeholder="Enter DOI to add Publications.." value={ref} onChange={handleChange}></InputBase>
             <Button className={classes.subButton} variant="contained" color="secondary" onClick={handleSubmit}>
               ADD </Button>
           </Container>
