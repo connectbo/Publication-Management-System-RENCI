@@ -24,9 +24,8 @@ function Home() {
     const classes = useStyles();
     const [pubs, setPubState] = useState('');
     const [status, setStatus] = useState('');
-
     const getPubs = async () => {
-        const PubResult = await fetch(`http://localhost:5000`)
+        const PubResult = await fetch(`http://localhost:5000/`)
             .then(res => res.json());
         setPubState(PubResult);
         setStatus('Showing results in RENCI Database');

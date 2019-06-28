@@ -1,5 +1,4 @@
 require('dotenv').config({ path: '/Users/Peter/Documents/GitHub/Publication-Management-System-RENCI/.env'});
-console.log(process.env.MONGO_URI);
 const mongoose = require('mongoose');
 const db = {
     mongoURI: process.env.MONGO_URI || 'localhost',
