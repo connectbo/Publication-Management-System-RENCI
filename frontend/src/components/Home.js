@@ -55,7 +55,7 @@ function Home() {
                         <Typography className={classes.body}><strong>DOI: </strong><a href={"https://dx.doi.org/"+pub.DOI}>{pub.DOI}</a></Typography>
                         <Typography className={classes.body}><strong>Author(s): </strong>{pub.Authors.join(", ")}</Typography>
                         <Typography className={classes.body}><strong>Created Date: </strong>{pub.Created_Date}</Typography>
-                        <Typography className={classes.body}><strong>Type: </strong> <Link onClick={(e) => {searchbyType(e,pub.Type)}}> {pub.Type}</Link> </Typography>
+                        <Typography className={classes.body}><strong>Type: </strong> <a href={"/search/type="+pub.Type} onClick={(e) => {searchbyType(e,pub.Type)}}> {pub.Type}</a> </Typography>
                     </CardContent>
                 </Card>)
             }
