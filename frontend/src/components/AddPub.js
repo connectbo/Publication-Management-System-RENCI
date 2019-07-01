@@ -5,7 +5,7 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import InputBase from '@material-ui/core/InputBase';
+import Input from '@material-ui/core/Input';
 
 const useStyles = makeStyles({
     body: {
@@ -52,7 +52,7 @@ const useStyles = makeStyles({
         <div>
           <Container className={classes.root}>
             <Typography><strong>PubFinder</strong></Typography>
-            <InputBase className={classes.input} id="ref" type="text" placeholder="Enter DOI to add Publications.." value={ref} onChange={handleChange}></InputBase>
+            <Input className={classes.input} id="ref" type="text" placeholder="Enter DOI to add Publications.." value={ref} onChange={handleChange}></Input>
             <Button className={classes.subButton} variant="contained" color="secondary" onClick={handleSubmit}>
               ADD </Button>
           </Container>
