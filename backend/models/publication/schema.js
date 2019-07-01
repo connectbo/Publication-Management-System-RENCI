@@ -9,4 +9,8 @@ const publication_schema = Schema({
     Created_Date: String
 });
 
+publication_schema.index({
+    '$**': 'text'
+});
+
 module.exports = mongoose.model('Publication', publication_schema);

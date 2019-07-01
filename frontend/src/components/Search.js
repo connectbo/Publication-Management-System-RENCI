@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
+import { BrowserRouter as Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import InputBase from '@material-ui/core/InputBase';
+import Input from '@material-ui/core/Input';
 
 const useStyles = makeStyles({
   body: {
@@ -23,51 +24,58 @@ const useStyles = makeStyles({
   },
   input: {
     marginLeft: 8,
-    flex: 1
   }
 });
 
+let pubArray = [];
+
 function Search() {
-    console.log("Search visited!");
-    const classes = useStyles();
-    const [ref, setrefState] = useState('');
-    const [result, setResultState] = useState('');
-    const [authorString, setAuthorStringState] = useState('');
-  
-    const handleChange = event => {
-      setrefState(event.target.value);
-    }
-  
-    const handleSubmit = event => {
-      event.preventDefault();
-      fetch(`http://localhost:5000/reference/${ref}`)
-        .then(res => res.json())
-        .then(data => {
-          setResultState(data);
-          setAuthorStringState(data.Authors.join(', '));
-        })
-    }
-    return (
-      <div>
-        <Container className={classes.root}>
-          <Typography><strong>PubFinder</strong></Typography>
-          <InputBase className={classes.input} id="ref" type="text" placeholder="Enter DOI to start searching.." value={ref} onChange={handleChange}></InputBase>
-          <Button className={classes.subButton} variant="contained" color="secondary" onClick={handleSubmit}>
-            Search </Button>
-        </Container>
-        <Typography className={classes.body}><strong>Search Result: </strong>{result.status}</Typography>
-        <Container>
-          <Card className={classes.card}>
-            <CardContent>
-              <Typography className={classes.body}><strong>Title: </strong> {result.Title}</Typography>
-              <Typography className={classes.body}><strong>DOI: </strong>{result.DOI}</Typography>
-              <Typography className={classes.body}><strong>Author(s): </strong>{authorString}</Typography>
-              <Typography className={classes.body}><strong>Type: </strong> {result.Type}</Typography>
-            </CardContent>
-          </Card>
-        </Container>
-      </div>
-    );
+  const classes = useStyles();
+  const [ref, setrefState] = useState('');
+  const [title, setTitleState] = useState('');
+  const [pubArray, setpubArrayState] = useState([]);
+  const [authorString, setAuthorStringState] = useState('');
+
+  const handlerefChange = event => {
+    setrefState(event.target.value);
   }
+
+  const handleTitleChange = event => {
+    setTitleState(event.target.value);
+  }
+
+  const handleSubmit = event => {
+    event.preventDefault();
+    fetch(`http://localhost:5000/search/title=${title}`)
+      .then(res => res.json())
+      .then(data => {
+        console.log(data);
+        setpubArrayState(data);
+      })
+  }
+  return (
+    <div>
+      <Container className={classes.root}>
+        <Typography><strong>DOI</strong></Typography><Input className={classes.input} id="ref" type="text" value={ref} onChange={handlerefChange}></Input>
+        <Typography><strong>Title</strong></Typography><Input className={classes.input} id="title" type="text" value={title} onChange={handleTitleChange}></Input>
+        <Button className={classes.subButton} variant="contained" color="secondary" onClick={handleSubmit}>
+          Search </Button>
+      </Container>
+      {/* <Typography className={classes.body}><strong>Search Result: </strong>{result.status}</Typography> */}
+      <Container>
+        {pubArray.map(pub => <Card className={classes.card}>
+          <CardContent>
+            <Typography className={classes.body}><strong>Title: </strong> {pub.Title}</Typography>
+            <Typography className={classes.body}><strong>DOI: </strong><a href={"https://dx.doi.org/" + pub.DOI}>{pub.DOI}</a></Typography>
+            <Typography className={classes.body}><strong>Author(s): </strong>{pub.Authors.join(", ")}</Typography>
+            <Typography className={classes.body}><strong>Created Date: </strong>{pub.Created_Date}</Typography>
+            <Typography className={classes.body}><strong>Type: </strong> </Typography>
+          </CardContent>
+        </Card>)
+        }
+      </Container>
+    </div>
+  );
+}
 
 export default Search;

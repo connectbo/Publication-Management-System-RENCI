@@ -2,6 +2,17 @@ const Publication = require('../models/publication/schema');
 const request = require('request');
 
 
+exports.searchTitle = function (req, res) {
+    Publication.find({$text: { $search: req.params.title }}) 
+        .exec(function (err, pubs) {
+        if (err) {
+            console.log(err);
+            throw (err);
+        }
+        res.send(pubs);
+        });
+}
+
 exports.getAll = function (req, res) {
     return Publication.find({}, function (err, pubs) {
         if (err) {
@@ -30,7 +41,7 @@ exports.getOne = function (req, Res) {
                     fullnameAuthors.push(parsedAuthors[i]['given'] + " " + parsedAuthors[i]['family']);
                 }
                 let result = {
-                    Title: parsedData['title'], Authors: fullnameAuthors, DOI: parsedData['DOI'], Type: parsedData['type'], Created_Date: parsedData['created']['date-time'].substring(0,10)
+                    Title: parsedData['title'], Authors: fullnameAuthors, DOI: parsedData['DOI'], Type: parsedData['type'], Created_Date: parsedData['created']['date-time'].substring(0, 10)
                 };
                 result['status'] = 'Found 1 matching result from Crossref API';
                 Res.send(result);
@@ -50,13 +61,13 @@ exports.getSave = function (req, Res) {
             fullnameAuthors.push(parsedAuthors[i]['given'] + " " + parsedAuthors[i]['family']);
         }
         const saveResult = new Publication({
-            'Title': parsedData['title'], 'Authors': fullnameAuthors, 'DOI': parsedData['DOI'], 'Type': parsedData['type'], Created_Date: parsedData['created']['date-time'].substring(0,10)
+            'Title': parsedData['title'], 'Authors': fullnameAuthors, 'DOI': parsedData['DOI'], 'Type': parsedData['type'], Created_Date: parsedData['created']['date-time'].substring(0, 10)
         });
         saveResult.save(function (err) {
             if (err) throw err;
         });
         const renderResult = {
-            'Title': parsedData['title'], 'Authors': fullnameAuthors, 'DOI': parsedData['DOI'], 'Type': parsedData['type'], 'status': "Stored in RENCI Database", 'Created_Date': parsedData['created']['date-time'].substring(0,10)
+            'Title': parsedData['title'], 'Authors': fullnameAuthors, 'DOI': parsedData['DOI'], 'Type': parsedData['type'], 'status': "Stored in RENCI Database", 'Created_Date': parsedData['created']['date-time'].substring(0, 10)
         }
         Res.send(renderResult);
     });
