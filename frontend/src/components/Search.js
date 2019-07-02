@@ -75,7 +75,7 @@ function Search() {
             <Typography className={classes.body}><strong>DOI: </strong><a href={"https://dx.doi.org/" + pub.DOI}>{pub.DOI}</a></Typography>
             <Typography className={classes.body}><strong>Author(s): </strong>{pub.Authors.join(", ")}</Typography>
             <Typography className={classes.body}><strong>Created Date: </strong>{pub.Created_Date}</Typography>
-            <Typography className={classes.body}><strong>Type: </strong>{pub.Created_Date}</Typography>
+            <Typography className={classes.body}><strong>Type: </strong>{pub.Type}</Typography>
           </CardContent>
         </Card>)
         }
