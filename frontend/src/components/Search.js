@@ -27,7 +27,6 @@ const useStyles = makeStyles({
   }
 });
 
-let pubArray = [];
 
 function Search() {
   const classes = useStyles();
@@ -35,7 +34,7 @@ function Search() {
   const [title, setTitleState] = useState('');
   const [author, setAuthorState] = useState('');
   const [pubArray, setpubArrayState] = useState([]);
-  const [authorString, setAuthorStringState] = useState('');
+  const [status, setStatusState] = useState('');
 
   const handlerefChange = event => {
     setrefState(event.target.value);
@@ -50,11 +49,11 @@ function Search() {
   }
 
   const handleSubmit = event => {
+    setStatusState('Searching by '+title+" "+author);
     event.preventDefault();
     fetch(`http://localhost:5000/search/title=${title}&&author=${author}`)
       .then(res => res.json())
       .then(data => {
-        console.log(data);
         setpubArrayState(data);
       })
   }
@@ -68,7 +67,7 @@ function Search() {
         <Button className={classes.subButton} variant="contained" color="secondary" onClick={handleSubmit}>
           Search </Button>
       </Container>
-      {/* <Typography className={classes.body}><strong>Search Result: </strong>{result.status}</Typography> */}
+      <Typography className={classes.body}><strong>{status}</strong></Typography>
       <Container>
         {pubArray.map(pub => <Card className={classes.card}>
           <CardContent>
@@ -76,7 +75,7 @@ function Search() {
             <Typography className={classes.body}><strong>DOI: </strong><a href={"https://dx.doi.org/" + pub.DOI}>{pub.DOI}</a></Typography>
             <Typography className={classes.body}><strong>Author(s): </strong>{pub.Authors.join(", ")}</Typography>
             <Typography className={classes.body}><strong>Created Date: </strong>{pub.Created_Date}</Typography>
-            <Typography className={classes.body}><strong>Type: </strong> </Typography>
+            <Typography className={classes.body}><strong>Type: </strong>{pub.Created_Date}</Typography>
           </CardContent>
         </Card>)
         }

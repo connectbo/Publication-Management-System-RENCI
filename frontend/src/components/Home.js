@@ -39,7 +39,7 @@ function Home() {
     })
 
     const searchbyType = async (event, type) => {
-        const PubResult = await fetch(`http://localhost:5000/reference/type/${type}`)
+        const PubResult = await fetch(`http://localhost:5000/search/type=${type}`)
             .then(res => res.json());
         setPubState(PubResult);
         setStatus('Filtered by '+type);

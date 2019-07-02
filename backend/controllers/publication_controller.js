@@ -2,6 +2,16 @@ const Publication = require('../models/publication/schema');
 const request = require('request');
 
 
+exports.searchTitleAuthor = function (req, res) {
+    Publication.find({ $text: { $search: req.params.title }, Authors: { $regex: req.params.author, $options: 'i' }},
+        function (err, pubs) {
+            if (err) {
+                console.log(err);
+                throw (err);
+            }
+            res.send(pubs)
+        });
+}
 exports.searchAuthor = function (req, res) {
     Publication.find({ Authors: { $regex: req.params.author, $options: 'i' }},
         function (err, pubs) {
@@ -9,7 +19,6 @@ exports.searchAuthor = function (req, res) {
                 console.log(err);
                 throw (err);
             }
-            console.log(pubs);
             res.send(pubs)
         });
 }
