@@ -33,6 +33,7 @@ function Search() {
   const classes = useStyles();
   const [ref, setrefState] = useState('');
   const [title, setTitleState] = useState('');
+  const [author, setAuthorState] = useState('');
   const [pubArray, setpubArrayState] = useState([]);
   const [authorString, setAuthorStringState] = useState('');
 
@@ -44,9 +45,13 @@ function Search() {
     setTitleState(event.target.value);
   }
 
+  const handleAuthorChange = event => {
+    setAuthorState(event.target.value);
+  }
+
   const handleSubmit = event => {
     event.preventDefault();
-    fetch(`http://localhost:5000/search/title=${title}`)
+    fetch(`http://localhost:5000/search/title=${title}&&author=${author}`)
       .then(res => res.json())
       .then(data => {
         console.log(data);
@@ -58,6 +63,8 @@ function Search() {
       <Container className={classes.root}>
         <Typography><strong>DOI</strong></Typography><Input className={classes.input} id="ref" type="text" value={ref} onChange={handlerefChange}></Input>
         <Typography><strong>Title</strong></Typography><Input className={classes.input} id="title" type="text" value={title} onChange={handleTitleChange}></Input>
+        <Typography><strong>Author</strong></Typography><Input className={classes.input} id="author" type="text" value={author} onChange={handleAuthorChange}></Input>
+        {/* <Typography><strong>Type</strong></Typography><Input className={classes.input} id="type" type="text" value={author} onChange={handleAuthorChange}></Input> */}
         <Button className={classes.subButton} variant="contained" color="secondary" onClick={handleSubmit}>
           Search </Button>
       </Container>

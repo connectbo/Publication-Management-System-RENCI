@@ -2,14 +2,28 @@ const Publication = require('../models/publication/schema');
 const request = require('request');
 
 
+exports.searchTA = function (req, res) {
+    Publication.find({ author: { $regex: 'Allan Porterfield', $options: 'i' }},
+        function (err, pubs) {
+            if (err) {
+                console.log(err);
+                throw (err);
+            }
+            console.log(pubs);
+            res.send(pubs)
+        });
+}
+
+//$text: { $search: req.params.title }, 
+
 exports.searchTitle = function (req, res) {
-    Publication.find({$text: { $search: req.params.title }}) 
+    Publication.find({ $text: { $search: req.params.title } })
         .exec(function (err, pubs) {
-        if (err) {
-            console.log(err);
-            throw (err);
-        }
-        res.send(pubs);
+            if (err) {
+                console.log(err);
+                throw (err);
+            }
+            res.send(pubs);
         });
 }
 

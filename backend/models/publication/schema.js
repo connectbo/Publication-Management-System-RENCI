@@ -10,7 +10,7 @@ const publication_schema = Schema({
 });
 
 publication_schema.index({
-    '$**': 'text'
+    '$title': 'text'
 });
 
 module.exports = mongoose.model('Publication', publication_schema);
