@@ -56,7 +56,7 @@ const useStyles = makeStyles({
             <Button className={classes.subButton} variant="contained" color="secondary" onClick={handleSubmit}>
               ADD </Button>
           </Container>
-          <Typography className={classes.body}><strong>Result: </strong>{result.status}</Typography>
+          <Typography className={classes.body}><strong>   Result :  </strong>{result.status}</Typography>
           <Container>
             <Card className={classes.card}>
               <CardContent>

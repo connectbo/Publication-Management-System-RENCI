@@ -13,6 +13,9 @@ const useStyles = makeStyles({
     fontSize: 18,
     padding: '8px 8px',
   },
+  card:{
+    margin: '10px 5px',
+  },
   subButton: {
     marginLeft: 10,
   },
@@ -75,7 +78,7 @@ function Search() {
             <Typography className={classes.body}><strong>DOI: </strong><a href={"https://dx.doi.org/" + pub.DOI}>{pub.DOI}</a></Typography>
             <Typography className={classes.body}><strong>Author(s): </strong>{pub.Authors.join(", ")}</Typography>
             <Typography className={classes.body}><strong>Created Date: </strong>{pub.Created_Date}</Typography>
-            <Typography className={classes.body}><strong>Type: </strong>{pub.Type}</Typography>
+            <Typography className={classes.body}><strong>Type: </strong>{pub.Type }</Typography>
           </CardContent>
         </Card>)
         }
