@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 import Header from './components/Header';
 import Home from './components/Home';
 import Search from './components/Search';
-import AddPub from './components/AddPub';
+import Add from './components/Add';
 
 function App() {
 
@@ -11,7 +11,7 @@ function App() {
       <Router>
           <Header/>
           <Route path="/search" component={Search} />
-          <Route path="/add" component={AddPub} />
+          <Route path="/add" component={Add} />
           <Route path="/" exact component={Home} />
       </Router> 
   );

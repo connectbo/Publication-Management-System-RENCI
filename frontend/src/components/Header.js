@@ -25,7 +25,7 @@ function Header() {
           </a>
                 <Button href="/" color="inherit">Home</Button>
                 <Button href="/search" color="inherit">Search</Button>
-                <Button href="/add" color="inherit">Add Pub</Button>
+                <Button href="/add" color="inherit">Add</Button>
             </Toolbar>
         </AppBar>
     )

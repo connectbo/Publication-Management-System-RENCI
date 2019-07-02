@@ -27,7 +27,7 @@ const useStyles = makeStyles({
     }
   });
   
-  function AddPub() {
+  function Add() {
       console.log("Add visited!");
       const classes = useStyles();
       const [ref, setrefState] = useState('');
@@ -71,4 +71,4 @@ const useStyles = makeStyles({
       );
     }
   
-  export default AddPub;
+  export default Add;
