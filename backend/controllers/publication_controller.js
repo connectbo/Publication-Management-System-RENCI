@@ -2,7 +2,7 @@ const Publication = require('../models/publication/schema');
 const request = require('request');
 
 
-exports.searchTA = function (req, res) {
+exports.searchAuthor = function (req, res) {
     Publication.find({ Authors: { $regex: req.params.author, $options: 'i' }},
         function (err, pubs) {
             if (err) {
