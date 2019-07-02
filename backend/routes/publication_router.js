@@ -13,7 +13,7 @@ PubRouter.param('author', function(request, response, next, author){
     next();
 })
 
-PubRouter.get('/search/title=:title&author=:author', PubController.searchTA);
+PubRouter.get('/search/author=:author', PubController.searchTA);
 PubRouter.get('/search/title=:title', PubController.searchTitle);
 PubRouter.get('/reference/type/:type', PubController.sortbyType);
 PubRouter.get('/reference/:id/:id2/save=yes', PubController.getSave);

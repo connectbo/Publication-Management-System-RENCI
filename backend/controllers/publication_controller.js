@@ -3,7 +3,7 @@ const request = require('request');
 
 
 exports.searchTA = function (req, res) {
-    Publication.find({ author: { $regex: 'Allan Porterfield', $options: 'i' }},
+    Publication.find({ Authors: { $regex: req.params.author, $options: 'i' }},
         function (err, pubs) {
             if (err) {
                 console.log(err);
