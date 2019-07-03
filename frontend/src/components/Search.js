@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Link } from 'react-router-dom';
+//import { BrowserRouter as Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Card from '@material-ui/core/Card';
@@ -7,6 +7,7 @@ import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Input from '@material-ui/core/Input';
+import { Radio, RadioGroup, FormLabel, FormControl, FormControlLabel } from '@material-ui/core';
 
 const useStyles = makeStyles({
   body: {
@@ -23,10 +24,10 @@ const useStyles = makeStyles({
     padding: '12px 12px',
     display: 'flex',
     alignItems: 'center',
-    width: 700,
+    width: 1100,
   },
   input: {
-    marginLeft: 8,
+    marginLeft: 10,
   }
 });
 
@@ -64,8 +65,16 @@ function Search() {
     <div>
       <Container className={classes.root}>
         <Typography><strong>DOI</strong></Typography><Input className={classes.input} id="ref" type="text" value={ref} onChange={handlerefChange}></Input>
-        <Typography><strong>Title</strong></Typography><Input className={classes.input} id="title" type="text" value={title} onChange={handleTitleChange}></Input>
-        <Typography><strong>Author</strong></Typography><Input className={classes.input} id="author" type="text" value={author} onChange={handleAuthorChange}></Input>
+        <Typography className={classes.input}><strong>Title</strong></Typography><Input className={classes.input} id="title" type="text" value={title} onChange={handleTitleChange}></Input>
+        <Typography className={classes.input}><strong>Author</strong></Typography><Input className={classes.input} id="author" type="text" value={author} onChange={handleAuthorChange}></Input>
+        <FormControl>
+          <FormLabel><strong>Type</strong></FormLabel>
+        <RadioGroup className={classes.input}>
+          <FormControlLabel value="female" control={<Radio />} label="Book Chapter"></FormControlLabel>
+          <FormControlLabel value="female" control={<Radio />} label="Journal Article"></FormControlLabel>
+          <FormControlLabel value="female" control={<Radio />} label="Proceedings Article"></FormControlLabel>
+        </RadioGroup>
+        </FormControl>
         {/* <Typography><strong>Type</strong></Typography><Input className={classes.input} id="type" type="text" value={author} onChange={handleAuthorChange}></Input> */}
         <Button className={classes.subButton} variant="contained" color="secondary" onClick={handleSubmit}>
           Search </Button>
