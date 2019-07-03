@@ -7,14 +7,14 @@ import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Input from '@material-ui/core/Input';
-import { Radio, RadioGroup, FormLabel, FormControl, FormControlLabel } from '@material-ui/core';
+import { Checkbox, FormGroup, FormLabel, FormControl, FormControlLabel } from '@material-ui/core';
 
 const useStyles = makeStyles({
   body: {
     fontSize: 18,
     padding: '8px 8px',
   },
-  card:{
+  card: {
     margin: '10px 5px',
   },
   subButton: {
@@ -39,6 +39,7 @@ function Search() {
   const [author, setAuthorState] = useState('');
   const [pubArray, setpubArrayState] = useState([]);
   const [status, setStatusState] = useState('');
+  const [type, setTypeState] = useState('Book');
 
   const handlerefChange = event => {
     setrefState(event.target.value);
@@ -52,8 +53,14 @@ function Search() {
     setAuthorState(event.target.value);
   }
 
+  const handleTypeChange = event => {
+    console.log(event.target.value);
+    setTypeState(event.target.value);
+    console.log(type);
+  }
+
   const handleSubmit = event => {
-    setStatusState('Searching by '+title+" "+author);
+    setStatusState('Searching by ' + title + " " + author);
     event.preventDefault();
     fetch(`http://localhost:5000/search/title=${title}&&author=${author}`)
       .then(res => res.json())
@@ -69,11 +76,13 @@ function Search() {
         <Typography className={classes.input}><strong>Author</strong></Typography><Input className={classes.input} id="author" type="text" value={author} onChange={handleAuthorChange}></Input>
         <FormControl>
           <FormLabel><strong>Type</strong></FormLabel>
-        <RadioGroup className={classes.input}>
-          <FormControlLabel value="female" control={<Radio />} label="Book Chapter"></FormControlLabel>
-          <FormControlLabel value="female" control={<Radio />} label="Journal Article"></FormControlLabel>
-          <FormControlLabel value="female" control={<Radio />} label="Proceedings Article"></FormControlLabel>
-        </RadioGroup>
+          <FormGroup>
+          {/* <RadioGroup className={classes.input} onChange={handleTypeChange}> */}
+            <FormControlLabel control={<Checkbox onChange={handleTypeChange} value="book" />} label="Book Chapter"></FormControlLabel>
+            <FormControlLabel control={<Checkbox onChange={handleTypeChange} value="journal" />} label="Journal Article" ></FormControlLabel>
+            <FormControlLabel control={<Checkbox onChange={handleTypeChange} value="proceedings" />} label="Proceedings Article"></FormControlLabel>
+          {/* </RadioGroup> */}
+          </FormGroup>
         </FormControl>
         {/* <Typography><strong>Type</strong></Typography><Input className={classes.input} id="type" type="text" value={author} onChange={handleAuthorChange}></Input> */}
         <Button className={classes.subButton} variant="contained" color="secondary" onClick={handleSubmit}>
@@ -87,7 +96,7 @@ function Search() {
             <Typography className={classes.body}><strong>DOI: </strong><a href={"https://dx.doi.org/" + pub.DOI}>{pub.DOI}</a></Typography>
             <Typography className={classes.body}><strong>Author(s): </strong>{pub.Authors.join(", ")}</Typography>
             <Typography className={classes.body}><strong>Created Date: </strong>{pub.Created_Date}</Typography>
-            <Typography className={classes.body}><strong>Type: </strong>{pub.Type }</Typography>
+            <Typography className={classes.body}><strong>Type: </strong>{pub.Type}</Typography>
           </CardContent>
         </Card>)
         }
