@@ -62,6 +62,8 @@ function Search() {
   const handleTypeChange = event => {
     let TargetName = event.target.value;
     setTypeState({ ...type, [TargetName]: event.target.checked });
+    type[TargetName] = event.target.checked;
+    console.log(type); 
   }
 
   const handleSubmit = event => {
@@ -82,9 +84,9 @@ function Search() {
         <FormControl>
           <FormLabel><strong>Type</strong></FormLabel>
           <FormGroup>
-            <FormControlLabel control={<Checkbox checked={type.book} onClick={handleTypeChange} value="book" />} label="Book Chapter"></FormControlLabel>
-            <FormControlLabel control={<Checkbox checked={type.journal} onClick={handleTypeChange} value="journal" />} label="Journal Article" ></FormControlLabel>
-            <FormControlLabel control={<Checkbox checked={type.proceedings} onClick={handleTypeChange} value="proceedings" />} label="Proceedings Article"></FormControlLabel>
+            <FormControlLabel control={<Checkbox checked={type.book} onChange={handleTypeChange} value="book" />} label="Book Chapter"></FormControlLabel>
+            <FormControlLabel control={<Checkbox checked={type.journal} onChange={handleTypeChange} value="journal" />} label="Journal Article" ></FormControlLabel>
+            <FormControlLabel control={<Checkbox checked={type.proceedings} onChange={handleTypeChange} value="proceedings" />} label="Proceedings Article"></FormControlLabel>
           </FormGroup>
         </FormControl>
         {/* <Typography><strong>Type</strong></Typography><Input className={classes.input} id="type" type="text" value={author} onChange={handleAuthorChange}></Input> */}
