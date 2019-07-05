@@ -1,6 +1,18 @@
 const Publication = require('../models/publication/schema');
 const request = require('request');
 
+exports.searchbyType = function (req, res){
+    console.log("Arrived!");
+    Publication.find({
+        $or: [{ Type: 'book-chapter' }, { Type: 'journal-article' }]},
+        function (err, pubs) {
+            if (err) {
+                console.log(err);
+                throw (err);
+            }
+            res.send(pubs)
+        });
+}
 
 exports.searchTitleAuthor = function (req, res) {
     Publication.find({ $text: { $search: req.params.title }, Authors: { $regex: req.params.author, $options: 'i' }},
@@ -96,15 +108,15 @@ exports.getSave = function (req, Res) {
     });
 }
 
-exports.sortbyType = function (req, res) {
-    const _TYPE = req.params.type;
-    Publication.find({ Type: _TYPE }, function (err, publication) {
-        if (err) {
-            console.log(err);
-            throw err;
-        }
-        else {
-            res.send(publication);
-        }
-    });
-}
+// exports.sortbyType = function (req, res) {
+//     const _TYPE = req.params.type;
+//     Publication.find({ Type: _TYPE }, function (err, publication) {
+//         if (err) {
+//             console.log(err);
+//             throw err;
+//         }
+//         else {
+//             res.send(publication);
+//         }
+//     });
+// }

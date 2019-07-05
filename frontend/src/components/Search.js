@@ -45,7 +45,7 @@ function Search() {
     proceedings: true,
   });
 
-  //let type=["book","journal","proceedings"];
+  let typeString = "";
 
   const handlerefChange = event => {
     setrefState(event.target.value);
@@ -66,9 +66,18 @@ function Search() {
     console.log(type); 
   }
 
+  function typetoString(){
+    for(let atype in type){
+      if(type[atype]===true){
+        typeString = typeString+atype.substr(0,1);
+      }
+    }
+  }
+
   const handleSubmit = event => {
     setStatusState('Searching by ' + title + " " + author);
     event.preventDefault();
+    typetoString();
     fetch(`http://localhost:5000/search/title=${title}&&author=${author}`)
       .then(res => res.json())
       .then(data => {
