@@ -39,8 +39,13 @@ function Search() {
   const [author, setAuthorState] = useState('');
   const [pubArray, setpubArrayState] = useState([]);
   const [status, setStatusState] = useState('');
+  const [type, setTypeState] =  useState({
+    book: true,
+    journal: true,
+    proceedings: true,
+  });
 
-  let type=["book","journal","proceedings"];
+  //let type=["book","journal","proceedings"];
 
   const handlerefChange = event => {
     setrefState(event.target.value);
@@ -55,20 +60,8 @@ function Search() {
   }
 
   const handleTypeChange = event => {
-    console.log(event.target.value);
-    let isChecked = false;
-    for(let i=0;i<type.length;i++){
-      console.log(type[i]);
-      if(type[i]===event.target.value){
-        type.remove(i);
-        isChecked = true;
-        break;
-      }
-    }
-    if(isChecked===false){
-      type.push(event.target.value);
-    }
-    console.log(type);
+    let TargetName = event.target.value;
+    setTypeState({ ...type, [TargetName]: event.target.checked });
   }
 
   const handleSubmit = event => {
@@ -89,9 +82,9 @@ function Search() {
         <FormControl>
           <FormLabel><strong>Type</strong></FormLabel>
           <FormGroup>
-            <FormControlLabel control={<Checkbox checked={true} onClick={handleTypeChange.bind(this)} value="book" />} label="Book Chapter"></FormControlLabel>
-            <FormControlLabel control={<Checkbox checked={true} onClick={handleTypeChange} value="journal" />} label="Journal Article" ></FormControlLabel>
-            <FormControlLabel control={<Checkbox checked={true} onClick={handleTypeChange} value="proceedings" />} label="Proceedings Article"></FormControlLabel>
+            <FormControlLabel control={<Checkbox checked={type.book} onClick={handleTypeChange} value="book" />} label="Book Chapter"></FormControlLabel>
+            <FormControlLabel control={<Checkbox checked={type.journal} onClick={handleTypeChange} value="journal" />} label="Journal Article" ></FormControlLabel>
+            <FormControlLabel control={<Checkbox checked={type.proceedings} onClick={handleTypeChange} value="proceedings" />} label="Proceedings Article"></FormControlLabel>
           </FormGroup>
         </FormControl>
         {/* <Typography><strong>Type</strong></Typography><Input className={classes.input} id="type" type="text" value={author} onChange={handleAuthorChange}></Input> */}
