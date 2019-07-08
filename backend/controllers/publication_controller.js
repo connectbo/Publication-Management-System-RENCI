@@ -44,53 +44,6 @@ exports.advancedSearch = function (req, res){
 }
 
 
-
-exports.searchbyType = function (req, res){
-    Publication.find({
-        $or: [{ Type: 'book-chapter' }, { Type: 'journal-article' }]},
-        function (err, pubs) {
-            if (err) {
-                console.log(err);
-                throw (err);
-            }
-            res.send(pubs)
-        });
-}
-
-exports.searchTitleAuthor = function (req, res) {
-    Publication.find({ $text: { $search: req.params.title }, Authors: { $regex: req.params.author, $options: 'i' }},
-        function (err, pubs) {
-            if (err) {
-                console.log(err);
-                throw (err);
-            }
-            res.send(pubs)
-        });
-}
-exports.searchAuthor = function (req, res) {
-    Publication.find({ Authors: { $regex: req.params.author, $options: 'i' }},
-        function (err, pubs) {
-            if (err) {
-                console.log(err);
-                throw (err);
-            }
-            res.send(pubs)
-        });
-}
-
-//$text: { $search: req.params.title }, 
-
-exports.searchTitle = function (req, res) {
-    Publication.find({ $text: { $search: req.params.title } })
-        .exec(function (err, pubs) {
-            if (err) {
-                console.log(err);
-                throw (err);
-            }
-            res.send(pubs);
-        });
-}
-
 exports.getAll = function (req, res) {
     return Publication.find({}, function (err, pubs) {
         if (err) {
@@ -150,16 +103,3 @@ exports.getSave = function (req, Res) {
         Res.send(renderResult);
     });
 }
-
-// exports.sortbyType = function (req, res) {
-//     const _TYPE = req.params.type;
-//     Publication.find({ Type: _TYPE }, function (err, publication) {
-//         if (err) {
-//             console.log(err);
-//             throw err;
-//         }
-//         else {
-//             res.send(publication);
-//         }
-//     });
-// }
