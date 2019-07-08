@@ -17,8 +17,8 @@ exports.advancedSearch = function (req, res){
         Authors: { $regex: _author, $options: 'i' },
         $or: generateTypeFinder(_type),
         Created_Date: {
-            '$gte': '2017-01-01',
-            '$lte': '2017-06-01'
+            '$gte': req.params.s_date,
+            '$lte': req.params.e_date
         }},
         function (err, pubs){
             if (err) {

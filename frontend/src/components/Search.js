@@ -99,7 +99,7 @@ function Search() {
     setStatusState('Searching by ' + title + " " + author);
     event.preventDefault();
     typetoString();
-    fetch(`http://localhost:5000/search/title=${title}&&author=${author}&&type=${typeString}`)
+    fetch(`http://localhost:5000/search/title=${title}&&author=${author}&&type=${typeString}&&s_date=${sdate}&&e_date=${edate}`)
       .then(res => res.json())
       .then(data => {
         setpubArrayState(data);

@@ -4,7 +4,7 @@ const express = require('express');
 const PubRouter = express.Router();
 
 //search router  
-PubRouter.get('/search/title=:title?&&author=:author?&&type=:type?', PubController.advancedSearch);
+PubRouter.get('/search/title=:title?&&author=:author?&&type=:type?&&s_date=:s_date?&&e_date=:e_date?', PubController.advancedSearch);
 
 //add router
 PubRouter.get('/reference/:id/:id2/save=yes', PubController.getSave);
