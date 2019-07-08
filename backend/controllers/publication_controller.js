@@ -1,8 +1,41 @@
 const Publication = require('../models/publication/schema');
 const request = require('request');
 
+exports.advancedSearch = function (req, res){
+    _title = req.params.title;
+    _author = req.params.author;
+    _type = req.params.type;
+    if(_author===undefined){
+        _author='';
+    }
+    if(_title===undefined){
+        _title='';
+    }
+    
+    generateTypeFinder(_type);
+
+    Publication.find({
+        $text: { $search: _title },
+        Authors: { $regex: _author, $options: 'i' },
+        $or: [{ Type: 'book-chapter' }, { Type: 'journal-article' }],},
+        function (err, pubs){
+            if (err) {
+                console.log(err);
+                throw (err);
+            }
+            res.send(pubs);
+        })
+
+    function generateTypeFinder(TypeString){
+        for (let i=0;i<TypeString.length;i++){
+            console.log(TypeString.substring(i,i+1));
+        }
+    }
+}
+
+
+
 exports.searchbyType = function (req, res){
-    console.log("Arrived!");
     Publication.find({
         $or: [{ Type: 'book-chapter' }, { Type: 'journal-article' }]},
         function (err, pubs) {

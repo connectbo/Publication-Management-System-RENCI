@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-//import { BrowserRouter as Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Card from '@material-ui/core/Card';
@@ -78,7 +77,7 @@ function Search() {
     setStatusState('Searching by ' + title + " " + author);
     event.preventDefault();
     typetoString();
-    fetch(`http://localhost:5000/search/title=${title}&&author=${author}`)
+    fetch(`http://localhost:5000/search/title=${title}&&author=${author}&&type=${typeString}`)
       .then(res => res.json())
       .then(data => {
         setpubArrayState(data);

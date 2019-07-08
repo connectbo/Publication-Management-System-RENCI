@@ -3,11 +3,8 @@ const PubController = require('../controllers/publication_controller');
 const express = require('express');
 const PubRouter = express.Router();
 
-//search router
-PubRouter.get('/search/type=:type', PubController.searchbyType);
-PubRouter.get('/search/title=:title&&author=:author', PubController.searchTitleAuthor);
-PubRouter.get('/search/title=&&author=:author', PubController.searchAuthor);
-PubRouter.get('/search/title=:title', PubController.searchTitle);
+//search router  
+PubRouter.get('/search/title=:title?&&author=:author?&&type=:type?', PubController.advancedSearch);
 //PubRouter.get('/search/type=:type', PubController.sortbyType);
 
 //add router
