@@ -11,13 +11,11 @@ exports.advancedSearch = function (req, res){
     if(_title===undefined){
         _title='';
     }
-    
-    generateTypeFinder(_type);
 
     Publication.find({
         $text: { $search: _title },
         Authors: { $regex: _author, $options: 'i' },
-        $or: [{ Type: 'book-chapter' }, { Type: 'journal-article' }],},
+        $or: generateTypeFinder(_type),},
         function (err, pubs){
             if (err) {
                 console.log(err);
@@ -27,9 +25,21 @@ exports.advancedSearch = function (req, res){
         })
 
     function generateTypeFinder(TypeString){
+        let TypeFinder = [];
         for (let i=0;i<TypeString.length;i++){
-            console.log(TypeString.substring(i,i+1));
+            switch (TypeString.substring(i,i+1)){
+                case 'b':
+                    TypeFinder.push({ Type : 'book-chapter'});
+                    break;
+                case 'j':
+                    TypeFinder.push({ Type : 'journal-article'});
+                    break;
+                case 'p':
+                    TypeFinder.push({ Type : 'proceedings-article'});
+                    break;
+            }
         }
+        return TypeFinder;
     }
 }
 
