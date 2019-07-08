@@ -38,13 +38,6 @@ function Home() {
         pubArray.push(pubs[key]);
     })
 
-    const searchbyType = async (event, type) => {
-        const PubResult = await fetch(`http://localhost:5000/search/type=${type}`)
-            .then(res => res.json());
-        setPubState(PubResult);
-        setStatus('Filtered by '+type);
-    } 
-
     return (
         <Container>
             <Typography className={classes.body}><strong>{status}</strong> </Typography>
@@ -55,7 +48,7 @@ function Home() {
                         <Typography className={classes.body}><strong>DOI: </strong><a href={"https://dx.doi.org/"+pub.DOI}>{pub.DOI}</a></Typography>
                         <Typography className={classes.body}><strong>Author(s): </strong>{pub.Authors.join(", ")}</Typography>
                         <Typography className={classes.body}><strong>Created Date: </strong>{pub.Created_Date}</Typography>
-                        <Typography className={classes.body}><strong>Type: </strong> <a href={"/search/type="+pub.Type} onClick={(e) => {searchbyType(e,pub.Type)}}> {pub.Type}</a> </Typography>
+                        <Typography className={classes.body}><strong>Type: </strong>{pub.Type}</Typography>
                     </CardContent>
                 </Card>)
             }
