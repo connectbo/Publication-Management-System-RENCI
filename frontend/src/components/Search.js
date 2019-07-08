@@ -6,6 +6,7 @@ import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Input from '@material-ui/core/Input';
+import TextField from '@material-ui/core/TextField';
 import { Checkbox, FormGroup, FormLabel, FormControl, FormControlLabel } from '@material-ui/core';
 
 const useStyles = makeStyles({
@@ -38,6 +39,9 @@ function Search() {
   const [author, setAuthorState] = useState('');
   const [pubArray, setpubArrayState] = useState([]);
   const [status, setStatusState] = useState('');
+  const [sdate, setSDate] = useState('');
+  const [edate, setEDate] = useState('');
+
   const [type, setTypeState] =  useState({
     book: true,
     journal: true,
@@ -45,6 +49,14 @@ function Search() {
   });
 
   let typeString = "";
+
+  const handle_edate_Change = event => {
+    setEDate(event.target.value);
+  }
+
+  const handle_sdate_Change = event => {
+    setSDate(event.target.value);
+  }
 
   const handlerefChange = event => {
     setrefState(event.target.value);
@@ -72,6 +84,7 @@ function Search() {
       }
     }
   }
+
 
   const handleSubmit = event => {
     if(ref!==''){
@@ -107,7 +120,10 @@ function Search() {
             <FormControlLabel control={<Checkbox checked={type.proceedings} onChange={handleTypeChange} value="proceedings" />} label="Proceedings Article"></FormControlLabel>
           </FormGroup>
         </FormControl>
-        {/* <Typography><strong>Type</strong></Typography><Input className={classes.input} id="type" type="text" value={author} onChange={handleAuthorChange}></Input> */}
+        <FormControl>
+          <TextField className={classes.input} id="sdate" label="Start Date" type="date" value={sdate} onChange={handle_sdate_Change}></TextField>
+          <TextField className={classes.input} id="edate" label="End Date" type="date" value={edate} onChange={handle_edate_Change}></TextField>
+        </FormControl>
         <Button className={classes.subButton} variant="contained" color="secondary" onClick={handleSubmit}>
           Search </Button>
       </Container>

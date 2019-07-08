@@ -15,7 +15,11 @@ exports.advancedSearch = function (req, res){
     Publication.find({
         $text: { $search: _title },
         Authors: { $regex: _author, $options: 'i' },
-        $or: generateTypeFinder(_type),},
+        $or: generateTypeFinder(_type),
+        Created_Date: {
+            '$gte': '2017-01-01',
+            '$lte': '2017-06-01'
+        }},
         function (err, pubs){
             if (err) {
                 console.log(err);
