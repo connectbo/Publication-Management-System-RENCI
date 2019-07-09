@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
@@ -51,7 +52,7 @@ function Home() {
             {pubArray.map(pub =>
                 <ExpansionPanel className={classes.card} expanded={expanded === pub.DOI} onChange={handleExpandChange(pub.DOI)}>
                     <ExpansionPanelSummary
-                        expandIcon={<Button />}
+                        expandIcon={<IconButton />}
                         aria-controls="panel1a-content"
                         id="panel1a-header"
                     >
