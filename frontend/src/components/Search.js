@@ -39,10 +39,10 @@ function Search() {
   const [author, setAuthorState] = useState('');
   const [pubArray, setpubArrayState] = useState([]);
   const [status, setStatusState] = useState('');
-  const [sdate, setSDate] = useState('');
-  const [edate, setEDate] = useState('');
+  const [sdate, setSDate] = useState('2001-01-01');
+  const [edate, setEDate] = useState('2019-07-09');
 
-  const [type, setTypeState] =  useState({
+  const [type, setTypeState] = useState({
     book: true,
     journal: true,
     proceedings: true,
@@ -74,19 +74,19 @@ function Search() {
     let TargetName = event.target.value;
     setTypeState({ ...type, [TargetName]: event.target.checked });
     type[TargetName] = event.target.checked;
-    console.log(type); 
+    console.log(type);
   }
 
-  function typetoString(){
-    for(let atype in type){
-      if(type[atype]===true){
-        typeString = typeString+atype.substr(0,1);
+  function typetoString() {
+    for (let atype in type) {
+      if (type[atype] === true) {
+        typeString = typeString + atype.substr(0, 1);
       }
     }
   }
 
   const handleSubmit = event => {
-    if(ref!==''){
+    if (ref !== '') {
       console.log('visited');
       fetch(`http://localhost:5000/reference/${ref}`)
         .then(res => res.json())
@@ -94,16 +94,16 @@ function Search() {
           setpubArrayState([data]);
         })
     }
-    else{
-    setStatusState('Searching by ' + title + " " + author);
-    event.preventDefault();
-    typetoString();
-    console.log(`http://localhost:5000/search/title=${title}&&author=${author}&&type=${typeString}&&s_date=${sdate}&&e_date=${edate}`);
-    fetch(`http://localhost:5000/search/title=${title}&&author=${author}&&type=${typeString}&&s_date=${sdate}&&e_date=${edate}`)
-      .then(res => res.json())
-      .then(data => {
-        setpubArrayState(data);
-      })
+    else {
+      setStatusState('Searching by ' + title + " " + author);
+      event.preventDefault();
+      typetoString();
+      console.log(`http://localhost:5000/search/title=${title}&&author=${author}&&type=${typeString}&&s_date=${sdate}&&e_date=${edate}`);
+      fetch(`http://localhost:5000/search/title=${title}&&author=${author}&&type=${typeString}&&s_date=${sdate}&&e_date=${edate}`)
+        .then(res => res.json())
+        .then(data => {
+          setpubArrayState(data);
+        })
     }
   }
   return (
@@ -121,8 +121,12 @@ function Search() {
           </FormGroup>
         </FormControl>
         <FormControl>
-          <TextField className={classes.input} id="sdate" label="Start Date" type="date" default="01-01-2001" value={sdate} onChange={handle_sdate_Change}></TextField>
-          <TextField className={classes.input} id="edate" label="End Date" type="date" default="09-07-2018" value={edate} onChange={handle_edate_Change}></TextField>
+          <TextField className={classes.input} id="sdate" label="Start Date" type="date" value={sdate} onChange={handle_sdate_Change} InputLabelProps={{
+            shrink: true,
+          }} ></TextField>
+          <TextField className={classes.input} id="edate" label="End Date" type="date" value={edate} onChange={handle_edate_Change} InputLabelProps={{
+            shrink: true,
+          }}></TextField>
         </FormControl>
         <Button className={classes.subButton} variant="contained" color="secondary" onClick={handleSubmit}>
           Search </Button>
