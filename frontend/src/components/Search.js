@@ -7,7 +7,7 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Input from '@material-ui/core/Input';
 import TextField from '@material-ui/core/TextField';
-import { Checkbox, FormGroup, FormLabel, FormControl, FormControlLabel } from '@material-ui/core';
+import { Checkbox, FormGroup, FormLabel, FormControl, FormControlLabel, IconButton } from '@material-ui/core';
 
 const useStyles = makeStyles({
   body: {
@@ -84,7 +84,6 @@ function Search() {
       }
     }
   }
-
 
   const handleSubmit = event => {
     if(ref!==''){
