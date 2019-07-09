@@ -17,9 +17,10 @@ exports.advancedSearch = function (req, res) {
         _sdate = '1995-12-08';
     }
     if (_edate === undefined) {
-        _edate = new Date().substring(0,11);
+        tem_edate = new Date();
+        tem_edate = tem_edate.toISOString();
+        _edate = tem_edate.substring(0,10);
     }
-    console.log(_edate);
 
     Publication.find({
         $text: { $search: _title },
