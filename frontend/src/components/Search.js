@@ -98,6 +98,7 @@ function Search() {
     setStatusState('Searching by ' + title + " " + author);
     event.preventDefault();
     typetoString();
+    console.log(`http://localhost:5000/search/title=${title}&&author=${author}&&type=${typeString}&&s_date=${sdate}&&e_date=${edate}`);
     fetch(`http://localhost:5000/search/title=${title}&&author=${author}&&type=${typeString}&&s_date=${sdate}&&e_date=${edate}`)
       .then(res => res.json())
       .then(data => {
@@ -120,8 +121,8 @@ function Search() {
           </FormGroup>
         </FormControl>
         <FormControl>
-          <TextField className={classes.input} id="sdate" label="Start Date" type="date" value={sdate} onChange={handle_sdate_Change}></TextField>
-          <TextField className={classes.input} id="edate" label="End Date" type="date" value={edate} onChange={handle_edate_Change}></TextField>
+          <TextField className={classes.input} id="sdate" label="Start Date" type="date" default="01-01-2001" value={sdate} onChange={handle_sdate_Change}></TextField>
+          <TextField className={classes.input} id="edate" label="End Date" type="date" default="09-07-2018" value={edate} onChange={handle_edate_Change}></TextField>
         </FormControl>
         <Button className={classes.subButton} variant="contained" color="secondary" onClick={handleSubmit}>
           Search </Button>

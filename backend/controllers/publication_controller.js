@@ -1,26 +1,36 @@
 const Publication = require('../models/publication/schema');
 const request = require('request');
 
-exports.advancedSearch = function (req, res){
+exports.advancedSearch = function (req, res) {
     _title = req.params.title;
     _author = req.params.author;
     _type = req.params.type;
-    if(_author===undefined){
-        _author='';
+    _sdate = req.params.s_date;
+    _edate = req.params.e_date;
+    if (_author === undefined) {
+        _author = '';
     }
-    if(_title===undefined){
-        _title='';
+    if (_title === undefined) {
+        _title = '';
     }
+    if (_sdate === undefined) {
+        _sdate = '1995-12-08';
+    }
+    if (_edate === undefined) {
+        _edate = new Date().substring(0,11);
+    }
+    console.log(_edate);
 
     Publication.find({
         $text: { $search: _title },
         Authors: { $regex: _author, $options: 'i' },
         $or: generateTypeFinder(_type),
         Created_Date: {
-            '$gte': req.params.s_date,
-            '$lte': req.params.e_date
-        }},
-        function (err, pubs){
+            '$gte': _sdate,
+            '$lte': _edate
+        }
+    },
+        function (err, pubs) {
             if (err) {
                 console.log(err);
                 throw (err);
@@ -28,25 +38,24 @@ exports.advancedSearch = function (req, res){
             res.send(pubs);
         })
 
-    function generateTypeFinder(TypeString){
+    function generateTypeFinder(TypeString) {
         let TypeFinder = [];
-        for (let i=0;i<TypeString.length;i++){
-            switch (TypeString.substring(i,i+1)){
+        for (let i = 0; i < TypeString.length; i++) {
+            switch (TypeString.substring(i, i + 1)) {
                 case 'b':
-                    TypeFinder.push({ Type : 'book-chapter'});
+                    TypeFinder.push({ Type: 'book-chapter' });
                     break;
                 case 'j':
-                    TypeFinder.push({ Type : 'journal-article'});
+                    TypeFinder.push({ Type: 'journal-article' });
                     break;
                 case 'p':
-                    TypeFinder.push({ Type : 'proceedings-article'});
+                    TypeFinder.push({ Type: 'proceedings-article' });
                     break;
             }
         }
         return TypeFinder;
     }
 }
-
 
 exports.getAll = function (req, res) {
     return Publication.find({}, function (err, pubs) {

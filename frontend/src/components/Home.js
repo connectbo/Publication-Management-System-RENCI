@@ -1,18 +1,13 @@
 import React, { useState, useEffect } from 'react';
-//import { BrowserRouter as Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails } from '@material-ui/core';
 
-
 const useStyles = makeStyles(theme => ({
     card: {
-        margin: '10px 5px',
-        minWidth: 300,
+        marginTop: 10
     },
     title: {
         fontSize: 20,
@@ -53,34 +48,23 @@ function Home() {
     return (
         <Container>
             <Typography className={classes.body}><strong>{status}</strong> </Typography>
-            {
-                pubArray.map(pub =>
-                    <ExpansionPanel expanded={expanded === pub.DOI } onChange={handleExpandChange(pub.DOI)}>
-                        <ExpansionPanelSummary
-                            expandIcon={<Button />}
-                            aria-controls="panel1a-content"
-                            id="panel1a-header"
-                        >
-                            <Typography className={classes.heading}>{pub.Title}</Typography>
-                        </ExpansionPanelSummary>
-                        <ExpansionPanelDetails>
-                            <Typography className={classes.body}><strong>DOI: </strong><a href={"https://dx.doi.org/" + pub.DOI}>{pub.DOI}</a></Typography>
-                            <Typography className={classes.body}><strong>Author(s): </strong>{pub.Authors.join(", ")}</Typography>
-                            <Typography className={classes.body}><strong>Created Date: </strong>{pub.Created_Date}</Typography>
-                            <Typography className={classes.body}><strong>Type: </strong>{pub.Type}</Typography>
-                        </ExpansionPanelDetails>
-                    </ExpansionPanel>
-
-                    // <Card className={classes.card}>
-                    //     <CardContent>
-                    //         <Typography className={classes.body}><strong>Title: </strong> {pub.Title}</Typography>
-                    //         <Typography className={classes.body}><strong>DOI: </strong><a href={"https://dx.doi.org/" + pub.DOI}>{pub.DOI}</a></Typography>
-                    //         <Typography className={classes.body}><strong>Author(s): </strong>{pub.Authors.join(", ")}</Typography>
-                    //         <Typography className={classes.body}><strong>Created Date: </strong>{pub.Created_Date}</Typography>
-                    //         <Typography className={classes.body}><strong>Type: </strong>{pub.Type}</Typography>
-                    //     </CardContent>
-                    // </Card>)
-                )}
+            {pubArray.map(pub =>
+                <ExpansionPanel className={classes.card} expanded={expanded === pub.DOI} onChange={handleExpandChange(pub.DOI)}>
+                    <ExpansionPanelSummary
+                        expandIcon={<Button />}
+                        aria-controls="panel1a-content"
+                        id="panel1a-header"
+                    >
+                        <Typography className={classes.heading}>{pub.Title}</Typography>
+                    </ExpansionPanelSummary>
+                    <ExpansionPanelDetails>
+                        <Typography className={classes.body}><strong>DOI: </strong><a href={"https://dx.doi.org/" + pub.DOI}>{pub.DOI}</a></Typography>
+                        <Typography className={classes.body}><strong>Author(s): </strong>{pub.Authors.join(", ")}</Typography>
+                        <Typography className={classes.body}><strong>Created Date: </strong>{pub.Created_Date}</Typography>
+                        <Typography className={classes.body}><strong>Type: </strong>{pub.Type}</Typography>
+                    </ExpansionPanelDetails>
+                </ExpansionPanel>
+            )}
         </Container>
     );
 }
