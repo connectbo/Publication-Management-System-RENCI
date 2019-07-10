@@ -19,25 +19,30 @@ exports.advancedSearch = function (req, res) {
     if (_edate === undefined) {
         tem_edate = new Date();
         tem_edate = tem_edate.toISOString();
-        _edate = tem_edate.substring(0,10);
+        _edate = tem_edate.substring(0, 10);
     }
 
-    Publication.find({
-        $text: { $search: _title },
-        Authors: { $regex: _author, $options: 'i' },
-        $or: generateTypeFinder(_type),
-        Created_Date: {
-            '$gte': _sdate,
-            '$lte': _edate
-        }
-    },
-        function (err, pubs) {
-            if (err) {
-                console.log(err);
-                throw (err);
+    Publication.find()
+        .and([
+            { Title: { $regex: _title, $options: 'i' } },
+            { Authors: { $regex: _author, $options: 'i' } },
+            { $or: generateTypeFinder(_type) },
+            {
+                Created_Date: {
+                    '$gte': _sdate,
+                    '$lte': _edate
+                }
             }
-            res.send(pubs);
-        })
+        ])
+        .exec(
+            function (err, pubs) {
+                if (err) {
+                    console.log(err);
+                    throw (err);
+                }
+                console.log(pubs);
+                res.send(pubs);
+            })
 
     function generateTypeFinder(TypeString) {
         let TypeFinder = [];

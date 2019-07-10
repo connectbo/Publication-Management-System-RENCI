@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails } from '@material-ui/core';
 
@@ -11,14 +10,14 @@ const useStyles = makeStyles(theme => ({
         marginTop: 10
     },
     title: {
-        fontSize: 20,
+        fontSize: 18,
+        paddingTop: '4px',
     },
     body: {
-        fontSize: 18,
-        padding: '8px 8px',
+        fontSize: 16,
     },
     heading: {
-        fontSize: theme.typography.pxToRem(15),
+        fontSize: 18,
         fontWeight: theme.typography.fontWeightRegular,
     }
 }));
@@ -48,21 +47,23 @@ function Home() {
 
     return (
         <Container>
-            <Typography className={classes.body}><strong>{status}</strong> </Typography>
+            <Typography className={classes.title}>{status} </Typography>
             {pubArray.map(pub =>
                 <ExpansionPanel className={classes.card} expanded={expanded === pub.DOI} onChange={handleExpandChange(pub.DOI)}>
                     <ExpansionPanelSummary
                         expandIcon={<ExpandMoreIcon />}
                         aria-controls="panel1a-content"
-                        id="panel1a-header"
-                    >
-                        <Typography className={classes.heading}>{pub.Title}</Typography>
+                        id="panel1a-header">
+                        <Container>
+                            <Typography className={classes.heading}><strong>{pub.Title}</strong></Typography>
+                            <Typography block><a href={"https://dx.doi.org/" + pub.DOI}>{pub.DOI}</a></Typography>
+                        </Container>
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
-                        <Typography className={classes.body}><strong>DOI: </strong><a href={"https://dx.doi.org/" + pub.DOI}>{pub.DOI}</a></Typography>
-                        <Typography className={classes.body}><strong>Author(s): </strong>{pub.Authors.join(", ")}</Typography>
-                        <Typography className={classes.body}><strong>Created Date: </strong>{pub.Created_Date}</Typography>
-                        <Typography className={classes.body}><strong>Type: </strong>{pub.Type}</Typography>
+                        <Container>
+                            <Typography className={classes.body}><strong>Author(s): </strong>{pub.Authors.join(", ")}</Typography><hr/>
+                            <Typography className={classes.body}>Published on <strong>{pub.Created_Date}</strong>, Category: <strong>{pub.Type}</strong></Typography>
+                        </Container>
                     </ExpansionPanelDetails>
                 </ExpansionPanel>
             )}
