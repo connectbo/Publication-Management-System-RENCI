@@ -4,9 +4,11 @@
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.1.1",
+    "@material-ui/icons": "^4.2.1",
     "core-util-is": "^1.0.2",
     "dotenv": "^8.0.0",
     "material-design-icons": "^3.0.1",
+    "material-ui-icons": "^1.0.0-beta.36",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-router-dom": "^5.0.1",
