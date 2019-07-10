@@ -52,7 +52,7 @@ function Home() {
             {pubArray.map(pub =>
                 <ExpansionPanel className={classes.card} expanded={expanded === pub.DOI} onChange={handleExpandChange(pub.DOI)}>
                     <ExpansionPanelSummary
-                        expandIcon={<IconButton />}
+                        expandIcon={<ExpandMoreIcon />}
                         aria-controls="panel1a-content"
                         id="panel1a-header"
                     >
