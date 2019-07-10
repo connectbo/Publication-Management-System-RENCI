@@ -10,8 +10,9 @@ const useStyles = makeStyles(theme => ({
         marginTop: 10
     },
     title: {
-        fontSize: 18,
-        paddingTop: '4px',
+        fontSize: 14,
+        paddingTop: '10px',
+        paddingBottom:'8px'
     },
     body: {
         fontSize: 16,
@@ -25,13 +26,11 @@ const useStyles = makeStyles(theme => ({
 function Home() {
     const classes = useStyles();
     const [pubs, setPubState] = useState('');
-    const [status, setStatus] = useState('');
     const [expanded, setExpanded] = useState(false);
     const getPubs = async () => {
         const PubResult = await fetch(`http://localhost:5000/`)
             .then(res => res.json());
         setPubState(PubResult);
-        setStatus('Showing results in RENCI Database');
     }
 
     useEffect(getPubs, []);
@@ -47,7 +46,7 @@ function Home() {
 
     return (
         <Container>
-            <Typography className={classes.title}>{status} </Typography>
+            <Typography className={classes.title}>{pubs.status} </Typography>
             {pubArray.map(pub =>
                 <ExpansionPanel className={classes.card} expanded={expanded === pub.DOI} onChange={handleExpandChange(pub.DOI)}>
                     <ExpansionPanelSummary

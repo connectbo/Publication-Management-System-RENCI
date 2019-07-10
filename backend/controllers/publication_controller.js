@@ -40,7 +40,6 @@ exports.advancedSearch = function (req, res) {
                     console.log(err);
                     throw (err);
                 }
-                console.log(pubs);
                 res.send(pubs);
             })
 
@@ -64,13 +63,20 @@ exports.advancedSearch = function (req, res) {
 }
 
 exports.getAll = function (req, res) {
+    let toSend = [];
     return Publication.find({}, function (err, pubs) {
         if (err) {
             console.log(err);
             throw (err);
         }
-        res.send(pubs);
-    })
+        toSend = pubs;
+    }).count(function(err, counts){
+        if(err){
+            console.log(err);
+        }
+        toSend.status = counts;
+        res.send(toSend);
+    });
 }
 
 exports.getOne = function (req, Res) {
