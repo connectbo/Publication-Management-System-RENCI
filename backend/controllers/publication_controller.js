@@ -1,5 +1,5 @@
 const Publication = require('../models/publication/schema');
-const Category = require('../models/publication/schema')
+const Category = require('../models/category/category')
 const request = require('request');
 
 exports.advancedSearch = function (req, res) {
@@ -118,18 +118,23 @@ exports.getSave = function (req, Res) {
         for (i = 0; i < parsedAuthors.length; i++) {
             fullnameAuthors.push(parsedAuthors[i]['given'] + " " + parsedAuthors[i]['family']);
         }
-        Category.find({Category: parsedData['type']}, function(err, categoryTest){
-            if(err){
-                console.log(err);
+        Category.find({ Category: parsedData['type'] }, function (err, categoryTest) {
+            if (err) {
+                throw err;
+            }
+            if (categoryTest === []) {
+                const categoryResult = new Category({
+                    'Category': parsedData['type']
+                });
+                categoryResult.save(function (err) {
+                    if (err) throw err;
+                })
             }
         })
-        const categoryResult = new Category({
-            'Category': parsedData['type']
-        });
         const saveResult = new Publication({
             'Title': parsedData['title'], 'Authors': fullnameAuthors, 'DOI': parsedData['DOI'], 'Type': parsedData['type'], Created_Date: parsedData['created']['date-time'].substring(0, 10)
         });
-        
+
         saveResult.save(function (err) {
             if (err) throw err;
         });
