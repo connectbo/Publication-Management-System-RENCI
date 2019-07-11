@@ -1,4 +1,5 @@
 const Publication = require('../models/publication/schema');
+const Category = require('../models/publication/schema')
 const request = require('request');
 
 exports.advancedSearch = function (req, res) {
@@ -7,6 +8,7 @@ exports.advancedSearch = function (req, res) {
     _type = req.params.type;
     _sdate = req.params.s_date;
     _edate = req.params.e_date;
+
     if (_author === undefined) {
         _author = '';
     }
@@ -70,8 +72,8 @@ exports.getAll = function (req, res) {
             throw (err);
         }
         toSend = pubs;
-    }).count(function(err, counts){
-        if(err){
+    }).count(function (err, counts) {
+        if (err) {
             console.log(err);
         }
         toSend.status = counts;
@@ -116,9 +118,18 @@ exports.getSave = function (req, Res) {
         for (i = 0; i < parsedAuthors.length; i++) {
             fullnameAuthors.push(parsedAuthors[i]['given'] + " " + parsedAuthors[i]['family']);
         }
+        Category.find({Category: parsedData['type']}, function(err, categoryTest){
+            if(err){
+                console.log(err);
+            }
+        })
+        const categoryResult = new Category({
+            'Category': parsedData['type']
+        });
         const saveResult = new Publication({
             'Title': parsedData['title'], 'Authors': fullnameAuthors, 'DOI': parsedData['DOI'], 'Type': parsedData['type'], Created_Date: parsedData['created']['date-time'].substring(0, 10)
         });
+        
         saveResult.save(function (err) {
             if (err) throw err;
         });
