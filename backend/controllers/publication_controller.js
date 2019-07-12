@@ -132,7 +132,7 @@ exports.getSave = function (req, Res) {
             if (err) {
                 throw err;
             }
-            if (categoryTest) {
+            if (!categoryTest) {
                 console.log("Visited!");
                 const categoryResult = new Category({
                     'Category': parsedData['type']

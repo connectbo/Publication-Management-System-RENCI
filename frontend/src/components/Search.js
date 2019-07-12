@@ -54,12 +54,12 @@ function Search() {
 
   useEffect(fetchCategories, []);
 
-  let categoryJSON = {};
+ let categoryJSON = {};
   let categoryArray = [];
   if (isLoading) {
     categories.forEach(function (category) {
       let curr_cate = category['Category'];
-      categoryJSON[curr_cate] = true;
+      categoryJSON[curr_cate] = false;
       categoryArray.push(curr_cate);
     })
     isLoading = false;
@@ -89,7 +89,7 @@ function Search() {
 
   const handleCategoryChange = event => {
     let TargetName = event.target.value;
-    setCategories({ ...categoryJSON, [TargetName]: event.target.checked });
+    // setcategoryJSON({...categoryJSON, [TargetName] : event.target.checked});
     categoryJSON[TargetName] = event.target.checked;
     console.log(categoryJSON);
   }
