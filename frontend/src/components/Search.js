@@ -41,6 +41,7 @@ function Search() {
   const [status, setStatusState] = useState('');
   const [sdate, setSDate] = useState('2001-01-01');
   const [edate, setEDate] = useState('2019-07-09');
+  const [category,setCategory] = useState([]);
 
   const [type, setTypeState] = useState({
     book: true,
@@ -77,10 +78,14 @@ function Search() {
     console.log(type);
   }
 
-  useEffect()
+  useEffect(fetchCategory,[]);
 
   function fetchCategory(){
-    fetch(`http://localhost:5000/`)
+    fetch(`http://localhost:5000/category`)
+      .then(res => res.json())
+      .then(data => {
+        setCategory([data]);
+      });
   }
 
   function typetoString() {
