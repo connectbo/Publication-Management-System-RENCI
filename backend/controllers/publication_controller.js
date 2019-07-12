@@ -81,12 +81,13 @@ exports.getAll = function (req, res) {
             throw (err);
         }
         toSend = pubs;
-    }).count(function (err, counts) {
+        res.send(toSend);
+    }).countDocuments(function (err, counts) {
         if (err) {
             console.log(err);
         }
         toSend.status = counts;
-        res.send(toSend);
+        
     });
 }
 

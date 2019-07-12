@@ -33,7 +33,7 @@ function Home() {
         setPubState(PubResult);
     }
 
-    useEffect(getPubs, []);
+    useEffect(getPubs,[]);
 
     const pubArray = [];
     Object.keys(pubs).forEach(function (key) {
