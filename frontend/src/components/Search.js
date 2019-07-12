@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Card from '@material-ui/core/Card';
@@ -43,6 +43,7 @@ function Search() {
   const [edate, setEDate] = useState('2019-07-09');
   const [categories, setCategories] = useState([]);
 
+  let isLoading = true;
   let categoryString = "";
 
   const fetchCategories = async () => {
@@ -51,15 +52,18 @@ function Search() {
     setCategories(categoryResults);
   }
 
-  useEffect(fetchCategories,[]);
+  useEffect(fetchCategories, []);
 
   let categoryJSON = {};
   let categoryArray = [];
-  categories.forEach(function (category) {
-    let curr_cate = category['Category'];
-    categoryJSON[curr_cate] = true;
-    categoryArray.push(curr_cate);
-  })
+  if (isLoading) {
+    categories.forEach(function (category) {
+      let curr_cate = category['Category'];
+      categoryJSON[curr_cate] = true;
+      categoryArray.push(curr_cate);
+    })
+    isLoading = false;
+  }
 
 
 
@@ -83,16 +87,16 @@ function Search() {
     setAuthorState(event.target.value);
   }
 
-  const handleTypeChange = event => {
+  const handleCategoryChange = event => {
     let TargetName = event.target.value;
-    setCategories({ ...categories, [TargetName]: event.target.checked });
-    categories[TargetName] = event.target.checked;
-    console.log(categories);
+    setCategories({ ...categoryJSON, [TargetName]: event.target.checked });
+    categoryJSON[TargetName] = event.target.checked;
+    console.log(categoryJSON);
   }
 
   function categorytoString() {
-    for (let category in categories) {
-      if (categories[category] === true) {
+    for (let category in categoryJSON) {
+      if (categoryJSON[category] === true) {
         categoryString = categoryString + category.substr(0, 1);
       }
     }
@@ -127,7 +131,7 @@ function Search() {
         <FormControl className={classes.input}>
           <FormLabel><strong>Type</strong></FormLabel>
           <FormGroup>
-            {categoryArray.map(cate => <FormControlLabel control={<Checkbox checked={categoryJSON.cate} onChange={handleTypeChange} value={cate} />} label={cate} ></FormControlLabel> )}
+            {categoryArray.map(cate => <FormControlLabel control={<Checkbox checked={categoryJSON.cate} onChange={handleCategoryChange} value={cate} />} label={cate} ></FormControlLabel>)}
             {/* <FormControlLabel control={<Checkbox checked={.journal} onChange={handleTypeChange} value="journal" />} label="Journal Article" ></FormControlLabel>
             <FormControlLabel control={<Checkbox checked={type.proceedings} onChange={handleTypeChange} value="proceedings" />} label="Proceedings Article"></FormControlLabel> */}
           </FormGroup>
