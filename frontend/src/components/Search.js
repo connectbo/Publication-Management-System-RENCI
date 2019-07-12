@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Card from '@material-ui/core/Card';
@@ -75,6 +75,12 @@ function Search() {
     setTypeState({ ...type, [TargetName]: event.target.checked });
     type[TargetName] = event.target.checked;
     console.log(type);
+  }
+
+  useEffect()
+
+  function fetchCategory(){
+    fetch(`http://localhost:5000/`)
   }
 
   function typetoString() {

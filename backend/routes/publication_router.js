@@ -6,6 +6,8 @@ const PubRouter = express.Router();
 //search router  
 PubRouter.get('/search/title=:title?&&author=:author?&&type=:type?&&s_date=:s_date?&&e_date=:e_date?', PubController.advancedSearch);
 
+PubRouter.get('/category', PubController.getCategory);
+
 //add router
 PubRouter.get('/reference/:id/:id2/save=yes', PubController.getSave);
 PubRouter.get('/reference/:id/:id2', PubController.getOne);

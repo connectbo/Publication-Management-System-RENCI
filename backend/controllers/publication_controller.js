@@ -2,6 +2,15 @@ const Publication = require('../models/publication/schema');
 const Category = require('../models/category/category')
 const request = require('request');
 
+exports.getCategory = function (req, res) {
+    Category.find({}, function(err, allCategory){
+        if(err) {
+            throw err;
+        }
+        res.send(allCategory);
+    })
+}
+
 exports.advancedSearch = function (req, res) {
     _title = req.params.title;
     _author = req.params.author;
@@ -122,10 +131,12 @@ exports.getSave = function (req, Res) {
             if (err) {
                 throw err;
             }
-            if (categoryTest === []) {
+            if (categoryTest) {
+                console.log("Visited!");
                 const categoryResult = new Category({
                     'Category': parsedData['type']
                 });
+                console.log(categoryResult);
                 categoryResult.save(function (err) {
                     if (err) throw err;
                 })
