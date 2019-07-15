@@ -54,13 +54,14 @@ function Search() {
 
   useEffect(fetchCategories, []);
 
- let categoryJSON = {};
-  let categoryArray = [];
-  if (isLoading) {
+  const [categoryJSON, setcategoryJSON] = useState({});
+  const [categoryArray, setcategoryArray] = useState([]);
+  if (Object.keys(categoryJSON).length === 0) {
     categories.forEach(function (category) {
       let curr_cate = category['Category'];
-      categoryJSON[curr_cate] = false;
+      categoryJSON[curr_cate] = true;
       categoryArray.push(curr_cate);
+      setcategoryArray(categoryArray);
     })
     isLoading = false;
   }
@@ -89,9 +90,10 @@ function Search() {
 
   const handleCategoryChange = event => {
     let TargetName = event.target.value;
-    // setcategoryJSON({...categoryJSON, [TargetName] : event.target.checked});
-    categoryJSON[TargetName] = event.target.checked;
-    console.log(categoryJSON);
+    console.log(event.target.checked);
+    let newcategoryJSON = JSON.parse(JSON.stringify(categoryJSON));
+    newcategoryJSON[TargetName] = event.target.checked;
+    setcategoryJSON(newcategoryJSON);
   }
 
   function categorytoString() {
@@ -131,7 +133,7 @@ function Search() {
         <FormControl className={classes.input}>
           <FormLabel><strong>Type</strong></FormLabel>
           <FormGroup>
-            {categoryArray.map(cate => <FormControlLabel control={<Checkbox checked={categoryJSON.cate} onChange={handleCategoryChange} value={cate} />} label={cate} ></FormControlLabel>)}
+            {categoryArray.map(cate => <FormControlLabel control={<Checkbox checked={categoryJSON[cate]} onChange={handleCategoryChange} value={cate} />} label={cate} ></FormControlLabel>)}
             {/* <FormControlLabel control={<Checkbox checked={.journal} onChange={handleTypeChange} value="journal" />} label="Journal Article" ></FormControlLabel>
             <FormControlLabel control={<Checkbox checked={type.proceedings} onChange={handleTypeChange} value="proceedings" />} label="Proceedings Article"></FormControlLabel> */}
           </FormGroup>
