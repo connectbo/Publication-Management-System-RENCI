@@ -59,7 +59,6 @@ exports.advancedSearch = function (req, res) {
 
     function generateTypeFinder(TypeString) {
         let TypeFinder = [];
-        console.log(TypeString);
         for (let i = 0; i < TypeString.length; i++) {
             switch (TypeString.substring(i, i + 1)) {
                 case 'b':
