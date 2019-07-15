@@ -24,6 +24,9 @@ exports.advancedSearch = function (req, res) {
     if (_title === undefined) {
         _title = '';
     }
+    if (_type === undefined) {
+        _type = '';
+    }
     if (_sdate === undefined) {
         _sdate = '1995-12-08';
     }
@@ -56,6 +59,7 @@ exports.advancedSearch = function (req, res) {
 
     function generateTypeFinder(TypeString) {
         let TypeFinder = [];
+        console.log(TypeString);
         for (let i = 0; i < TypeString.length; i++) {
             switch (TypeString.substring(i, i + 1)) {
                 case 'b':
@@ -129,11 +133,13 @@ exports.getSave = function (req, Res) {
             fullnameAuthors.push(parsedAuthors[i]['given'] + " " + parsedAuthors[i]['family']);
         }
         Category.find({ Category: parsedData['type'] }, function (err, categoryTest) {
+            console.log("Visited!");
             if (err) {
                 throw err;
             }
-            if (!categoryTest) {
-                console.log("Visited!");
+            console.log(categoryTest);
+            if (categoryTest === undefined || categoryTest.length == 0) {
+                console.log("No Found!");
                 const categoryResult = new Category({
                     'Category': parsedData['type']
                 });
