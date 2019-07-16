@@ -43,7 +43,6 @@ function Search() {
   const [edate, setEDate] = useState('2019-07-09');
   const [categories, setCategories] = useState([]);
 
-  let isLoading = true;
   let categoryString = "";
 
   const fetchCategories = async () => {
@@ -63,7 +62,6 @@ function Search() {
       categoryArray.push(curr_cate);
       setcategoryArray(categoryArray);
     })
-    isLoading = false;
   }
 
 
