@@ -27,12 +27,10 @@ function Home() {
     const classes = useStyles();
     const [pubs, setPubState] = useState('');
     const [expanded, setExpanded] = useState(false);
-    const [isLoading, setLoading] = useState(true);
     const getPubs = async () => {
         const PubResult = await fetch(`http://localhost:5000/`)
             .then(res => res.json());
         setPubState(PubResult);
-        setLoading(false);
     }
 
     useEffect(getPubs, []);
