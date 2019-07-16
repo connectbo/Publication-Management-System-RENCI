@@ -9,11 +9,13 @@ services:
     volumes:
       - ./backend:/usr/src/app
       - /usr/src/app/node_modules/
-    environment:
-      - API_PORT=${API_PORT}
-      - MONGO_URI=${MONGO_URI}
     ports:
       - $API_PORT:$API_PORT
+    environment:
+      API_PORT: $API_PORT
+      MONGO_URI: $MONGO_URI
+      NODE_ENV: production
+
 
   frontend:
     container_name: frontend
