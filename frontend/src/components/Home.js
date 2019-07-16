@@ -12,7 +12,7 @@ const useStyles = makeStyles(theme => ({
     title: {
         fontSize: 14,
         paddingTop: '10px',
-        paddingBottom:'8px'
+        paddingBottom: '8px'
     },
     body: {
         fontSize: 16,
@@ -27,13 +27,15 @@ function Home() {
     const classes = useStyles();
     const [pubs, setPubState] = useState('');
     const [expanded, setExpanded] = useState(false);
+    const [isLoading, setLoading] = useState(true);
     const getPubs = async () => {
         const PubResult = await fetch(`http://localhost:5000/`)
             .then(res => res.json());
         setPubState(PubResult);
+        setLoading(false);
     }
 
-    useEffect(getPubs,[]);
+    useEffect(getPubs, []);
 
     const pubArray = [];
     Object.keys(pubs).forEach(function (key) {
@@ -46,6 +48,9 @@ function Home() {
 
     return (
         <Container>
+            {/* <div className='initial-loading'>
+                <ClipLoader sizeUnit={"px"} size={150} color={'#123abc'} loading={isLoading}></ClipLoader>
+            </div> */}
             <Typography className={classes.title}>{pubs.status} </Typography>
             {pubArray.map(pub =>
                 <ExpansionPanel className={classes.card} expanded={expanded === pub.DOI} onChange={handleExpandChange(pub.DOI)}>
@@ -60,7 +65,7 @@ function Home() {
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
                         <Container>
-                            <Typography className={classes.body}><strong>Author(s): </strong>{pub.Authors.join(", ")}</Typography><hr/>
+                            <Typography className={classes.body}><strong>Author(s): </strong>{pub.Authors.join(", ")}</Typography><hr />
                             <Typography className={classes.body}>Published on <strong>{pub.Created_Date}</strong>, Category: <strong>{pub.Type}</strong></Typography>
                         </Container>
                     </ExpansionPanelDetails>
