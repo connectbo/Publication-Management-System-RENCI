@@ -37,6 +37,8 @@ https://hub.docker.com/editions/community/docker-ce-desktop-mac
 ### Set up environment variable file
 Create an environment variable file called .env. You can refer to the sample .env file in the root directory.
 
+Remember to specify the API_PORT that your backend service
+
 
 ### Start Service
 After installing you can easily get project setup and running by using Docker-Compose. By this, you will only need one line command to get two services(frontend, backend) running.
