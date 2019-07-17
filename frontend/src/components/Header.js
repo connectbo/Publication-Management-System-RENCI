@@ -3,7 +3,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
-import Button from '@material-ui/core/Button';
+import Button from '@material-ui/core/Button'
+import { NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles({
     barTitle: {
@@ -23,9 +25,9 @@ function Header() {
                 <a href="/" color="inherit" className={classes.barTitle}>
                     <strong>RENCI </strong> Publication Management System
           </a>
-                <Button href="/" color="inherit">Home</Button>
-                <Button href="/search" color="inherit">Search</Button>
-                <Button href="/add" color="inherit">Add</Button>
+                <NavLink component={Button} to="/" color="inherit">Home</NavLink>
+                <Link component={Button} to="/search" color="inherit">Search</Link>
+                <NavLink component={Button} to="/add" color="inherit">Add</NavLink>
             </Toolbar>
         </AppBar>
     )
