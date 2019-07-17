@@ -1,0 +1,32 @@
+version: "3"
+
+services:
+  backend:
+    container_name: pmt-backend
+    build:
+      context: ./backend/
+      dockerfile: Dockerfile
+    volumes:
+      - ./backend:/usr/src/app
+    environment:
+      API_PORT: $API_PORT
+      MONGO_URI: $MONGO_URI
+      NODE_ENV: production
+    ports:
+      - $API_PORT:$API_PORT
+
+  frontend:
+    container_name: pmt-frontend
+    build:
+      context: ./frontend/
+      dockerfile: Dockerfile-prod
+      args:
+        NODE_ENV: production
+    volumes:
+      - ./frontend:/usr/src/app
+    environment:
+      NODE_ENV: production
+    ports:
+      - 80:80
+    depends_on:
+      - backend
