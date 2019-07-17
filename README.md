@@ -80,7 +80,8 @@ You are able to search publications stored in RENCI database by one of the follo
 5. Start Date
 6. End Date
 
-###
+### Add Publication
+Entering the publication DOI and you are able to add it to the RENCI database. *Restrictions Apply.*
 
 ## Structure
 
