@@ -4,16 +4,14 @@ A redesigned publication management for RENCI. MERN Stack(MongoDB, Express, Reac
 
 ## Installation & Run
 
-### Prerequisites
-
-
-
-First, clone the project:
+### Clone Project
+Fork and clone the repo from Github.
 ```
 git clone https://github.com/connectbo/Publication-Management-System-RENCI.git
 ```
 
-Then, run the following commands to install the current stable release of Docker Compose and NPM.
+### Install Docker Compose & NPM
+Run the following commands to install the current stable release of Docker Compose and NPM.
 
 ```
 sudo curl -L "https://github.com/docker/compose/releases/download/1.24.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
@@ -36,7 +34,11 @@ If you are a Mac user, you might need to install Docker Desktop, which is availa
 https://hub.docker.com/editions/community/docker-ce-desktop-mac
 ```
 
-### Usage
+### Set up environment variable file
+Create an environment variable file called .env. You can refer to the sample .env file in the root directory.
+
+
+### Start Service
 After installing you can easily get project setup and running by using Docker-Compose. By this, you will only need one line command to get two services(frontend, backend) running.
 
 Change to your the cloned directory and then use
@@ -47,13 +49,38 @@ docker-compose up
 
 If both frontend and backend are compiled successfully, you should be able to see the system running Port 3000 on your localhost along with the server running at Port 5000.
 
+### Production Mode
+This project also has a production ready-to-deploy version. You are able to access by
+```
+docker-compose -f docker-compose.prod.yml up --build
+```
+
+### Stop Service
+Use the following code to stop service.
+```
+docker-compose down
+```
+
+
 ## Functionality
 
 The homepage would list all articles already stored in RENCI's database. For those articles that are not retrieved and stored yet, you could use search and add function to store them.
 
-### Search with DOI
-Use the SEARCH button on the top right and enter in DOI you want to search for. The system would return an result according to this DOI. If an article is found from CrossRef API and not stored in RENCI database yet, you would have a chance to store it into our Database by clicking the 'SAVE IT' button.
+### Browse all publications
 
+By default, when you visit the homepage, you will see a list of publications stored in the RENCI database. Each publication would have a card effect, showing title and doi with a hyperlink to the external publication link. By clicking the card, you will be able to see full information, including the author, category, published date.
+
+### Search with DOI
+You are able to search publications stored in RENCI database by one of the following category, a combination or all of them.
+
+1. DOI
+2. Title
+3. Author
+4. Category
+5. Start Date
+6. End Date
+
+###
 
 ## Structure
 
