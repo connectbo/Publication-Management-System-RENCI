@@ -10,8 +10,8 @@ services:
       - ./backend:/usr/src/app
       - /usr/src/app/node_modules/
     environment:
-      - API_PORT = ${API_PORT}
-      - MONGO_URI = ${MONGO_URI}
+      - API_PORT=${API_PORT}
+      - MONGO_URI=${MONGO_URI}
     ports:
       - $API_PORT:$API_PORT
 
