@@ -25,9 +25,9 @@ function Header() {
                 <a href="/" color="inherit" className={classes.barTitle}>
                     <strong>RENCI </strong> Publication Management System
           </a>
-                <NavLink component={Button} to="/" color="inherit">Home</NavLink>
-                <Link component={Button} to="/search" color="inherit">Search</Link>
-                <NavLink component={Button} to="/add" color="inherit">Add</NavLink>
+                <Button component={NavLink} to="/" color="inherit">Home</Button>
+                <Button component={NavLink} to="/search" color="inherit">Search</Button>
+                <Button component={NavLink} to="/add" color="inherit">Add</Button>
             </Toolbar>
         </AppBar>
     )
