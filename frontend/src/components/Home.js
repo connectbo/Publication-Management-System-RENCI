@@ -24,16 +24,18 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function Home() {
+    console.log("Home visited")
     const classes = useStyles();
     const [pubs, setPubState] = useState('');
+    console.log(pubs);
     const [expanded, setExpanded] = useState(false);
-    const getPubs = async () => {
+    async function getPubs() {
         const PubResult = await fetch(`http://localhost:5000/`)
             .then(res => res.json());
         setPubState(PubResult);
     }
 
-    useEffect(getPubs, []);
+    useEffect(()=>{getPubs();}, []);
 
     const pubArray = [];
     Object.keys(pubs).forEach(function (key) {
