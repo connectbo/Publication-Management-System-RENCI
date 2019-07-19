@@ -33,6 +33,7 @@ const useStyles = makeStyles({
 
 
 function Search() {
+  console.log('Search visited!');
   const classes = useStyles();
   const [ref, setrefState] = useState('');
   const [title, setTitleState] = useState('');
@@ -42,16 +43,16 @@ function Search() {
   const [sdate, setSDate] = useState('2001-01-01');
   const [edate, setEDate] = useState('2019-07-09');
   const [categories, setCategories] = useState([]);
-
+  console.log(categories);
   let categoryString = "";
 
-  const fetchCategories = async () => {
+  async function fetchCategories() {
     const categoryResults = await fetch(`http://localhost:5000/category`)
       .then(res => res.json());
     setCategories(categoryResults);
   }
 
-  useEffect(fetchCategories, []);
+  useEffect(() => {fetchCategories();}, []);
 
   const [categoryJSON, setcategoryJSON] = useState({});
   const [categoryArray, setcategoryArray] = useState([]);
