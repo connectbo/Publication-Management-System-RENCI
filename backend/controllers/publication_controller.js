@@ -3,8 +3,8 @@ const Category = require('../models/category/category')
 const request = require('request');
 
 exports.getCategory = function (req, res) {
-    Category.find({}, function(err, allCategory){
-        if(err) {
+    Category.find({}, function (err, allCategory) {
+        if (err) {
             throw err;
         }
         res.send(allCategory);
@@ -90,7 +90,7 @@ exports.getAll = function (req, res) {
             console.log(err);
         }
         toSend.status = counts;
-        
+
     });
 }
 
@@ -131,33 +131,47 @@ exports.getSave = function (req, Res) {
         for (i = 0; i < parsedAuthors.length; i++) {
             fullnameAuthors.push(parsedAuthors[i]['given'] + " " + parsedAuthors[i]['family']);
         }
-        Category.find({ Category: parsedData['type'] }, function (err, categoryTest) {
-            console.log("Visited!");
+        Publication.find({ Title: parsedData['title'] }, function (err, findPub) {
             if (err) {
                 throw err;
             }
-            console.log(categoryTest);
-            if (categoryTest === undefined || categoryTest.length == 0) {
-                console.log("No Found!");
-                const categoryResult = new Category({
-                    'Category': parsedData['type']
-                });
-                console.log(categoryResult);
-                categoryResult.save(function (err) {
-                    if (err) throw err;
+            if (findPub === undefined || findPub == 0) {
+                Category.find({ Category: parsedData['type'] }, function (err, categoryTest) {
+                    console.log("Visited!");
+                    if (err) {
+                        throw err;
+                    }
+                    console.log(categoryTest);
+                    if (categoryTest === undefined || categoryTest.length == 0) {
+                        console.log("No Found!");
+                        const categoryResult = new Category({
+                            'Category': parsedData['type']
+                        });
+                        console.log(categoryResult);
+                        categoryResult.save(function (err) {
+                            if (err) throw err;
+                        })
+                    }
                 })
+                const saveResult = new Publication({
+                    'Title': parsedData['title'], 'Authors': fullnameAuthors, 'DOI': parsedData['DOI'], 'Type': parsedData['type'], Created_Date: parsedData['created']['date-time'].substring(0, 10)
+                });
+
+                saveResult.save(function (err) {
+                    if (err) throw err;
+                });
+                const renderResult = {
+                    'Title': parsedData['title'], 'Authors': fullnameAuthors, 'DOI': parsedData['DOI'], 'Type': parsedData['type'], 'status': "Stored in RENCI Database", 'Created_Date': parsedData['created']['date-time'].substring(0, 10)
+                }
+                Res.send(renderResult);
+            }
+            else{
+                const renderDBResult = {
+                    'Title': parsedData['title'], 'Authors': fullnameAuthors, 'DOI': parsedData['DOI'], 'Type': parsedData['type'], 'status': "Found in RENCI Database", 'Created_Date': parsedData['created']['date-time'].substring(0, 10)
+                }
+                Res.send(renderDBResult);
             }
         })
-        const saveResult = new Publication({
-            'Title': parsedData['title'], 'Authors': fullnameAuthors, 'DOI': parsedData['DOI'], 'Type': parsedData['type'], Created_Date: parsedData['created']['date-time'].substring(0, 10)
-        });
 
-        saveResult.save(function (err) {
-            if (err) throw err;
-        });
-        const renderResult = {
-            'Title': parsedData['title'], 'Authors': fullnameAuthors, 'DOI': parsedData['DOI'], 'Type': parsedData['type'], 'status': "Stored in RENCI Database", 'Created_Date': parsedData['created']['date-time'].substring(0, 10)
-        }
-        Res.send(renderResult);
     });
 }
