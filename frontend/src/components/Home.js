@@ -26,11 +26,13 @@ const useStyles = makeStyles(theme => ({
 function Home() {
     console.log("Home visited")
     const classes = useStyles();
+    const currentUrl = window.location.hostname;
+    console.log(currentUrl);
     const [pubs, setPubState] = useState('');
     console.log(pubs);
     const [expanded, setExpanded] = useState(false);
     async function getPubs() {
-        const PubResult = await fetch(`http://localhost:5000/`)
+        const PubResult = await fetch(`http://${currentUrl}:5000/`)
             .then(res => res.json());
         setPubState(PubResult);
     }

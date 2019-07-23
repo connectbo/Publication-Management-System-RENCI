@@ -80,7 +80,6 @@ exports.getAll = function (req, res) {
     let toSend = [];
     return Publication.find({}, function (err, pubs) {
         if (err) {
-            console.log(err);
             throw (err);
         }
         toSend = pubs;
