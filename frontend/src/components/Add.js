@@ -28,8 +28,8 @@ const useStyles = makeStyles({
   });
   
   function Add() {
-      console.log("Add visited!");
       const classes = useStyles();
+      const currentUrl = window.location.hostname;
       const [ref, setrefState] = useState('');
       const [result, setResultState] = useState('');
       const [authorString, setAuthorStringState] = useState('');
@@ -40,7 +40,7 @@ const useStyles = makeStyles({
     
       const handleSubmit = event => {
         event.preventDefault();
-        fetch(`http://localhost:5000/reference/${ref}/save=yes`)
+        fetch(`http://${currentUrl}:5000/reference/${ref}/save=yes`)
           .then(res => res.json())
           .then(data => {
             setResultState(data);

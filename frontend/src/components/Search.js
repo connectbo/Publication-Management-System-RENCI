@@ -43,11 +43,11 @@ function Search() {
   const [sdate, setSDate] = useState('2001-01-01');
   const [edate, setEDate] = useState('2019-07-09');
   const [categories, setCategories] = useState([]);
-  console.log(categories);
+  const currentUrl = window.location.hostname;
   let categoryString = "";
 
   async function fetchCategories() {
-    const categoryResults = await fetch(`http://localhost:5000/category`)
+    const categoryResults = await fetch(`http://${currentUrl}:5000/category`)
       .then(res => res.json());
     setCategories(categoryResults);
   }
@@ -105,7 +105,7 @@ function Search() {
 
   const handleSubmit = event => {
     if (ref !== '') {
-      fetch(`http://localhost:5000/reference/${ref}`)
+      fetch(`http://${currentUrl}:5000/reference/${ref}`)
         .then(res => res.json())
         .then(data => {
           setpubArrayState([data]);
@@ -115,8 +115,7 @@ function Search() {
       setStatusState('Searching by ' + title + " " + author);
       event.preventDefault();
       categorytoString();
-      console.log(`http://localhost:5000/search/title=${title}&&author=${author}&&type=${categoryString}&&s_date=${sdate}&&e_date=${edate}`);
-      fetch(`http://localhost:5000/search/title=${title}&&author=${author}&&type=${categoryString}&&s_date=${sdate}&&e_date=${edate}`)
+      fetch(`http://${currentUrl}:5000/search/title=${title}&&author=${author}&&type=${categoryString}&&s_date=${sdate}&&e_date=${edate}`)
         .then(res => res.json())
         .then(data => {
           setpubArrayState(data);
@@ -133,8 +132,6 @@ function Search() {
           <FormLabel><strong>Type</strong></FormLabel>
           <FormGroup>
             {categoryArray.map(cate => <FormControlLabel control={<Checkbox checked={categoryJSON[cate]} onChange={handleCategoryChange} value={cate} />} label={cate} ></FormControlLabel>)}
-            {/* <FormControlLabel control={<Checkbox checked={.journal} onChange={handleTypeChange} value="journal" />} label="Journal Article" ></FormControlLabel>
-            <FormControlLabel control={<Checkbox checked={type.proceedings} onChange={handleTypeChange} value="proceedings" />} label="Proceedings Article"></FormControlLabel> */}
           </FormGroup>
         </FormControl>
         <FormControl>

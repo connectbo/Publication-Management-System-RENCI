@@ -24,12 +24,9 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function Home() {
-    console.log("Home visited")
     const classes = useStyles();
     const currentUrl = window.location.hostname;
-    console.log(currentUrl);
     const [pubs, setPubState] = useState('');
-    console.log(pubs);
     const [expanded, setExpanded] = useState(false);
     async function getPubs() {
         const PubResult = await fetch(`http://${currentUrl}:5000/`)
@@ -50,9 +47,6 @@ function Home() {
 
     return (
         <Container>
-            {/* <div className='initial-loading'>
-                <ClipLoader sizeUnit={"px"} size={150} color={'#123abc'} loading={isLoading}></ClipLoader>
-            </div> */}
             <Typography className={classes.title}>{pubs.status} </Typography>
             {pubArray.map(pub =>
                 <ExpansionPanel className={classes.card} expanded={expanded === pub.DOI} onChange={handleExpandChange(pub.DOI)}>
