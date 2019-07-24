@@ -13,4 +13,7 @@ PubRouter.get('/reference/:id/:id2/save=yes', PubController.getSave);
 PubRouter.get('/reference/:id/:id2', PubController.getOne);
 PubRouter.get('/', PubController.getAll);
 
+//multipleAdd
+PubRouter.post('/insert', PubController.insert)
+
 module.exports = PubRouter;
