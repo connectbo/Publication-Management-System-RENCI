@@ -3,9 +3,11 @@ const app = express();
 const connectDB = require('./config/db');
 const cors = require('cors');
 const PubRouter = require('./routes/publication_router');
+const bodyParser = require('body-parser')
 
 connectDB();
 app.use(cors());
+app.use(bodyParser.json())
 
 app.use('/', PubRouter);
 
