@@ -2,21 +2,33 @@ const Publication = require('../models/publication/schema');
 const Category = require('../models/category/category')
 const request = require('request');
 
-exports.insert = function (req, res) {
+function testSequence() {
+    for (let i = 0; i < 5; i++) {
+        console.log(i);
+    }
+    console.log("Reaching the end!");
+}
+
+exports.test = function (req, res) {
+    console.log("Testing Starts...");
+    for (let i = 0; i < 5; i++) {
+        console.log(i);
+    }
+    console.log("Testing Ends..")
+}
+
+exports.insert = async function (req, Res) {
     console.log("Insert Visited!")
     const toInsert = req.body;
+    let insertStatus = {};
     for (apub in toInsert) {
         const _DOI = toInsert[apub]['doi'];
         const apiUrl = 'https://api.crossref.org/v1/works/' + _DOI;
-        console.log("Processing "+_DOI);
-        request.get(apiUrl, function (error, res, body) {
+        await request.get(apiUrl, function (error, res, body) {
+            console.log("Processing " + _DOI);
             const parsedData = JSON.parse(body)['message'];
-            const parsedAuthors = JSON.parse(body)['message']['author'];
-            const fullnameAuthors = [];
-            for (i = 0; i < parsedAuthors.length; i++) {
-                fullnameAuthors.push(parsedAuthors[i]['given'] + " " + parsedAuthors[i]['family']);
-            }
-            Publication.find({ Title: parsedData['title'] }, async function (err, findPub) {
+
+            Publication.find({ Title: parsedData['title'] }, function (err, findPub) {
                 if (err) {
                     throw err;
                 }
@@ -42,22 +54,16 @@ exports.insert = function (req, res) {
                     saveResult.save(function (err) {
                         if (err) throw err;
                     });
-                    const insertDBResult = {
-                        'Title': parsedData['title'], 'Authors': fullnameAuthors, 'DOI': parsedData['DOI'], 'Type': parsedData['type'], 'status': "Stored in RENCI Database", 'Created_Date': parsedData['created']['date-time'].substring(0, 10)
-                    }
-                    console.log(_DOI+"Inserted!");
-                    // res.send(insertDBResult);
+                    insertStatus[_DOI] = "Inserted in Database!";
+                    console.log(_DOI+ " Added!")
                 }
                 else {
-                    const insertDBResult = {
-                        'Title': parsedData['title'], 'Authors': fullnameAuthors, 'DOI': parsedData['DOI'], 'Type': parsedData['type'], 'status': "Found in RENCI Database", 'Created_Date': parsedData['created']['date-time'].substring(0, 10)
-                    }
-                    console.log(_DOI+"Found in database!");
-                    // res.send(insertDBResult);
+                    insertStatus[_DOI] = "Already in Database!";
+                    console.log(_DOI+ " Found!");
                 }
             })
-        });
-    }
+        })
+    };
 }
 
 exports.getCategory = function (req, res) {
