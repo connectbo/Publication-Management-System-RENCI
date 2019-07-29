@@ -1,0 +1,311 @@
+[
+    {
+        "tite": "Visualizing Information",
+        "doi": "",
+        "type": "Short Course",
+        "event": {
+            "name": "Duke Center for Health Informatics Short Course",
+            "year": 2018
+        },
+        "citation": "Borland, D. Visualizing Information. Duke Center for Health Informatics Short Course. U.S. Food and Drug Administration. March 16, 2018"
+    },{
+        "tite": "Coping with “Big Data” in research computing",
+        "doi": "",
+        "type": "Presentation",
+        "event": {
+            "name": "eResearch New Zealand 2018",
+            "year": 2018
+        },
+        "url": "https://az659834.vo.msecnd.net/eventsairseasiaprod/production-uoaevents-public/fcf6dd8a1ab649d8b1476319c156e634"
+    },{
+        "tite": "Evaluating path query mechanisms as a foundation for SDN network control",
+        "doi": "10.1109/netsoft.2018.8460116 ",
+        "type": "Conference Paper",
+        "event": {
+            "name": "IEEE Conference on Network Softwarization (Netsoft)"
+        },
+        "citation": "Gao, S., Shrivastava, S., Ogan, K., Baldin, I., & Xin, Y. (2018, June). Evaluating path query mechanisms as a foundation for SDN network control. IEEE Conference on Network Softwarization (Netsoft). Montreal, Canada"
+    },{
+        "tite": "HydroShare and iRODS: How iRODS manages data for a hydrology community of 1000’s of users",
+        "doi": "",
+        "type": "Presentation",
+        "event": {
+            "name": "iRODS User Group Meeting"
+        },
+        "citation": "Idaszak, R, Tarboton, D.G. (PI), Yi, H., Calloway, C., Wang, S., Horsburgh, J., Ames, D., Clark, M., Goodall, J., Couch, A., Castronova., T., Bandaragoda, C., Seul, M., Henderson, M., & Doan, P. (2018, June). HydroShare and iRODS: How iRODS manages data for a hydrology community of 1000’s of users. iRODS User Group Meeting. Durham, NC. "
+    },{
+        "tite": "Cyberinfrastructure for enhancing interdisciplinary engagement in coastal risk management research",
+        "doi": "",
+        "type": "Presentation",
+        "event": {
+            "name": "iEMSs 2018"
+        },
+        "citation": "Karancia, A., Stillwell, L., Lenhardt, W.C., & Dietrich, C. (2018, June). Cyberinfrastructure for enhancing interdisciplinary engagement in coastal risk management research. iEMSs 2018. Fort Collins, CO. "
+    },{
+        "tite": "Detecting outliers in network transfers with feature extraction",
+        "doi": "",
+        "type": "Workshop",
+        "citation": "Kiran, M., Wang, C., Rao, N.S.V. & Mandal, A. (2018, July). Detecting outliers in network transfers with feature extraction. DISE1: Joint Workshop on Deep (or Machine) Learning for Safety-Critical Applications in Engineering, co-located with 35th International Conference on Machine Learning. Stockholm, Sweden",
+        "url": "https://icml.cc/Conferences/2018/Schedule?showEvent=3327"
+    },{
+        "tite": "NC Policy Collaboratory Project Report: Increasing Access to Certain North Carolina Environmental Monitoring and Natural Resource Data",
+        "doi": "",
+        "type": "Report",
+        "citation": "Lenhardt, W. C., & Blanton. B. (2018). NC Policy Collaboratory Project Report: Increasing Access to Certain North Carolina Environmental Monitoring and Natural Resource Data (pp. 1-42, Rep.). Chapel Hill, NC: RENCI, UNC-Chapel Hill",
+        "url": "https://collaboratory.unc.edu/files/2018/04/Collaboratory-Data-Study-Report-to-NCGA-1April2018.pdf"
+    },{
+        "tite": "Analytics for earth science data discovery: Applying DataBridge to long-tail and large data collections in the earth and environmental sciences",
+        "doi": "",
+        "type": "Poster",
+        "event": {
+            "name": "ESIP Winter Meeting",
+            "year": 2018
+        },
+        "citation": "Rajasekar, A., Lander, H, & Lenhardt, W.C. (2018, January). Analytics for earth science data discovery: Applying DataBridge to long-tail and large data collections in the earth and environmental sciences. ESIP Winter Meeting. Bethesda, MD",
+        "url": "https://figshare.com/articles/Analytics_for_Earth_Science_Data_Discovery_Applying_DataBridge_to_Long-tail_and_Large_Data_Collections_in_the_Earth_and_Environmental_Sciences_Presented_at_the_Winter_2018_ESIP_Meeting/5853063"
+    },{
+        "tite": "A truthful online auction mechanism for deadline-aware cloud resource allocation",
+        "doi": "10.1109/noms.2018.8406240",
+        "type": "Conference Paper"
+    },{
+        "tite": "Advancing distributed data management for the HydroShare hydrologic information system",
+        "doi": "10.1016/j.envsoft.2017.12.008 ",
+        "type": "Journal Article"
+    },{
+        "tite": "An integrated scenario ensemble-based framework for hurricane evacuation modeling: Part 1–Decision Support System",
+        "doi": "10.1111/risa.12990 ",
+        "type": "Journal Article"
+    },{
+        "tite": "An integrated scenario ensemble-based framework for hurricane evacuation modeling: Part 2–Hazard modeling",
+        "doi": "10.1111/risa.13004 ",
+        "type": "Journal Article"
+    },{
+        "tite": "Automated Integration of Trees and Traits: A Case Study Using Paired Fin Loss Across Teleost Fishes",
+        "doi": "10.1093/sysbio/syx098 ",
+        "type": "Journal Article"
+    },{
+        "tite": "Cachalot: A Network-Aware, Cooperative Cache Network for Geo-Distributed, Data-Intensive Applications",
+        "doi": "10.1109/noms.2018.8406273 ",
+        "type": "Conference Paper"
+    },{
+        "tite": "Dual View: multivariate visualization using linked layouts of objects and dimensions",
+        "doi": "",
+        "type": "Poster",
+        "event": {
+            "name": "IEEE VIS",
+            "year": 2018
+        },
+        "authors": ["D. Borland", "D. Gotz"],
+        "url": "http://ieeevis.org/year/2018/info/posters"
+    },{
+        "tite": "Increasing understanding of survey re-weighting with visualization",
+        "doi": "",
+        "type": "Poster",
+        "event": {
+            "name": "IEEE VIS ",
+            "year": 2018
+        },
+        "authors": ["Y. Zhang",  "D. Borland", "D. Gotz"],
+        "url": "http://ieeevis.org/year/2018/info/posters"
+    },{
+        "tite": "Methods, Systems, and Computer Readable Media for Providing a Secure Virtual Research Space",
+        "doi": "",
+        "type": "Patent",
+        "citation": "Schmitt, C. P.. Chase, J. S.. Baldin, I. Coposky, J. M., Shoffner, M. R., Lamm, B. W., Mostafa, J. Methods, Systems, and Computer Readable Media for Providing a Secure Virtual Research Space. U.S. Patent 9984245B2. May 29, 2018.",
+        "note": "US Patent Number US9984245B2",
+        "url": "https://patents.google.com/patent/US9984245B2/en?oq=us9984245B2"
+    },{
+        "tite": "Networks of blood proteins in the neuroimmunology of schizophrenia.",
+        "doi": "10.1038/s41398-018-0158-y ",
+        "type": "Journal Article"
+    },{
+        "tite": "Offenders become the victim in virtual reality: impact of changing perspective in domestic violence",
+        "doi": "10.1038/s41598-018-19987-7 ",
+        "type": "Journal Article"
+    },{
+        "tite": "Ontology-based interactive visualization of patient-generated research questions",
+        "doi": "",
+        "type": "Presentation",
+        "event": {
+            "name": "Workshop on Visual Analytics in Healthcare (VAHC 2018)",
+            "year": 2018 
+        },
+        "citation": "D. Borland, L. Christopherson, and C. Schmitt. Ontology-based interactive visualization of patient-generated research questions. 2018 Workshop on Visual Analytics in Healthcare (VAHC 2018). 2018.",
+        "url": "https://www.visualanalyticshealthcare.org/docs/VAHC-2018-Schedule.pdf"
+    },{
+        "tite": "Probabilistic Track Generation for Hurricane Storm Surge Estimates",
+        "doi": "",
+        "type": "Thesis",
+        "authors": ["Jessica L. Smith"],
+        "citation": "Smith, J. L. (2018) Probabilistic Track Generation for Hurricane Storm Surge Estimates (master’s thesis) UNC-CH, Chapel Hill, NC.",
+        "url": "https://cdr.lib.unc.edu/indexablecontent/uuid:1021fc4d-0b0f-497f-a7bd-c4b82b455739"
+    },{
+        "tite": "Rethinking Flood Analytics",
+        "doi": "",
+        "type": "Conference Paper",
+        "event": {
+            "name": "Flood Analytics Colloquium",
+            "year": 2018
+        },
+        "citation": "This report draws from the vision of a flood-resilient nation and its associated challenges to address the current state of analytics and a “blue sky” set of principles that guides where analytics may lead. It then seeks to bridge the gaps between where flood analytics stands and the finish line by identifying key research and development needs and opportunities. Finally, it discusses opportunities within the Flood Apex Program and among other academic and agency efforts for inclusion and collaboration to rethink flood analytics",
+        "url": "http://coastalresiliencecenter.unc.edu/wp-content/uploads/2018/04/CRC-FloodAnalytics-Colloquium-Report.pdf"
+    },{
+        "tite": "Security Risks in Asynchronous Web Servers: When Performance Optimizations Amplify the Impact of Data-Oriented Attacks",
+        "doi": "10.1109/eurosp.2018.00020 ",
+        "type": "Conference Paper"
+    },{
+        "tite": "The Cell Cycle Browser: an interactive tool for visualizing, simulating, and perturbing cell cycle progression",
+        "doi": "10.1101/234039 ",
+        "type": "Posted Content"
+    },{
+        "tite": "The Future of CISE Distributed Research Infrastructure",
+        "doi": "10.1145/3213232.3213239 ",
+        "type": "Journal Article"
+    },{
+        "tite": "Toward Live Inter-Domain Network Services on the ExoGENI Testbed",
+        "doi": "10.1109/infcomw.2018.8407026 ",
+        "type": "Conference Paper"
+    },{
+        "tite": "Upper elementary students’ explanations of “why ice melts” and the influence of haptic force feedback",
+        "doi": "",
+        "type": "Presentation",
+        "event": {
+            "name": "NARST Annual International Conference",
+            "year": 2018
+        },
+        "citation": "J. Minogue, D. Hunter, D. Borland, and M. Russo. Upper elementary students’ explanations of “why ice melts” and the influence of haptic force feedback. 2018 NARST Annual International Conference. 2018.",
+        "url": "https://www.narst.org/annualconference/2018_NARST_Clickable_Conference_Program.pdf"
+    },{
+        "tite": "Variability in coastal flooding predictions due to forecast errors during Hurricane Arthur",
+        "doi": "10.1016/j.coastaleng.2018.02.008 ",
+        "type": "Journal Article"
+    },{
+        "tite": "Visual cohort queries for high-dimensional data: a design study",
+        "doi": "",
+        "type": "Presentation",
+        "event": {
+            "name": "2018 Workshop on Visual Analytics in Healthcare (VAHC 2018)",
+            "year": 2018
+        },
+        "citation": "W. Zhao, D. Borland, A. E. Chung, and D. Gotz. Visual cohort queries for high-dimensional data: a design study. 2018 Workshop on Visual Analytics in Healthcare (VAHC 2018). 2018.",
+        "url": "https://www.visualanalyticshealthcare.org/docs/VAHC-2018-Schedule.pdf"
+    },{
+        "tite": "Arachne: an OWL RL Reasoner Applied to Gene Ontology Causal Activity Models (and Beyond)",
+        "doi": "",
+        "type": "Presentation",
+        "event": {
+            "name": "ISWC 2018"
+        },
+        "abstract": "This paper introduces Arachne, an RDF rule engine with support for efficient reasoning with large OWL RL terminologies. Arachne is being used by the Gene Ontology (GO) Consortium to provide real-time reasoning within the Noctua modeling tool while creating GO \"Causal Activity Models\".",
+        "url": "http://ceur-ws.org/Vol-2180/"
+    },{
+        "tite": "DataBridge for Neuroscience",
+        "doi": "", 
+        "type": "Presentation",
+        "event": {
+            "name": "NeuroInformatics",
+            "year": 2018
+        },
+        "note": "This talk presented the DataBridge for Neuroscience project at the INCF 2018 Workshop on Advanced Data Discovery for Neuroscience held in conjunction with NeuroInformatics 2018, Montreal Canada.",
+        "url": "http://www.neuroinformatics2018.org/abstracts/"
+    },{
+        "tite": "INCF 2018 Workshop on Advanced Data Discovery for Neuroscience",
+        "type": "Workshop",
+        "event": {
+            "name": "INCF 2018 Workshop on Advanced Data Discovery for Neuroscience",
+            "year": 2018
+        },
+        "url": "https://sites.google.com/renci.org/neuroinformatics-18-workshop/home"
+    },{
+        "tite": "Tobacco use and psychosis risk in persons at clinical high risk",
+        "doi": "10.1111/eip.12751",
+        "type": "Journal Article"
+    },{
+        "tite": "Whole genome sequence study of cannabis dependence in two independent cohorts",
+        "doi": "10.1111/adb.12489  ",
+        "type": "Journal Article"
+    },{
+        "tite": "Diagnostic utility of exome sequencing in the evaluation of neuromuscular disorders",
+        "doi": "10.1212/NXG.0000000000000212",
+        "type": "Journal Article"
+    },{
+        "tite": "ClinGen advancing genomic data-sharing standards as a GA4GH driver project",
+        "doi": "10.1002/humu.23625",
+        "type": "Journal Article"
+    },{
+        "tite": "ClinGen Allele Registry links information about genetic variants",
+        "doi": "10.1002/humu.23637",
+        "type": "Journal Article"
+    },{
+        "tite": "The Future of Multi-Clouds: a Survey of Essential Architectural Elements",
+        "doi": "",
+        "type": "Keynote",
+        "event": {
+            "name": "MoNeTec",
+            "year": 2018
+        },
+        "url": "http://nrig.renci.org/wp-content/uploads/2018/11/Monetec_2018.pdf"
+    },{
+        "tite": "Developing Methods for Standardized Patient Cohort Deduplication Across the Carolinas Collaborative, A Regional Data Research Network",
+        "doi": "",
+        "type": "Presentation",
+        "event": {
+            "name": "AMIA Clinical Informatics Conference",
+            "year": 2018
+        },
+        "citation": "Robert Bradford, Ashok Krishnamurthy, Jordan Brittingham, Steve Evans, Brian Ostasiewski, Wonhee Yang and Kira Bradford, Developing Methods for Standardized Patient Cohort Deduplication Across the Carolinas Collaborative, A Regional Data Research Network, AMIA Clinical Informatics Conference, 2018.",
+        "url": "https://cic2018.zerista.com/event/member?item_id=7657852"
+    },{
+        "tite": "Surgical Critical Care Initiative Data Management: Systems and Processes Enabling Research and Clinical Decision Support Tool Development to Improve Precision Medicine in Acute Care",
+        "type": "Poster",
+        "event": {
+            "name": "Military Health System Research Symposium (MHSRS)"
+        },
+        "citation": "MacKelfresh, A., Belard, A., Schobel, S., Limkakeng, A., Heath, A., Hurst, B., James, J., Kapeljushnik, O., Shoffner, M., Sliwowski, M., Lones, J., Pinson, L., Kirsch, J., Turk, M., Almond, C., Clear, C., Crubezy, M., McCourt, B., Hill, C., Huang, E., Kirk, A., Buchman, T., Elster, E. Surgical Critical Care Initiative Data Management: Systems and Processes Enabling Research and Clinical Decision Support Tool Development to Improve Precision Medicine in Acute Care. Poster presented at Military Health System Research Symposium (MHSRS), August 20-23, 2018, Kissimmee, FL"
+    },{
+        "tite": "Enabling eResearch with Automated Data Management from Ingestion Through Distribution",
+        "type": "Presentation",
+        "event": {
+            "name": "eResearch Australia 2018"
+        },
+        "authors": ["Davis Fellinger"],
+        "url": "https://conference.eresearch.edu.au/2018-program/"
+    },{
+        "tite": "Trans-Atlantic Workshop on Public Private Partnerships for Big Data Research & Innovation and Workforce Development",
+        "type": "Workshop Report",
+        "citation": "Shanley, L.A., et al. (2018) Trans-Atlantic Workshop on Public Private Partnerships for Big Data Research & Innovation and Workforce Development. Chapel Hill: South Big Data Innovation Hub, University of North Carolina at Chapel Hill. (Author and Editor)"
+    },{
+        "tite": "Opportunities and Challenges of Citizen Science for Earth Observation: Workshop Report",
+        "type": "Workshop Report",
+        "citation": "Shanley, L.A., et al. (2018) Opportunities and Challenges of Citizen Science for Earth Observation: Workshop Report. Washington, DC: Secure World Foundation and South Big Data Innovation Hub, University of North Carolina at Chapel Hill. (Author and Editor)."
+    },{
+        "tite": "Summit to Sea: Modeling Regional Watersheds and Adjoining Coastal Regions",
+        "type": "Workshop Report",
+        "citation": "Band, L., Bales, J., Lenhardt, C., Linker, L., Read, J., Shanley, L. (2018). Summit to Sea: Modeling Regional Watersheds and Adjoining Coastal Regions. Chapel Hill: South Big Data Innovation Hub, University of North Carolina at Chapel Hill. (Co-author and Editor)."
+    },{
+        "tite": "Translational Data Analytics for Environmental Health: Sensors, Algorithms, and Patients",
+        "type": "Workshop Report",
+        "citation": "Krishnamurthy, A., Shanley, L.A., McKeen, S., et al. (2018). Translational Data Analytics for Environmental Health: Sensors, Algorithms, and Patients. Chapel, Hill: South Big Data Innovation Hub, University of North Carolina. (Co-author and Editor)"
+    },{
+        "tite": "The Data Science Corps: Making a Difference by Connecting Experts to Projects",
+        "type": "Workshop Report",
+        "citation": "Conroy, C., et al. (2018). The Data Science Corps: Making a Difference by Connecting Experts to Projects. Washington, DC: Georgetown University. (Report Contributor and co-editor)"
+    },{
+        "tite": "Marine Mammal Passive Acoustics & Spatial Ecology (MAPS) Citizen Science Workshop Report",
+        "type": "Workshop Report",
+        "citation": "Gero, S. Clabaugh, A., Holberg, J., and Zitterlind, V. (2018). Marine Mammal Passive Acoustics & Spatial Ecology (MAPS) Citizen Science Workshop Report. Washington, DC: Department of the Interior Bureau of Ocean Energy Management. (Report Contributor)"
+    },{
+        "tite": "Citizen Science Maker Summit Report: Learning Outcomes and Next Steps",
+        "type": "Workshop Report",
+        "citation": "Prange, E., Lande, M., and Cavalier, D. (2018). Citizen Science Maker Summit Report: Learning Outcomes and Next Steps. Tempe, AZ: Arizona State University and SciStarter. (Workshop Advisor/Report Contributor)"
+    },{
+        "tite": "Practical Experiences in Advanced Data Discovery: The DataBridge for Neuroscience project",
+        "doi": "",
+        "type": "Poster",
+        "event": {
+            "name": "NeuroInformatics",
+            "year": 2018
+        },
+        "note": "This poster discusses the NSF Funded DataBridge for Neuroscience project. The primary goal of this project was to introduce advanced techniques for Data Discovery to the Neuroinformatics community."
+    }
+]
