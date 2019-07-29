@@ -1,10 +1,41 @@
 const Publication = require('../models/publication/schema');
 const Category = require('../models/category/category')
+<<<<<<< Updated upstream
 const request = require('request');
 
 exports.insert = function (req, res) {
     console.log("Insert Visited!")
     const toInsert = req.body;
+=======
+const fetch = require("node-fetch");
+const fs = require('fs');
+const readline = require('readline');
+
+exports.test = async function (req, res) {
+    console.log("Testing Starts...");
+    for (let i = 0; i < 2; i++) {
+        console.log("Start Processing " + i);
+        const result = await fetch('https://api.crossref.org/v1/works/10.1016/j.envsoft.2017.12.008');
+        const resultJSON = await result.json();
+        console.log("Fetch result...");
+        console.log(resultJSON['message']);
+    }
+    console.log("Testing Ends..")
+}
+
+async function fetchInsert(toInsert) {
+    let insertStatus = {};
+    const fileStream = fs.createReadStream(toInsert);
+    const rl = readline.createInterface({
+        input: fileStream,
+        crlfDelay: Infinity
+    });
+
+    for await (const line of rl){
+        console.log("Reading this line: "+line);
+    }
+
+>>>>>>> Stashed changes
     for (apub in toInsert) {
         const _DOI = toInsert[apub]['doi'];
         const apiUrl = 'https://api.crossref.org/v1/works/' + _DOI;

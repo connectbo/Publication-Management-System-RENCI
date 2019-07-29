@@ -32,12 +32,27 @@ const useStyles = makeStyles({
       const currentUrl = window.location.hostname;
       const [ref, setrefState] = useState('');
       const [result, setResultState] = useState('');
+      const [file, setFile] = useState('');
       const [authorString, setAuthorStringState] = useState('');
     
       const handleChange = event => {
         setrefState(event.target.value);
       }
     
+      const fileChangeHandler = event => {
+        console.log(event.target.files[0]);
+      }
+
+      function submitFile(uploadedfile) {
+        fetch(`http://${currentUrl}:5000/insert`, {
+          method: 'POST',
+          body: uploadedfile})
+          .then(res => res.json())
+          .then(data => {
+            console.log(data);
+          })
+      }
+
       const handleSubmit = event => {
         event.preventDefault();
         fetch(`http://${currentUrl}:5000/reference/${ref}/save=yes`)
@@ -56,8 +71,12 @@ const useStyles = makeStyles({
             <Button className={classes.subButton} variant="contained" color="secondary" onClick={handleSubmit}>
               ADD </Button>
           </Container>
-          <Typography className={classes.body}><strong>   Result :  </strong>{result.status}</Typography>
           <Container>
+          <input type='file' name='file' onChange={fileChangeHandler} />
+          <Button className={classes.subButton} color="secondary" onClick={submitFile}>Upload File</Button>
+          </Container>
+          <Container>
+            <Typography className={classes.body}><strong>   Result :  </strong>{result.status}</Typography>
             <Card className={classes.card}>
               <CardContent>
                 <Typography className={classes.body}><strong>Title: </strong> {result.Title}</Typography>
