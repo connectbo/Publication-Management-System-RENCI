@@ -24,11 +24,13 @@ async function fetchInsert(toInsert) {
         crlfDelay: Infinity
     });
 
+    //go through line by line
     for await (const line of rl){
         console.log("Reading this line: "+line);
     }
 
     for (apub in toInsert) {
+        
         const _DOI = toInsert[apub]['doi'];
         const apiUrl = 'https://api.crossref.org/v1/works/' + _DOI;
         const fetchResult = await fetch(apiUrl);
