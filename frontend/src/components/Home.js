@@ -27,11 +27,13 @@ function Home() {
     const classes = useStyles();
     const currentUrl = window.location.hostname;
     const [pubs, setPubState] = useState('');
+    const [pubs_num,setPubNumber] = useState(0);
     const [expanded, setExpanded] = useState(false);
     async function getPubs() {
         const PubResult = await fetch(`http://${currentUrl}:5000/`)
             .then(res => res.json());
-        setPubState(PubResult);
+        setPubNumber(PubResult.status);
+        setPubState(PubResult.content);
     }
 
     useEffect(()=>{getPubs();}, []);
@@ -47,7 +49,7 @@ function Home() {
 
     return (
         <Container>
-            <Typography className={classes.title}>{pubs.status} </Typography>
+            <Typography className={classes.heading}>{`Showing ${pubs_num} results in RENCI database`} </Typography>
             {pubArray.map(pub =>
                 <ExpansionPanel className={classes.card} expanded={expanded === pub.DOI} onChange={handleExpandChange(pub.DOI)}>
                     <ExpansionPanelSummary

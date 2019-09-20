@@ -33,7 +33,6 @@ const useStyles = makeStyles({
 
 
 function Search() {
-  console.log('Search visited!');
   const classes = useStyles();
   const [ref, setrefState] = useState('');
   const [title, setTitleState] = useState('');
@@ -46,13 +45,16 @@ function Search() {
   const currentUrl = window.location.hostname;
   let categoryString = "";
 
-  async function fetchCategories() {
+  async function fetchData() {
     const categoryResults = await fetch(`http://${currentUrl}:5000/category`)
       .then(res => res.json());
     setCategories(categoryResults);
+    const pubData = await fetch(`http://${currentUrl}:5000`)
+      .then(res => res.json())
+      .then(data => setpubArrayState(data.content));
   }
 
-  useEffect(() => {fetchCategories();}, []);
+  useEffect(() => {fetchData();}, []);
 
   const [categoryJSON, setcategoryJSON] = useState({});
   const [categoryArray, setcategoryArray] = useState([]);

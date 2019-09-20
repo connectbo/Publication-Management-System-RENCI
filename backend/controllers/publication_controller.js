@@ -16,75 +16,27 @@ exports.test = async function (req, res) {
     console.log("Testing Ends..")
 }
 
-async function fetchInsert(toInsert) {
-    let insertStatus = {};
-    const fileStream = fs.createReadStream(toInsert);
-    const rl = readline.createInterface({
-        input: fileStream,
-        crlfDelay: Infinity
-    });
+// async function fetchInsert(toInsert) {
+//     let insertStatus = {};
+//     await fs.writeFile('toInsert.txt', toInsert, (err) => {
+//         if (err) throw err;
+//         console.log('Created toInsert Text File!');
+//     })
+//     const fileStream = fs.createReadStream('toInsert.txt');
+//     const rl = readline.createInterface({
+//         input: fileStream,
+//         crlfDelay: Infinity
+//     });
+//     for (const line of rl) {
+//         console.log("Reading this line: " + line);
+//     }
 
-    //go through line by line
-    for await (const line of rl){
-        console.log("Reading this line: "+line);
-    }
-
-    for (apub in toInsert) {
-        
-        const _DOI = toInsert[apub]['doi'];
-        const apiUrl = 'https://api.crossref.org/v1/works/' + _DOI;
-        const fetchResult = await fetch(apiUrl);
-        const fetchJSONResult = await fetchResult.json();
-        console.log("Processing " + _DOI);
-        const parsedData = fetchJSONResult['message'];
-        const parsedAuthors = fetchJSONResult['message']['author'];
-        const fullnameAuthors = [];
-        for (i = 0; i < parsedAuthors.length; i++) {
-            fullnameAuthors.push(parsedAuthors[i]['given'] + " " + parsedAuthors[i]['family']);
-        }
-        Publication.find({ Title: parsedData['title'] }, function (err, findPub) {
-            if (err) {
-                throw err;
-            }
-            if (findPub === undefined || findPub == 0) {
-                Category.find({ Category: parsedData['type'] }, function (err, categoryTest) {
-                    if (err) {
-                        throw err;
-                    }
-                    if (categoryTest === undefined || categoryTest.length == 0) {
-                        console.log("No Found!");
-                        const categoryResult = new Category({
-                            'Category': parsedData['type']
-                        });
-                        categoryResult.save(function (err) {
-                            if (err) throw err;
-                        })
-                    }
-                })
-                const saveResult = new Publication({
-                    'Title': parsedData['title'], 'Authors': fullnameAuthors, 'DOI': parsedData['DOI'], 'Type': parsedData['type'], Created_Date: parsedData['created']['date-time'].substring(0, 10)
-                });
-
-                saveResult.save(function (err) {
-                    if (err) throw err;
-                });
-                insertStatus[_DOI] = "Added! "
-                console.log(_DOI + " Added!")
-            }
-            else {
-                insertStatus[_DOI] = "Already in Database!";
-                console.log(_DOI + " Found!");
-            }
-        })
-    };
-    return insertStatus;
-}
-
-//
+// }
 
 exports.insert = async function (req, Res) {
     console.log("Insert Visited!")
     const toInsert = req.body;
+    console.log(toInsert);
     const response = await fetchInsert(toInsert);
     console.log("Printing Results: ");
     console.log(response);
@@ -166,19 +118,18 @@ exports.advancedSearch = function (req, res) {
 }
 
 exports.getAll = function (req, res) {
-    let toSend = [];
-    return Publication.find({}, function (err, pubs) {
-        if (err) {
-            throw (err);
-        }
-        toSend = pubs;
-        res.send(toSend);
-    }).countDocuments(function (err, counts) {
+    let toSend = {};
+    return Publication.countDocuments(function (err, counts) {
         if (err) {
             console.log(err);
         }
         toSend.status = counts;
-
+    }).find({}, function (err, pubs) {
+        if (err) {
+            throw (err);
+        }
+        toSend.content = pubs;
+        res.send(toSend);
     });
 }
 
