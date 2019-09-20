@@ -29,6 +29,9 @@ function Home() {
     const [pubs, setPubState] = useState('');
     const [pubs_num,setPubNumber] = useState(0);
     const [expanded, setExpanded] = useState(false);
+    
+
+
     async function getPubs() {
         const PubResult = await fetch(`http://${currentUrl}:5000/`)
             .then(res => res.json());

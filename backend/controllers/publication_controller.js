@@ -94,8 +94,7 @@ exports.advancedSearch = function (req, res) {
                 if (err) {
                     console.log(err);
                     throw (err);
-                }
-                res.send(pubs);
+                } res.send(pubs);
             })
 
     function generateTypeFinder(TypeString) {

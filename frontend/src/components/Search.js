@@ -44,6 +44,11 @@ function Search() {
   const [categories, setCategories] = useState([]);
   const currentUrl = window.location.hostname;
   let categoryString = "";
+  let toReport = {
+    "book-chapter": 0,
+    "journal-article": 0,
+    "proceedings-article": 0
+};
 
   async function fetchData() {
     const categoryResults = await fetch(`http://${currentUrl}:5000/category`)
@@ -121,6 +126,11 @@ function Search() {
         .then(res => res.json())
         .then(data => {
           setpubArrayState(data);
+          data.forEach(pub => {
+            let curr_type = pub.Type;
+            toReport[curr_type]+=1;
+          })
+          console.log(toReport);
         })
     }
   }
