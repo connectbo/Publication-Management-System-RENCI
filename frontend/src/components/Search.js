@@ -55,7 +55,7 @@ function Search() {
       .then(data => setpubArrayState(data.content));
   }
 
-  useEffect(() => {fetchData();}, []);
+  useEffect(() => { fetchData(); }, []);
 
   const [categoryJSON, setcategoryJSON] = useState({});
   const [categoryArray, setcategoryArray] = useState([]);
@@ -107,6 +107,7 @@ function Search() {
   }
 
   const handleSubmit = event => {
+    let toReportString = "Found results: ";
     if (ref !== '') {
       fetch(`http://${currentUrl}:5000/reference/${ref}`)
         .then(res => res.json())
@@ -124,14 +125,18 @@ function Search() {
           setpubArrayState(data);
           data.forEach(pub => {
             let curr_type = pub.Type;
-            if(toReport[curr_type]){
-              toReport[curr_type]+=1;
+            if (toReport[curr_type]) {
+              toReport[curr_type] += 1;
             }
-            else{
+            else {
               toReport[curr_type] = 1;
             }
           })
-          setStatusState(JSON.stringify(toReport));
+          Object.keys(toReport).forEach(key => {
+            toReportString+=`${key}: ${toReport[key]} `;
+          })
+          console.log(toReportString);
+          setStatusState(toReportString);
         })
     }
   }

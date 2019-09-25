@@ -33,6 +33,7 @@ function Add() {
   const currentUrl = window.location.hostname;
   const [ref, setrefState] = useState('');
   const [result, setResultState] = useState('');
+  const [fileFormat, setfileFormat] = useState('');
   const [file, setFile] = useState('');
   const [authorString, setAuthorStringState] = useState('');
 
@@ -79,6 +80,7 @@ function Add() {
       </Container>
       <Container>
         <input type='file' name='file' onChange={fileChangeHandler} />
+        <Typography className={classes.body}><strong>   Your file format :  </strong>{file.type}</Typography>
         <Button className={classes.subButton} color="secondary" onClick={submitFile}>Upload File</Button>
       </Container>
       <Container>

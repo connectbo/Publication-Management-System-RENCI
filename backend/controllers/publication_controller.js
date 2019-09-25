@@ -16,23 +16,6 @@ exports.test = async function (req, res) {
     console.log("Testing Ends..")
 }
 
-// async function fetchInsert(toInsert) {
-//     let insertStatus = {};
-//     await fs.writeFile('toInsert.txt', toInsert, (err) => {
-//         if (err) throw err;
-//         console.log('Created toInsert Text File!');
-//     })
-//     const fileStream = fs.createReadStream('toInsert.txt');
-//     const rl = readline.createInterface({
-//         input: fileStream,
-//         crlfDelay: Infinity
-//     });
-//     for (const line of rl) {
-//         console.log("Reading this line: " + line);
-//     }
-
-// }
-
 exports.insert = async function (req, Res) {
     console.log("Insert Visited!")
     const toInsert = req.body;
