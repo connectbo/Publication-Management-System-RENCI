@@ -41,12 +41,16 @@ const useStyles = makeStyles({
     
       const fileChangeHandler = event => {
         console.log(event.target.files[0]);
+        setFile(event.target.files[0]);
       }
 
-      function submitFile(uploadedfile) {
+      function submitFile() {
+        let formData = new FormData();
+        formData.append('dois', file);
+        console.log(formData.get('dois'))
         fetch(`http://${currentUrl}:5000/insert`, {
           method: 'POST',
-          body: uploadedfile})
+          body: formData})
           .then(res => res.json())
           .then(data => {
             console.log(data);

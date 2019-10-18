@@ -6,8 +6,10 @@ const PubRouter = require('./routes/publication_router');
 const bodyParser = require('body-parser')
 
 connectDB();
+
 app.use(cors());
-app.use(bodyParser.json())
+app.use(express.json())
+app.use(express.urlencoded({ extended: false }))
 
 app.use('/', PubRouter);
 

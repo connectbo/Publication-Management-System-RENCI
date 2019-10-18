@@ -30,7 +30,6 @@ async function fetchInsert(toInsert) {
     }
 
     for (apub in toInsert) {
-        
         const _DOI = toInsert[apub]['doi'];
         const apiUrl = 'https://api.crossref.org/v1/works/' + _DOI;
         const fetchResult = await fetch(apiUrl);
@@ -84,11 +83,16 @@ async function fetchInsert(toInsert) {
 
 exports.insert = async function (req, Res) {
     console.log("Insert Visited!")
-    const toInsert = req.body;
-    const response = await fetchInsert(toInsert);
-    console.log("Printing Results: ");
-    console.log(response);
-    Res.send(response);
+    console.log(req.file);
+    return req.body;
+    // const formData = req.body.dois;
+    // console.log(typeof formData);
+    // const toInsert = formData.get('dois');
+    // console.log(toInsert);
+//     const response = await fetchInsert(toInsert);
+//     console.log("Printing Results: ");
+//     console.log(response);
+//     Res.send(response);
 }
 
 exports.getCategory = function (req, res) {
