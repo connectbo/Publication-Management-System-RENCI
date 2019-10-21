@@ -32,8 +32,9 @@ function Add() {
   const classes = useStyles();
   const currentUrl = window.location.hostname;
   const [ref, setrefState] = useState('');
+  const [textarea, setTextArea] = useState('');
+  const [insertStatus, setinsertStatus] = useState('');
   const [result, setResultState] = useState('');
-  const [fileFormat, setfileFormat] = useState('');
   const [file, setFile] = useState('');
   const [authorString, setAuthorStringState] = useState('');
 
@@ -41,15 +42,19 @@ function Add() {
     setrefState(event.target.value);
   }
 
+  const handleTextAreaChange = event => {
+    setTextArea(event.target.value);
+  }
+
   const fileChangeHandler = event => {
+    console.log(event.target.files[0]);
     setFile(event.target.files[0]);
   }
 
-  const submitFile = event => {
-    var formData = new FormData();
-    var fileField = document.querySelector('input[type="file"]');
-    formData.append('avatar', fileField.files[0]);
-    console.log(formData);
+  function submitFile() {
+    let formData = new FormData();
+    formData.append('dois', file);
+    console.log(formData.get('dois'))
     fetch(`http://${currentUrl}:5000/insert`, {
       method: 'POST',
       body: formData
@@ -58,6 +63,20 @@ function Add() {
       .then(data => {
         console.log(data);
       })
+  }
+
+  const textAreaSubmit = event => {
+    event.preventDefault();
+    fetch(`http://${currentUrl}:5000/insert`, {
+      method: 'POST',
+      body: textarea,
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then(res => res.json())
+      .then(data => setinsertStatus(data))
+      console.log(insertStatus);
   }
 
   const handleSubmit = event => {
@@ -80,8 +99,14 @@ function Add() {
       </Container>
       <Container>
         <input type='file' name='file' onChange={fileChangeHandler} />
-        <Typography className={classes.body}><strong>   Your file format :  </strong>{file.type}</Typography>
         <Button className={classes.subButton} color="secondary" onClick={submitFile}>Upload File</Button>
+      </Container>
+      <Container>
+        <textarea rows="30" cols="100" onChange={handleTextAreaChange}>
+        </textarea>
+        <Typography className={classes.body}></Typography>
+        <Button className={classes.subButton} variant="contained" color="secondary" onClick={textAreaSubmit}>
+          Submit </Button>
       </Container>
       <Container>
         <Typography className={classes.body}><strong>   Result :  </strong>{result.status}</Typography>

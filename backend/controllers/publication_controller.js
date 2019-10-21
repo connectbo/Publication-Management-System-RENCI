@@ -17,13 +17,63 @@ exports.test = async function (req, res) {
 }
 
 exports.insert = async function (req, Res) {
-    console.log("Insert Visited!")
-    const toInsert = req.body;
-    console.log(toInsert);
-    const response = await fetchInsert(toInsert);
-    console.log("Printing Results: ");
-    console.log(response);
-    Res.send(response);
+    const uploaded = req.body;
+    let insertStatus = {
+        'Added': [],
+        'Already in Database': []
+    };
+    for (m in uploaded) {
+        const _DOI = uploaded[m]['doi'];
+        const apiUrl = 'https://api.crossref.org/v1/works/' + _DOI;
+        const fetchResult = await fetch(apiUrl);
+        const fetchJSONResult = await fetchResult.json();
+        console.log("Processing " + _DOI);
+        const parsedData = fetchJSONResult['message'];
+        const parsedAuthors = fetchJSONResult['message']['author'];
+        const fullnameAuthors = [];
+        for (i = 0; i < parsedAuthors.length; i++) {
+            fullnameAuthors.push(parsedAuthors[i]['given'] + " " + parsedAuthors[i]['family']);
+        }
+        Publication.find({ Title: parsedData['title'] }, async function (err, findPub) {
+            if (err) {
+                throw err;
+            }
+            if (findPub === undefined || findPub == 0) {
+                await Category.find({ Category: parsedData['type'] }, function (err, categoryTest) {
+                    if (err) {
+                        throw err;
+                    }
+                    if (categoryTest === undefined || categoryTest.length == 0) {
+                        console.log("No Found!");
+                        const categoryResult = new Category({
+                            'Category': parsedData['type']
+                        });
+                        categoryResult.save(function (err) {
+                            if (err) throw err;
+                        })
+                    }
+                })
+                const saveResult = new Publication({
+                    'Title': parsedData['title'], 'Authors': fullnameAuthors, 'DOI': parsedData['DOI'], 'Type': parsedData['type'], Created_Date: parsedData['created']['date-time'].substring(0, 10)
+                });
+
+                saveResult.save(function (err) {
+                    if (err) throw err;
+                });
+                insertStatus['Added'].push(_DOI)
+                console.log(_DOI + " Added!")
+            }
+            else {
+                insertStatus['Already in Database'].push(_DOI);
+                console.log(_DOI + " Found!");
+                console.log(insertStatus);
+                if(_DOI ==  uploaded[uploaded.length-1]['doi']){
+                    console.log("visited");
+                    Res.send(insertStatus);
+                }
+            }
+        })
+    }
 }
 
 exports.getCategory = function (req, res) {
