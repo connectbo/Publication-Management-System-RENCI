@@ -46,7 +46,7 @@ function Search() {
   let categoryString = "";
   let toReport = {};
 
-  async function fetchData() {
+  async function fetchCategories() {
     const categoryResults = await fetch(`http://${currentUrl}:5000/category`)
       .then(res => res.json());
     setCategories(categoryResults);
