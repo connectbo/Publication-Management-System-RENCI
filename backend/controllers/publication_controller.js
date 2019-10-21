@@ -17,7 +17,7 @@ exports.test = async function (req, res) {
 }
 
 async function fetchInsert(toInsert) {
-    let insertStatus = {};
+    
     const fileStream = fs.createReadStream(toInsert);
     const rl = readline.createInterface({
         input: fileStream,
@@ -25,12 +25,26 @@ async function fetchInsert(toInsert) {
     });
 
     //go through line by line
-    for await (const line of rl){
-        console.log("Reading this line: "+line);
+    for await (const line of rl) {
+        console.log("Reading this line: " + line);
     }
 
     for (apub in toInsert) {
-        const _DOI = toInsert[apub]['doi'];
+
+    };
+    return insertStatus;
+}
+
+//
+
+exports.insert = async function (req, Res) {
+    const uploaded = req.body;
+    let insertStatus = {
+        'Added': [],
+        'Already in Database': []
+    };
+    for (m in uploaded) {
+        const _DOI = uploaded[m]['doi'];
         const apiUrl = 'https://api.crossref.org/v1/works/' + _DOI;
         const fetchResult = await fetch(apiUrl);
         const fetchJSONResult = await fetchResult.json();
@@ -41,12 +55,12 @@ async function fetchInsert(toInsert) {
         for (i = 0; i < parsedAuthors.length; i++) {
             fullnameAuthors.push(parsedAuthors[i]['given'] + " " + parsedAuthors[i]['family']);
         }
-        Publication.find({ Title: parsedData['title'] }, function (err, findPub) {
+        Publication.find({ Title: parsedData['title'] }, async function (err, findPub) {
             if (err) {
                 throw err;
             }
             if (findPub === undefined || findPub == 0) {
-                Category.find({ Category: parsedData['type'] }, function (err, categoryTest) {
+                await Category.find({ Category: parsedData['type'] }, function (err, categoryTest) {
                     if (err) {
                         throw err;
                     }
@@ -67,32 +81,20 @@ async function fetchInsert(toInsert) {
                 saveResult.save(function (err) {
                     if (err) throw err;
                 });
-                insertStatus[_DOI] = "Added! "
+                insertStatus['Added'].push(_DOI)
                 console.log(_DOI + " Added!")
             }
             else {
-                insertStatus[_DOI] = "Already in Database!";
+                insertStatus['Already in Database'].push(_DOI);
                 console.log(_DOI + " Found!");
+                console.log(insertStatus);
+                if(_DOI ==  uploaded[uploaded.length-1]['doi']){
+                    console.log("visited");
+                    Res.send(insertStatus);
+                }
             }
         })
-    };
-    return insertStatus;
-}
-
-//
-
-exports.insert = async function (req, Res) {
-    console.log("Insert Visited!")
-    console.log(req.file);
-    return req.body;
-    // const formData = req.body.dois;
-    // console.log(typeof formData);
-    // const toInsert = formData.get('dois');
-    // console.log(toInsert);
-//     const response = await fetchInsert(toInsert);
-//     console.log("Printing Results: ");
-//     console.log(response);
-//     Res.send(response);
+    }
 }
 
 exports.getCategory = function (req, res) {

@@ -16,6 +16,8 @@ PubRouter.get('/reference/:id/:id2', PubController.getOne);
 PubRouter.get('/', PubController.getAll);
 
 //multipleAdd
+
+//module multer is used to handle multi-part/data file
 PubRouter.post('/insert', upload.single('dois'), PubController.insert)
 
 module.exports = PubRouter;
