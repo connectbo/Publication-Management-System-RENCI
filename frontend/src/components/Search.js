@@ -33,7 +33,6 @@ const useStyles = makeStyles({
 
 
 function Search() {
-  console.log('Search visited!');
   const classes = useStyles();
   const [ref, setrefState] = useState('');
   const [title, setTitleState] = useState('');
@@ -45,14 +44,18 @@ function Search() {
   const [categories, setCategories] = useState([]);
   const currentUrl = window.location.hostname;
   let categoryString = "";
+  let toReport = {};
 
-  async function fetchCategories() {
+  async function fetchData() {
     const categoryResults = await fetch(`http://${currentUrl}:5000/category`)
       .then(res => res.json());
     setCategories(categoryResults);
+    const pubData = await fetch(`http://${currentUrl}:5000`)
+      .then(res => res.json())
+      .then(data => setpubArrayState(data.content));
   }
 
-  useEffect(() => {fetchCategories();}, []);
+  useEffect(() => { fetchData(); }, []);
 
   const [categoryJSON, setcategoryJSON] = useState({});
   const [categoryArray, setcategoryArray] = useState([]);
@@ -104,6 +107,7 @@ function Search() {
   }
 
   const handleSubmit = event => {
+    let toReportString = "Found results: ";
     if (ref !== '') {
       fetch(`http://${currentUrl}:5000/reference/${ref}`)
         .then(res => res.json())
@@ -119,6 +123,20 @@ function Search() {
         .then(res => res.json())
         .then(data => {
           setpubArrayState(data);
+          data.forEach(pub => {
+            let curr_type = pub.Type;
+            if (toReport[curr_type]) {
+              toReport[curr_type] += 1;
+            }
+            else {
+              toReport[curr_type] = 1;
+            }
+          })
+          Object.keys(toReport).forEach(key => {
+            toReportString+=`${key}: ${toReport[key]} `;
+          })
+          console.log(toReportString);
+          setStatusState(toReportString);
         })
     }
   }
