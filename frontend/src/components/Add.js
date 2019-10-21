@@ -32,8 +32,8 @@ function Add() {
   const classes = useStyles();
   const currentUrl = window.location.hostname;
   const [ref, setrefState] = useState('');
-  const [textarea, setTextArea] = useState('');
-  const [insertStatus, setinsertStatus] = useState('');
+  const [textarea, setTextArea] = useState(`10.1111/risa.13004\n10.1111/risa.12990\n10.1109/noms.2018.8406240\n10.1109/noms.2018.8406273\n10.1093/sysbio/syx098`);
+  const [insertStatus, setinsertStatus] = useState({ 'Added': [], 'Found': [] });
   const [result, setResultState] = useState('');
   const [file, setFile] = useState('');
   const [authorString, setAuthorStringState] = useState('');
@@ -47,7 +47,6 @@ function Add() {
   }
 
   const fileChangeHandler = event => {
-    console.log(event.target.files[0]);
     setFile(event.target.files[0]);
   }
 
@@ -66,17 +65,17 @@ function Add() {
   }
 
   const textAreaSubmit = event => {
+    const lines = textarea.split('\n');
     event.preventDefault();
     fetch(`http://${currentUrl}:5000/insert`, {
       method: 'POST',
-      body: textarea,
+      body: lines,
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/x-www-form-urlencoded'
       }
     })
       .then(res => res.json())
       .then(data => setinsertStatus(data))
-      console.log(insertStatus);
   }
 
   const handleSubmit = event => {
@@ -101,14 +100,17 @@ function Add() {
         <input type='file' name='file' onChange={fileChangeHandler} />
         <Button className={classes.subButton} color="secondary" onClick={submitFile}>Upload File</Button>
       </Container>
-      <Container>
-        <textarea rows="30" cols="100" onChange={handleTextAreaChange}>
+      <Container className={classes.root}>
+        <textarea className={classes.body} id="user_input" rows="20" cols="60" onChange={handleTextAreaChange}>{textarea}
         </textarea>
-        <Typography className={classes.body}></Typography>
-        <Button className={classes.subButton} variant="contained" color="secondary" onClick={textAreaSubmit}>
-          Submit </Button>
+        <Container>
+          {insertStatus.Added.map(status => <Typography>{status}</Typography>)}
+          {insertStatus.Found.map(status => <Typography>{status}</Typography>)}
+        </Container>
+        <Button className={classes.subButton} variant="contained" color="secondary" onClick={textAreaSubmit}> Submit </Button>
       </Container>
-      <Container>
+
+      {/* <Container>
         <Typography className={classes.body}><strong>   Result :  </strong>{result.status}</Typography>
         <Card className={classes.card}>
           <CardContent>
@@ -118,7 +120,7 @@ function Add() {
             <Typography className={classes.body}><strong>Type: </strong> {result.Type}</Typography>
           </CardContent>
         </Card>
-      </Container>
+      </Container> */}
     </div>
   );
 }
