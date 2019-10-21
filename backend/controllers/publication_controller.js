@@ -18,16 +18,16 @@ exports.test = async function (req, res) {
 
 exports.insert = async function (req, Res) {
     const uploaded = req.body;
-    let dois=[];
-    for (key in uploaded){
+    let dois = [];
+    for (key in uploaded) {
         dois = key.split(",");
     }
     let insertStatus = {
         'Added': [],
         'Found': []
     }
-    for (m in dois) {
-        const _DOI = dois[m];
+    for (let i = 0; i < dois.length; i++) {
+        const _DOI = dois[i];
         Publication.find({ DOI: _DOI }, async function (err, pub) {
             if (err) {
                 throw err;
@@ -43,7 +43,7 @@ exports.insert = async function (req, Res) {
                 for (i = 0; i < parsedAuthors.length; i++) {
                     fullnameAuthors.push(parsedAuthors[i]['given'] + " " + parsedAuthors[i]['family']);
                 }
-                 Category.find({ Category: parsedData['type'] }, function (err, categoryTest) {
+                Category.find({ Category: parsedData['type'] }, function (err, categoryTest) {
                     if (err) {
                         throw err;
                     }
@@ -64,13 +64,13 @@ exports.insert = async function (req, Res) {
                 saveResult.save(function (err) {
                     if (err) throw err;
                 });
-                insertStatus['Added'].push(_DOI + " Added")
+                insertStatus['Added'].push("Inserted " + _DOI)
                 if (_DOI == dois[dois.length - 1]) {
                     Res.send(insertStatus);
                 }
             }
             else {
-                insertStatus['Found'].push(_DOI + " Found")
+                insertStatus['Found'].push("Found " + _DOI)
                 if (_DOI == dois[dois.length - 1]) {
                     Res.send(insertStatus);
                 }
