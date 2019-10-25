@@ -16,6 +16,49 @@ exports.test = async function (req, res) {
     console.log("Testing Ends..")
 }
 
+exports.validation = async function (req, res) {
+    const uploaded = req.body;
+    let dois = [];
+    for (key in uploaded) {
+        dois = key.split(",");
+    }
+    let checkStatus = {
+        'Fetchable': [],
+        'Error': [],
+        'Existing': []
+    }
+    for (let i = 0; i < dois.length; i++) {
+        const _DOI = dois[i];
+        let fetchResult;
+        Publication.find({ DOI: _DOI }, async function (err, pub) {
+            if (err) {
+                throw err;
+            }
+            if (pub == undefined || pub == 0) {
+                const apiUrl = 'https://api.crossref.org/v1/works/' + _DOI;
+                fetchResult = await fetch(apiUrl);
+                if (fetchResult.status == '200') {
+                    checkStatus.Fetchable.push(_DOI);
+                }
+                if (fetchResult.status == '404') {
+                    checkStatus.Error.push(_DOI);
+                }
+                if ((checkStatus.Error.length +checkStatus.Existing.length+ checkStatus.Fetchable.length) == dois.length) {
+                    console.log(checkStatus);
+                    res.send(checkStatus);
+                }
+            }
+            else {
+                checkStatus.Existing.push(_DOI);
+                if ((checkStatus.Error.length +checkStatus.Existing.length+ checkStatus.Fetchable.length) == dois.length) {
+                    console.log(checkStatus);
+                    res.send(checkStatus);
+                }
+            }
+        })  
+    }
+}
+
 exports.insert = async function (req, Res) {
     const uploaded = req.body;
     let dois = [];
