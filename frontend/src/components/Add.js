@@ -32,7 +32,7 @@ function Add() {
   const classes = useStyles();
   const currentUrl = window.location.hostname;
   const [ref, setrefState] = useState('');
-  const [textarea, setTextArea] = useState(`10.1111/risa.13004\n10.1111/risa.12990\n10.1109/noms.2018.8406240\n10.1109/noms.2018.8406273\n10.1093/sysbio/syx098`);
+  const [textarea, setTextArea] = useState(`10.1111/risa.13004\n10.1111/risa.12990\n10.1109/noms.2018.8406240\n10.1109/noms.2018.8406273\n10.1093/sysbio/syx098\n10.1111/adb.12489\n10.1111/eip.12751\n10.1109/infcomw.2018.8407026\n10.1145/3213232.3213239\n10.1101/234039\n10.1109/eurosp.2018.00020\n10.1038/s41598-018-19987-7\n10.1038/s41398-018-0158-y`);
   const [insertStatus, setinsertStatus] = useState({ 'Added': [], 'Found': [] });
   const [result, setResultState] = useState('');
   const [file, setFile] = useState('');

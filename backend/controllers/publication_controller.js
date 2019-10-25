@@ -65,12 +65,14 @@ exports.insert = async function (req, Res) {
                     if (err) throw err;
                 });
                 insertStatus['Added'].push("Inserted " + _DOI)
+                console.log("Inserted " + _DOI);
                 if (_DOI == dois[dois.length - 1]) {
                     Res.send(insertStatus);
                 }
             }
             else {
                 insertStatus['Found'].push("Found " + _DOI)
+                console.log("Found " + _DOI);
                 if (_DOI == dois[dois.length - 1]) {
                     Res.send(insertStatus);
                 }
