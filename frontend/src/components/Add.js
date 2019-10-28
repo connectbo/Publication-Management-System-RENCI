@@ -21,17 +21,27 @@ const useStyles = makeStyles({
     padding: '8px 8px',
   },
   subButton: {
-    marginLeft: 10,
+    marginLeft: 600,
+  },
+  subButton2: {
+    marginLeft: 100,
   },
   root: {
+    margin: '12px 12px',
     padding: '12px 12px',
     display: 'flex',
-    alignItems: 'center',
-    width: 700,
   },
   input: {
     marginLeft: 8,
     flex: 1
+  },
+  inputtext: {
+    fontSize: 18,
+    padding: '8px 8px',
+    display: 'inline'
+  },
+  left: {
+    width: '40%',
   }
 });
 
@@ -39,8 +49,9 @@ function Add() {
   const classes = useStyles();
   const currentUrl = window.location.hostname;
   const [ref, setrefState] = useState('');
-  const [textarea, setTextArea] = useState(`10.1111/risa.13004\n10.1111/risa.12990\n10.1109/noms.2018.8406240\n10.1109/noms.2018.8406273\n10.1093/sysbio/syx098\n10.1111/adb.12489\n10.1111/eip.12751\n10.1109/infcomw.2018.8407026\n10.1145/3213232.3213239\n10.1101/234039\n10.1109/eurosp.2018.00020\n10.1038/s41598-018-19987-7\n10.1038/s41398-018-0158-y`);
+  const [textarea, setTextArea] = useState('');
   const [checkStatus, setcheckStatus] = useState({ 'Fetchable': [], 'Error': [], 'Existing': [] });
+  const [insertStatus, setinsertStatus] = useState([]);
   const [result, setResultState] = useState('');
   const [file, setFile] = useState('');
   const [authorString, setAuthorStringState] = useState('');
@@ -102,6 +113,21 @@ function Add() {
       })
   }
 
+  const textAreaSubmit = event => {
+    event.preventDefault();
+    fetch(`http://${currentUrl}:5000/insert`, {
+      method: 'POST',
+      body: JSON.stringify(checkStatus.Fetchable),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+        setinsertStatus(data);
+      })
+  }
+
   const handleSubmit = event => {
     event.preventDefault();
     fetch(`http://${currentUrl}:5000/reference/${ref}/save=yes`)
@@ -114,7 +140,7 @@ function Add() {
 
   return (
     <div>
-      <Container className={classes.root}>
+      {/* <Container className={classes.root}>
         <Typography><strong>PubFinder</strong></Typography>
         <Input className={classes.input} id="ref" type="text" placeholder="Enter DOI to add Publications.." value={ref} onChange={handleChange}></Input>
         <Button className={classes.subButton} variant="contained" color="secondary" onClick={handleSubmit}>
@@ -123,22 +149,37 @@ function Add() {
       <Container>
         <input type='file' name='file' onChange={fileChangeHandler} />
         <Button className={classes.subButton} color="secondary" onClick={submitFile}>Upload File</Button>
-      </Container>
+      </Container> */}
       <Container className={classes.root}>
-        <textarea className={classes.body} id="user_input" rows="20" cols="60" onChange={handleTextAreaChange}>{textarea}
-        </textarea>
-        <Container>
-          <Typography>Fetchable DOI(s):</Typography>
-          {checkStatus.Fetchable.map(status => <Typography>{status}</Typography>)}
-          <Typography>Error DOI(s):</Typography>
-          {checkStatus.Error.map(status => <Typography>{status}</Typography>)}
-          <Typography>Stored DOI(s):</Typography>
-          {checkStatus.Existing.map(status => <Typography>{status}</Typography>)}
+        <Container className={classes.left}>
+          <Typography><b>Step 1: Copy and Paste your DOI(s)</b></Typography>
+          <hr/>
+          <textarea className={classes.inputtext} id="user_input" rows='25' cols='40' placeholder='10.1212/wnl.0b013e318221c187&#10;10.1111/j.1752-8062.2011.00324.x&#10;10.1145/2030718.2030727' onChange={handleTextAreaChange}>{textarea}
+          </textarea>
         </Container>
-      </Container>
-      <Button className={classes.subButton} variant="contained" color="secondary" onClick={textAreaCheck}> Check </Button>
-      <Button className={classes.subButton} variant="contained" color="secondary" onClick={handleSubmit}> Submit </Button>
-      {/* <Container>
+        <Container>
+          <Typography><b>Step 2: DOI Validation</b></Typography>
+          <hr/>
+          <Typography>{checkStatus.Fetchable.length+checkStatus.Existing.length+checkStatus.Error.length} unique doi(s) are detected. </Typography>
+          <br/>
+          <Typography><b>{checkStatus.Fetchable.length} Fetchable DOI(s):</b></Typography>
+          {checkStatus.Fetchable.map(status => <Typography>{status}</Typography>)}
+          <br />
+          <Typography><b>{checkStatus.Error.length} Unfetchable DOI(s):</b></Typography>
+          {checkStatus.Error.map(status => <Typography>{status}</Typography>)}
+          <br />
+          <Typography><b>{checkStatus.Existing.length} Already Stored DOI(s):</b></Typography>
+          {checkStatus.Existing.map(status => <Typography>{status}</Typography>)}
+          <Button variant="contained" color="secondary" onClick={textAreaCheck}> Check </Button>
+        </Container>
+        <Container>
+          <Typography><b>Step 3: Insert into RENCI Database</b></Typography>
+          <hr/>
+          <Typography><b>{insertStatus.length} Inserted DOI(s):</b></Typography>
+          {insertStatus.map(pub => <Typography>{pub}</Typography>)}
+          <Button variant="contained" color="secondary" onClick={textAreaSubmit}> Insert {checkStatus.Fetchable.length} Fetchable DOI(s) </Button>
+        </Container>
+      </Container>      {/* <Container>
         <Typography className={classes.body}><strong>   Result :  </strong>{result.status}</Typography>
         <Card className={classes.card}>
           <CardContent>

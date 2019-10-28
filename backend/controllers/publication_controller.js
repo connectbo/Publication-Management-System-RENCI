@@ -18,10 +18,11 @@ exports.test = async function (req, res) {
 
 exports.validation = async function (req, res) {
     const uploaded = req.body;
-    let dois = [];
+    let pre_dois = [];
     for (key in uploaded) {
-        dois = key.split(",");
+        pre_dois = key.split(",");
     }
+    let dois = [...new Set(pre_dois)];
     let checkStatus = {
         'Fetchable': [],
         'Error': [],
@@ -39,19 +40,20 @@ exports.validation = async function (req, res) {
                 fetchResult = await fetch(apiUrl);
                 if (fetchResult.status == '200') {
                     checkStatus.Fetchable.push(_DOI);
+                    console.log(_DOI+" checked "+(checkStatus.Error.length +checkStatus.Existing.length+ checkStatus.Fetchable.length));
                 }
                 if (fetchResult.status == '404') {
                     checkStatus.Error.push(_DOI);
+                    console.log(_DOI+" Error "+(checkStatus.Error.length +checkStatus.Existing.length+ checkStatus.Fetchable.length));
                 }
                 if ((checkStatus.Error.length +checkStatus.Existing.length+ checkStatus.Fetchable.length) == dois.length) {
-                    console.log(checkStatus);
                     res.send(checkStatus);
                 }
             }
             else {
                 checkStatus.Existing.push(_DOI);
+                console.log(_DOI+" existed "+(checkStatus.Error.length +checkStatus.Existing.length+ checkStatus.Fetchable.length));
                 if ((checkStatus.Error.length +checkStatus.Existing.length+ checkStatus.Fetchable.length) == dois.length) {
-                    console.log(checkStatus);
                     res.send(checkStatus);
                 }
             }
@@ -60,46 +62,34 @@ exports.validation = async function (req, res) {
 }
 
 exports.insert = async function (req, Res) {
-    const uploaded = req.body;
-    let dois = [];
-    for (key in uploaded) {
-        dois = key.split(",");
-    }
-    let insertStatus = {
-        'Added': [],
-        'Found': []
-    }
+    const dois = req.body;
+    let insertStatus = [];
+    let tem_category = [];
     for (let i = 0; i < dois.length; i++) {
         const _DOI = dois[i];
         Publication.find({ DOI: _DOI }, async function (err, pub) {
             if (err) {
                 throw err;
             }
-            if (pub == undefined || pub == 0) {
                 const apiUrl = 'https://api.crossref.org/v1/works/' + _DOI;
                 const fetchResult = await fetch(apiUrl);
                 const fetchJSONResult = await fetchResult.json();
                 console.log("Processing " + _DOI);
                 const parsedData = fetchJSONResult['message'];
-                const parsedAuthors = fetchJSONResult['message']['author'];
-                const fullnameAuthors = [];
-                for (i = 0; i < parsedAuthors.length; i++) {
-                    fullnameAuthors.push(parsedAuthors[i]['given'] + " " + parsedAuthors[i]['family']);
+                let fullnameAuthors = [];
+                if(!tem_category.includes(parsedData['type'])){
+                    console.log("Pushing.."+parsedData['type'])
+                    tem_category.push(parsedData['type']);
                 }
-                Category.find({ Category: parsedData['type'] }, function (err, categoryTest) {
-                    if (err) {
-                        throw err;
+                if('author' in parsedData){
+                    const parsedAuthors = fetchJSONResult['message']['author'];
+                    for (i = 0; i < parsedAuthors.length; i++) {
+                        fullnameAuthors.push(parsedAuthors[i]['given'] + " " + parsedAuthors[i]['family']);
                     }
-                    if (categoryTest === undefined || categoryTest.length == 0) {
-                        console.log("No Found!");
-                        const categoryResult = new Category({
-                            'Category': parsedData['type']
-                        });
-                        categoryResult.save(function (err) {
-                            if (err) throw err;
-                        })
-                    }
-                })
+                }
+                else{
+                    fullnameAuthors = ['Null']
+                }
                 const saveResult = new Publication({
                     'Title': parsedData['title'], 'Authors': fullnameAuthors, 'DOI': parsedData['DOI'], 'Type': parsedData['type'], Created_Date: parsedData['created']['date-time'].substring(0, 10)
                 });
@@ -107,19 +97,30 @@ exports.insert = async function (req, Res) {
                 saveResult.save(function (err) {
                     if (err) throw err;
                 });
-                insertStatus['Added'].push("Inserted " + _DOI)
-                console.log("Inserted " + _DOI);
-                if (_DOI == dois[dois.length - 1]) {
+                insertStatus.push(_DOI)
+                console.log("Inserted " + _DOI+" "+insertStatus.length);
+                if (insertStatus.length == dois.length) {
+                    console.log("Final checking...")
+                    for (let a = 0; a<tem_category.length; a++){
+                        console.log("Final Categories checking...")
+                        Category.find({ Category: tem_category[a] }, function (err, categoryTest) {
+                            if (err) {
+                                throw err;
+                            }
+                            console.log(categoryTest);
+                            if (categoryTest == undefined || categoryTest.length == 0) {
+                                console.log("Adding: "+tem_category[a]);
+                                const categoryResult = new Category({
+                                    'Category': tem_category[a]
+                                });
+                                categoryResult.save(function (err) {
+                                    if (err) throw err;
+                                })
+                            }
+                        })
+                    }
                     Res.send(insertStatus);
                 }
-            }
-            else {
-                insertStatus['Found'].push("Found " + _DOI)
-                console.log("Found " + _DOI);
-                if (_DOI == dois[dois.length - 1]) {
-                    Res.send(insertStatus);
-                }
-            }
         })
     }
 }
@@ -289,4 +290,4 @@ exports.getSave = async function (req, Res) {
             }
         })
     });
-}
+} 
