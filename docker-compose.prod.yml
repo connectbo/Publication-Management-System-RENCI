@@ -5,7 +5,7 @@ services:
     container_name: pmt-backend
     build:
       context: ./backend/
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile-prod
     volumes:
       - ./backend:/usr/src/app
     environment:
