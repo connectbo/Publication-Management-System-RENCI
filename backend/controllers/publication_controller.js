@@ -1,19 +1,25 @@
 const Publication = require('../models/publication/schema');
 const Category = require('../models/category/category')
 const fetch = require("node-fetch");
-const fs = require('fs');
-const readline = require('readline');
+const Cite = require('citation-js');
 
 exports.test = async function (req, res) {
-    console.log("Testing Starts...");
-    for (let i = 0; i < 2; i++) {
-        console.log("Start Processing " + i);
-        const result = await fetch('https://api.crossref.org/v1/works/10.1016/j.envsoft.2017.12.008');
-        const resultJSON = await result.json();
-        console.log("Fetch result...");
-        console.log(resultJSON['message']);
+    let example = new Cite('10.1109/tvcg.2013.24')
+    try {
+        let output = example.format('bibliography', {
+            type: 'string'
+        })
+        res.send(output);
     }
-    console.log("Testing Ends..")
+    catch (err) {
+        console.log(err);
+    }
+}
+
+exports.citation = async function (req, res) {
+    Publication.find({}, function (err, pub) {
+        res.send(pub);
+    })
 }
 
 exports.validation = async function (req, res) {
@@ -40,87 +46,110 @@ exports.validation = async function (req, res) {
                 fetchResult = await fetch(apiUrl);
                 if (fetchResult.status == '200') {
                     checkStatus.Fetchable.push(_DOI);
-                    console.log(_DOI+" checked "+(checkStatus.Error.length +checkStatus.Existing.length+ checkStatus.Fetchable.length));
+                    console.log(_DOI + " checked " + (checkStatus.Error.length + checkStatus.Existing.length + checkStatus.Fetchable.length));
                 }
                 if (fetchResult.status == '404') {
                     checkStatus.Error.push(_DOI);
-                    console.log(_DOI+" Error "+(checkStatus.Error.length +checkStatus.Existing.length+ checkStatus.Fetchable.length));
+                    console.log(_DOI + " Error " + (checkStatus.Error.length + checkStatus.Existing.length + checkStatus.Fetchable.length));
                 }
-                if ((checkStatus.Error.length +checkStatus.Existing.length+ checkStatus.Fetchable.length) == dois.length) {
+                if ((checkStatus.Error.length + checkStatus.Existing.length + checkStatus.Fetchable.length) == dois.length) {
                     res.send(checkStatus);
                 }
             }
             else {
                 checkStatus.Existing.push(_DOI);
-                console.log(_DOI+" existed "+(checkStatus.Error.length +checkStatus.Existing.length+ checkStatus.Fetchable.length));
-                if ((checkStatus.Error.length +checkStatus.Existing.length+ checkStatus.Fetchable.length) == dois.length) {
+                console.log(_DOI + " existed " + (checkStatus.Error.length + checkStatus.Existing.length + checkStatus.Fetchable.length));
+                if ((checkStatus.Error.length + checkStatus.Existing.length + checkStatus.Fetchable.length) == dois.length) {
                     res.send(checkStatus);
                 }
             }
-        })  
+        })
     }
 }
 
 exports.insert = async function (req, Res) {
     const dois = req.body;
-    let insertStatus = [];
+    let insertStatus = {
+        'Inserted': [],
+        'Inserted with missing value': []
+    };
     let tem_category = [];
     for (let i = 0; i < dois.length; i++) {
         const _DOI = dois[i];
+        console.log("Processing " + _DOI);
+        let example = new Cite(_DOI)
+        let output = example.format('bibliography', {
+            type: 'string'
+        })
+        console.log("Citation: " + output);
         Publication.find({ DOI: _DOI }, async function (err, pub) {
             if (err) {
                 throw err;
             }
-                const apiUrl = 'https://api.crossref.org/v1/works/' + _DOI;
-                const fetchResult = await fetch(apiUrl);
-                const fetchJSONResult = await fetchResult.json();
-                console.log("Processing " + _DOI);
-                const parsedData = fetchJSONResult['message'];
-                let fullnameAuthors = [];
-                if(!tem_category.includes(parsedData['type'])){
-                    console.log("Pushing.."+parsedData['type'])
-                    tem_category.push(parsedData['type']);
-                }
-                if('author' in parsedData){
+            const apiUrl = 'https://api.crossref.org/v1/works/' + _DOI;
+            const fetchResult = await fetch(apiUrl);
+            const fetchJSONResult = await fetchResult.json();
+            const parsedData = fetchJSONResult['message'];
+            let fullnameAuthors = [];
+            let citation_author = '';
+            if (!tem_category.includes(parsedData['type'])) {
+                console.log("Pushing.." + parsedData['type'])
+                tem_category.push(parsedData['type']);
+            }
+            try {
+                if ('author' in parsedData) {
                     const parsedAuthors = fetchJSONResult['message']['author'];
-                    for (i = 0; i < parsedAuthors.length; i++) {
-                        fullnameAuthors.push(parsedAuthors[i]['given'] + " " + parsedAuthors[i]['family']);
+                    for (let m = 0; m < parsedAuthors.length; m++) {
+                        fullnameAuthors.push(parsedAuthors[m]['given'] + " " + parsedAuthors[m]['family']);
+                        if (m == 0 && parsedAuthors.length == 1) {
+                            citation_author += (parsedAuthors[m]['family'] + ', ' + parsedAuthors[m]['given'].substring(0, 1) + '. ')
+                        }
+                        else if (m == parsedAuthors.length - 1) {
+                            citation_author += ('& ' + parsedAuthors[m]['family'] + ', ' + parsedAuthors[m]['given'].substring(0, 1) + '. ')
+                        }
+                        else {
+                            citation_author += (parsedAuthors[m]['family'] + ', ' + parsedAuthors[m]['given'].substring(0, 1) + '., ')
+                        }
                     }
                 }
-                else{
+                else {
                     fullnameAuthors = ['Null']
                 }
                 const saveResult = new Publication({
-                    'Title': parsedData['title'], 'Authors': fullnameAuthors, 'DOI': parsedData['DOI'], 'Type': parsedData['type'], Created_Date: parsedData['created']['date-time'].substring(0, 10)
+                    'Title': parsedData['title'], 'Authors': fullnameAuthors, 'DOI': parsedData['DOI'], 'Type': parsedData['type'], 'Created_Date': parsedData['created']['date-time'].substring(0, 10), 'Citation': output
                 });
-
                 saveResult.save(function (err) {
                     if (err) throw err;
                 });
-                insertStatus.push(_DOI)
-                console.log("Inserted " + _DOI+" "+insertStatus.length);
-                if (insertStatus.length == dois.length) {
-                    console.log("Final checking...")
-                    for (let a = 0; a<tem_category.length; a++){
-                        console.log("Final Categories checking...")
-                        Category.find({ Category: tem_category[a] }, function (err, categoryTest) {
-                            if (err) {
-                                throw err;
-                            }
-                            console.log(categoryTest);
-                            if (categoryTest == undefined || categoryTest.length == 0) {
-                                console.log("Adding: "+tem_category[a]);
-                                const categoryResult = new Category({
-                                    'Category': tem_category[a]
-                                });
-                                categoryResult.save(function (err) {
-                                    if (err) throw err;
-                                })
-                            }
-                        })
-                    }
-                    Res.send(insertStatus);
+                insertStatus['Inserted'].push(_DOI)
+                console.log("Inserted " + _DOI);
+            }
+            catch (err) {
+                insertStatus['Inserted with missing value'].push(_DOI)
+                console.log("Inserted with missing value" + _DOI);
+                console.log(err)
+            }
+            if ((insertStatus['Inserted'].length + insertStatus['Inserted with missing value'].length) == dois.length) {
+                for (let a = 0; a < tem_category.length; a++) {
+                    Category.find({ Category: tem_category[a] }, function (err, categoryTest) {
+                        if (err) {
+                            throw err;
+                        }
+                        console.log(categoryTest);
+                        if (categoryTest == undefined || categoryTest.length == 0) {
+                            console.log("Adding: " + tem_category[a]);
+                            const categoryResult = new Category({
+                                'Category': tem_category[a]
+                            });
+                            categoryResult.save(function (err) {
+                                if (err) throw err;
+                            })
+                        }
+                    })
                 }
+                console.log(insertStatus);
+                Res.send(insertStatus);
+            }
         })
     }
 }

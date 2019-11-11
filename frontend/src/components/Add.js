@@ -160,12 +160,12 @@ function Add() {
         <Container>
           <Typography><b>Step 2: DOI Validation</b></Typography>
           <hr/>
-          <Typography>{checkStatus.Fetchable.length+checkStatus.Existing.length+checkStatus.Error.length} unique doi(s) are detected. </Typography>
+          <Typography>In total, {checkStatus.Fetchable.length+checkStatus.Existing.length+checkStatus.Error.length} unique doi(s) are detected. </Typography>
           <br/>
-          <Typography><b>{checkStatus.Fetchable.length} Fetchable DOI(s):</b></Typography>
+          <Typography><b>{checkStatus.Fetchable.length} DOI(s) Fetchable via Crossref API: </b></Typography>
           {checkStatus.Fetchable.map(status => <Typography>{status}</Typography>)}
           <br />
-          <Typography><b>{checkStatus.Error.length} Unfetchable DOI(s):</b></Typography>
+          <Typography><b>{checkStatus.Error.length} DOI(s) Unfetchable via Crossref API: </b></Typography>
           {checkStatus.Error.map(status => <Typography>{status}</Typography>)}
           <br />
           <Typography><b>{checkStatus.Existing.length} Already Stored DOI(s):</b></Typography>
