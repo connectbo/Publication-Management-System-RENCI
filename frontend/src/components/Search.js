@@ -45,6 +45,7 @@ function Search() {
   const currentUrl = window.location.hostname;
   let categoryString = "";
   let toReport = {};
+  let csvContent = "data:text/csv;charset=utf-8,";
 
   async function fetchCategories() {
     const categoryResults = await fetch(`http://${currentUrl}:5000/category`)
@@ -68,7 +69,13 @@ function Search() {
     })
   }
 
-
+  const handleExport = () => {
+    pubArray.forEach(pub => {
+      csvContent += pub['Citation'] + "\r\n";
+    })
+    let encodedUri = encodeURI(csvContent);
+    window.open(encodedUri);
+  }
 
   const handle_edate_Change = event => {
     setEDate(event.target.value);
@@ -138,47 +145,48 @@ function Search() {
           console.log(toReportString);
           setStatusState(toReportString);
         })
+    }
   }
-}
-return (
-  <div>
-    <Container className={classes.root}>
-      <Typography><strong>DOI</strong></Typography><Input className={classes.input} id="ref" type="text" value={ref} onChange={handlerefChange}></Input>
-      <Typography className={classes.input}><strong>Title</strong></Typography><Input className={classes.input} id="title" type="text" value={title} onChange={handleTitleChange}></Input>
-      <Typography className={classes.input}><strong>Author</strong></Typography><Input className={classes.input} id="author" type="text" value={author} onChange={handleAuthorChange}></Input>
-      <FormControl className={classes.input}>
-        <FormLabel><strong>Type</strong></FormLabel>
-        <FormGroup>
-          {categoryArray.map(cate => <FormControlLabel control={<Checkbox checked={categoryJSON[cate]} onChange={handleCategoryChange} value={cate} />} label={cate} ></FormControlLabel>)}
-        </FormGroup>
-      </FormControl>
-      <FormControl>
-        <TextField className={classes.input} id="sdate" label="Start Date" type="date" value={sdate} onChange={handle_sdate_Change} InputLabelProps={{
-          shrink: true,
-        }} ></TextField>
-        <TextField className={classes.input} id="edate" label="End Date" type="date" value={edate} onChange={handle_edate_Change} InputLabelProps={{
-          shrink: true,
-        }}></TextField>
-      </FormControl>
-      <Button className={classes.subButton} variant="contained" color="secondary" onClick={handleSubmit}>
-        Search </Button>
-    </Container>
-    <Typography className={classes.body}><strong>{status}</strong></Typography>
-    <Container>
-      {pubArray.map(pub => <Card className={classes.card}>
-        <CardContent>
-          <Typography className={classes.body}><strong>Title: </strong> {pub.Title}</Typography>
-          <Typography className={classes.body}><strong>DOI: </strong><a href={"https://dx.doi.org/" + pub.DOI}>{pub.DOI}</a></Typography>
-          <Typography className={classes.body}><strong>Author(s): </strong>{pub.Authors.join(", ")}</Typography>
-          <Typography className={classes.body}><strong>Created Date: </strong>{pub.Created_Date}</Typography>
-          <Typography className={classes.body}><strong>Type: </strong>{pub.Type}</Typography>
-          <Typography className={classes.body}><strong>Citation: </strong>{pub.Citation}</Typography>
-        </CardContent>
-      </Card>)
-      }
-    </Container>
-  </div>
-);
+  return (
+    <div>
+      <Container className={classes.root}>
+        <Typography><strong>DOI</strong></Typography><Input className={classes.input} id="ref" type="text" value={ref} onChange={handlerefChange}></Input>
+        <Typography className={classes.input}><strong>Title</strong></Typography><Input className={classes.input} id="title" type="text" value={title} onChange={handleTitleChange}></Input>
+        <Typography className={classes.input}><strong>Author</strong></Typography><Input className={classes.input} id="author" type="text" value={author} onChange={handleAuthorChange}></Input>
+        <FormControl className={classes.input}>
+          <FormLabel><strong>Type</strong></FormLabel>
+          <FormGroup>
+            {categoryArray.map(cate => <FormControlLabel control={<Checkbox checked={categoryJSON[cate]} onChange={handleCategoryChange} value={cate} />} label={cate} ></FormControlLabel>)}
+          </FormGroup>
+        </FormControl>
+        <FormControl>
+          <TextField className={classes.input} id="sdate" label="Start Date" type="date" value={sdate} onChange={handle_sdate_Change} InputLabelProps={{
+            shrink: true,
+          }} ></TextField>
+          <TextField className={classes.input} id="edate" label="End Date" type="date" value={edate} onChange={handle_edate_Change} InputLabelProps={{
+            shrink: true,
+          }}></TextField>
+        </FormControl>
+        <Button className={classes.subButton} variant="contained" color="secondary" onClick={handleSubmit}>
+          Search </Button>
+      </Container>
+      <Typography className={classes.body}><strong>{status}</strong></Typography>
+      <Container>
+        <Button className={classes.subButton} color="secondary" onClick={handleExport}>Export Citations</Button>
+        {pubArray.map(pub => <Card className={classes.card}>
+          <CardContent>
+            <Typography className={classes.body}><strong>Title: </strong> {pub.Title}</Typography>
+            <Typography className={classes.body}><strong>DOI: </strong><a href={"https://dx.doi.org/" + pub.DOI}>{pub.DOI}</a></Typography>
+            <Typography className={classes.body}><strong>Author(s): </strong>{pub.Authors.join(", ")}</Typography>
+            <Typography className={classes.body}><strong>Created Date: </strong>{pub.Created_Date}</Typography>
+            <Typography className={classes.body}><strong>Type: </strong>{pub.Type}</Typography>
+            <Typography className={classes.body}><strong>Citation: </strong>{pub.Citation}</Typography>
+          </CardContent>
+        </Card>)
+        }
+      </Container>
+    </div>
+  );
 }
 
 export default Search;
