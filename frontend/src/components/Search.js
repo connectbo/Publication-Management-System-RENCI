@@ -7,6 +7,7 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Input from '@material-ui/core/Input';
 import TextField from '@material-ui/core/TextField';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import { Checkbox, FormGroup, FormLabel, FormControl, FormControlLabel } from '@material-ui/core';
 
 const useStyles = makeStyles({
@@ -45,7 +46,7 @@ function Search() {
   const currentUrl = window.location.hostname;
   let categoryString = "";
   let toReport = {};
-  let csvContent = "data:text/csv;charset=utf-8,";
+  let csvContent = "data:application/octet-stream,";
 
   async function fetchCategories() {
     const categoryResults = await fetch(`http://${currentUrl}:5000/category`)
@@ -71,10 +72,9 @@ function Search() {
 
   const handleExport = () => {
     pubArray.forEach(pub => {
-      csvContent += pub['Citation'] + "\r\n";
+      csvContent += encodeURIComponent(pub['Citation'] + "\r\n\n");
     })
-    let encodedUri = encodeURI(csvContent);
-    window.open(encodedUri);
+    window.open(csvContent);
   }
 
   const handle_edate_Change = event => {
@@ -172,8 +172,9 @@ function Search() {
       </Container>
       <Typography className={classes.body}><strong>{status}</strong></Typography>
       <Container>
-        <Button className={classes.subButton} color="secondary" onClick={handleExport}>Export Citations</Button>
-        {pubArray.map(pub => <Card className={classes.card}>
+        <Button className={classes.subButton} color="secondary" onClick={handleExport}>Download Citations</Button>
+        {pubArray.length>0 ?
+        pubArray.map(pub => <Card className={classes.card}>
           <CardContent>
             <Typography className={classes.body}><strong>Title: </strong> {pub.Title}</Typography>
             <Typography className={classes.body}><strong>DOI: </strong><a href={"https://dx.doi.org/" + pub.DOI}>{pub.DOI}</a></Typography>
@@ -183,7 +184,7 @@ function Search() {
             <Typography className={classes.body}><strong>Citation: </strong>{pub.Citation}</Typography>
           </CardContent>
         </Card>)
-        }
+        : <CircularProgress />}
       </Container>
     </div>
   );
