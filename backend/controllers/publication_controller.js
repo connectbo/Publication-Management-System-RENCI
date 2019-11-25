@@ -37,6 +37,13 @@ exports.validation = async function (req, res) {
     for (let i = 0; i < dois.length; i++) {
         const _DOI = dois[i];
         let fetchResult;
+        let fetchJSON;
+        let fullnameAuthors = [];
+        let example = new Cite(_DOI)
+        let output = example.format('bibliography', {
+            type: 'string'
+        })
+        let created_date;
         Publication.find({ DOI: _DOI }, async function (err, pub) {
             if (err) {
                 throw err;
@@ -44,16 +51,45 @@ exports.validation = async function (req, res) {
             if (pub == undefined || pub == 0) {
                 const apiUrl = 'https://api.crossref.org/v1/works/' + _DOI;
                 fetchResult = await fetch(apiUrl);
-                if (fetchResult.status == '200') {
-                    checkStatus.Fetchable.push(_DOI);
-                    console.log(_DOI + " checked " + (checkStatus.Error.length + checkStatus.Existing.length + checkStatus.Fetchable.length));
+                fetchJSON = await fetchResult.json();
+                if ('author' in fetchJSON['message']) {
+                    const parsedAuthors = fetchJSON['message']['author'];
+                    for (let m = 0; m < parsedAuthors.length; m++) {
+                        fullnameAuthors.push(parsedAuthors[m]['given'] + " " + parsedAuthors[m]['family']);
+                    }
                 }
-                if (fetchResult.status == '404') {
-                    checkStatus.Error.push(_DOI);
-                    console.log(_DOI + " Error " + (checkStatus.Error.length + checkStatus.Existing.length + checkStatus.Fetchable.length));
+                else {
+                    fullnameAuthors = ['Null']
                 }
-                if ((checkStatus.Error.length + checkStatus.Existing.length + checkStatus.Fetchable.length) == dois.length) {
-                    res.send(checkStatus);
+                if ('date-time' in fetchJSON['message']) {
+                    created_date = fetchJSON['message']['date-time'].substring(0, 10)
+                }
+                else {
+                    created_date = null;
+                }
+                try {
+                    let toReturn = {
+                        'DOI': _DOI,
+                        'Author': fullnameAuthors,
+                        'Type': fetchJSON['message']['type'],
+                        'Created_date': created_date,
+                        'Citation': output
+                    }
+
+                    if (fetchResult.status == '200') {
+                        checkStatus.Fetchable.push(toReturn);
+                        console.log(_DOI + " checked " + (checkStatus.Error.length + checkStatus.Existing.length + checkStatus.Fetchable.length));
+                    }
+                    if (fetchResult.status == '404') {
+                        checkStatus.Error.push(toReturn);
+                        console.log(_DOI + " Error " + (checkStatus.Error.length + checkStatus.Existing.length + checkStatus.Fetchable.length));
+                    }
+                    if ((checkStatus.Error.length + checkStatus.Existing.length + checkStatus.Fetchable.length) == dois.length) {
+                        res.send(checkStatus);
+                    }
+                }
+                catch (err) {
+                    throw err;
                 }
             }
             else {
@@ -101,15 +137,6 @@ exports.insert = async function (req, Res) {
                     const parsedAuthors = fetchJSONResult['message']['author'];
                     for (let m = 0; m < parsedAuthors.length; m++) {
                         fullnameAuthors.push(parsedAuthors[m]['given'] + " " + parsedAuthors[m]['family']);
-                        if (m == 0 && parsedAuthors.length == 1) {
-                            citation_author += (parsedAuthors[m]['family'] + ', ' + parsedAuthors[m]['given'].substring(0, 1) + '. ')
-                        }
-                        else if (m == parsedAuthors.length - 1) {
-                            citation_author += ('& ' + parsedAuthors[m]['family'] + ', ' + parsedAuthors[m]['given'].substring(0, 1) + '. ')
-                        }
-                        else {
-                            citation_author += (parsedAuthors[m]['family'] + ', ' + parsedAuthors[m]['given'].substring(0, 1) + '., ')
-                        }
                     }
                 }
                 else {

@@ -1,18 +1,11 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import Input from '@material-ui/core/Input';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import ListItemText from '@material-ui/core/ListItemText';
-import Checkbox from '@material-ui/core/Checkbox';
-import IconButton from '@material-ui/core/IconButton';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import CheckIcon from '@material-ui/icons/Check';
 
 
 const useStyles = makeStyles({
@@ -41,7 +34,7 @@ const useStyles = makeStyles({
     display: 'inline'
   },
   left: {
-    width: '40%',
+    width: 'auto',
   }
 });
 
@@ -82,18 +75,8 @@ function Add() {
     setFile(event.target.files[0]);
   }
 
-  function submitFile() {
-    let formData = new FormData();
-    formData.append('dois', file);
-    console.log(formData.get('dois'))
-    fetch(`http://${currentUrl}:5000/insert`, {
-      method: 'POST',
-      body: formData
-    })
-      .then(res => res.json())
-      .then(data => {
-        console.log(data);
-      })
+  function checkPub(){
+    console.log('test');
   }
 
   const textAreaCheck = event => {
@@ -140,21 +123,11 @@ function Add() {
 
   return (
     <div>
-      {/* <Container className={classes.root}>
-        <Typography><strong>PubFinder</strong></Typography>
-        <Input className={classes.input} id="ref" type="text" placeholder="Enter DOI to add Publications.." value={ref} onChange={handleChange}></Input>
-        <Button className={classes.subButton} variant="contained" color="secondary" onClick={handleSubmit}>
-          ADD </Button>
-      </Container>
-      <Container>
-        <input type='file' name='file' onChange={fileChangeHandler} />
-        <Button className={classes.subButton} color="secondary" onClick={submitFile}>Upload File</Button>
-      </Container> */}
       <Container className={classes.root}>
         <Container className={classes.left}>
           <Typography><b>Step 1: Copy and Paste your DOI(s)</b></Typography>
           <hr/>
-          <textarea className={classes.inputtext} id="user_input" rows='25' cols='40' placeholder='10.1212/wnl.0b013e318221c187&#10;10.1111/j.1752-8062.2011.00324.x&#10;10.1145/2030718.2030727' onChange={handleTextAreaChange}>{textarea}
+          <textarea className={classes.inputtext} id="user_input" rows='25' cols='30' placeholder='10.1212/wnl.0b013e318221c187&#10;10.1111/j.1752-8062.2011.00324.x&#10;10.1145/2030718.2030727' onChange={handleTextAreaChange}>{textarea}
           </textarea>
         </Container>
         <Container>
@@ -163,10 +136,18 @@ function Add() {
           <Typography>In total, {checkStatus.Fetchable.length+checkStatus.Existing.length+checkStatus.Error.length} unique doi(s) are detected. </Typography>
           <br/>
           <Typography><b>{checkStatus.Fetchable.length} DOI(s) Fetchable via Crossref API: </b></Typography>
-          {checkStatus.Fetchable.map(status => <Typography>{status}</Typography>)}
+          {checkStatus.Fetchable.map(pub => <div><Card><CardContent>
+            <Typography>DOI: {pub['DOI']}</Typography>
+            <Typography>Author(s): {pub['Author']}</Typography>
+            <Typography>Type: {pub['Type']}</Typography>
+            <Typography>Created Date: {pub['Created_date']}</Typography>
+            <Typography>Citation: {pub['Citation']}</Typography>
+          </CardContent>
+            </Card>
+          <CheckIcon onClick={checkPub}/></div>)}
           <br />
           <Typography><b>{checkStatus.Error.length} DOI(s) Unfetchable via Crossref API: </b></Typography>
-          {checkStatus.Error.map(status => <Typography>{status}</Typography>)}
+          {checkStatus.Error.map(pub => <Typography>{pub['message']['DOI']}</Typography>)}
           <br />
           <Typography><b>{checkStatus.Existing.length} Already Stored DOI(s):</b></Typography>
           {checkStatus.Existing.map(status => <Typography>{status}</Typography>)}
@@ -179,17 +160,7 @@ function Add() {
           {insertStatus.map(pub => <Typography>{pub}</Typography>)}
           <Button variant="contained" color="secondary" onClick={textAreaSubmit}> Insert {checkStatus.Fetchable.length} Fetchable DOI(s) </Button>
         </Container>
-      </Container>      {/* <Container>
-        <Typography className={classes.body}><strong>   Result :  </strong>{result.status}</Typography>
-        <Card className={classes.card}>
-          <CardContent>
-            <Typography className={classes.body}><strong>Title: </strong> {result.Title}</Typography>
-            <Typography className={classes.body}><strong>DOI: </strong>{result.DOI}</Typography>
-            <Typography className={classes.body}><strong>Author(s): </strong>{authorString}</Typography>
-            <Typography className={classes.body}><strong>Type: </strong> {result.Type}</Typography>
-          </CardContent>
-        </Card>
-      </Container> */}
+      </Container>
     </div>
   );
 }
