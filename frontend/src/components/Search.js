@@ -10,6 +10,27 @@ import TextField from '@material-ui/core/TextField';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { Checkbox, FormGroup, FormLabel, FormControl, FormControlLabel } from '@material-ui/core';
 
+//get publications from home.renci.org
+
+//let num3 = 15
+// publications = []
+// for (let i = 2010; i <= 2020; i++) {
+//     const idValue = 2021 - i
+//     const titleID = `#titl${ num3 }-${ idValue }_`
+//     const bodyID = `#tbod${ num3 }-${ idValue }__`
+//     const year = document.querySelector(titleID).querySelector('#group0').innerText.match(/Year : (\d{4})/)[1]
+//     publications[year] = []
+//     const body = document.querySelector(bodyID).nextElementSibling
+//     const entries = body.querySelectorAll('.ms-itmhover')
+//     entries.forEach(row => {
+//         title = row.querySelector('.ms-vb').innerText
+//         type = row.querySelector('.ms-vb2').innerText
+//         citation = row.querySelector('.ms-rtestate-field').innerText
+//         const publication = { title: title, type: type, citation: citation, }
+//         publications[year].push(publication)
+//     })
+// }
+
 const useStyles = makeStyles({
   body: {
     fontSize: 18,

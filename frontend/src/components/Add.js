@@ -75,7 +75,7 @@ function Add() {
     setFile(event.target.files[0]);
   }
 
-  function checkPub(){
+  function checkPub() {
     console.log('test');
   }
 
@@ -126,15 +126,15 @@ function Add() {
       <Container className={classes.root}>
         <Container className={classes.left}>
           <Typography><b>Step 1: Copy and Paste your DOI(s)</b></Typography>
-          <hr/>
+          <hr />
           <textarea className={classes.inputtext} id="user_input" rows='25' cols='30' placeholder='10.1212/wnl.0b013e318221c187&#10;10.1111/j.1752-8062.2011.00324.x&#10;10.1145/2030718.2030727' onChange={handleTextAreaChange}>{textarea}
           </textarea>
         </Container>
         <Container>
           <Typography><b>Step 2: DOI Validation</b></Typography>
-          <hr/>
-          <Typography>In total, {checkStatus.Fetchable.length+checkStatus.Existing.length+checkStatus.Error.length} unique doi(s) are detected. </Typography>
-          <br/>
+          <hr />
+          <Typography>In total, {checkStatus.Fetchable.length + checkStatus.Existing.length + checkStatus.Error.length} unique doi(s) are detected. </Typography>
+          <br />
           <Typography><b>{checkStatus.Fetchable.length} DOI(s) Fetchable via Crossref API: </b></Typography>
           {checkStatus.Fetchable.map(pub => <div><Card><CardContent>
             <Typography>DOI: {pub['DOI']}</Typography>
@@ -143,8 +143,8 @@ function Add() {
             <Typography>Created Date: {pub['Created_date']}</Typography>
             <Typography>Citation: {pub['Citation']}</Typography>
           </CardContent>
-            </Card>
-          <CheckIcon onClick={checkPub}/></div>)}
+          </Card>
+            <CheckIcon onClick={checkPub} /></div>)}
           <br />
           <Typography><b>{checkStatus.Error.length} DOI(s) Unfetchable via Crossref API: </b></Typography>
           {checkStatus.Error.map(pub => <Typography>{pub['message']['DOI']}</Typography>)}
@@ -155,7 +155,7 @@ function Add() {
         </Container>
         <Container>
           <Typography><b>Step 3: Insert into RENCI Database</b></Typography>
-          <hr/>
+          <hr />
           <Typography><b>{insertStatus.length} Inserted DOI(s):</b></Typography>
           {insertStatus.map(pub => <Typography>{pub}</Typography>)}
           <Button variant="contained" color="secondary" onClick={textAreaSubmit}> Insert {checkStatus.Fetchable.length} Fetchable DOI(s) </Button>
