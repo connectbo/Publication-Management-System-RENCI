@@ -6,6 +6,8 @@ import Typography from '@material-ui/core/Typography';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CheckIcon from '@material-ui/icons/Check';
+import CircularProgress from '@material-ui/core/CircularProgress';
+
 
 
 const useStyles = makeStyles({
@@ -49,6 +51,7 @@ function Add() {
   const [file, setFile] = useState('');
   const [authorString, setAuthorStringState] = useState('');
   const [checked, setChecked] = useState([])
+  const [isLoading, setLoading] = useState(false);
 
   const handleToggle = value => () => {
     const currentIndex = checked.indexOf(value);
@@ -80,6 +83,7 @@ function Add() {
   }
 
   const textAreaCheck = event => {
+    setLoading(true);
     const lines = textarea.split('\n');
     event.preventDefault();
     fetch(`http://${currentUrl}:5000/check`, {
@@ -92,6 +96,7 @@ function Add() {
       .then(res => res.json())
       .then(data => {
         setcheckStatus(data);
+        setLoading(false);
         console.log(data);
       })
   }
@@ -135,22 +140,25 @@ function Add() {
           <hr />
           <Typography>In total, {checkStatus.Fetchable.length + checkStatus.Existing.length + checkStatus.Error.length} unique doi(s) are detected. </Typography>
           <br />
-          <Typography><b>{checkStatus.Fetchable.length} DOI(s) Fetchable via Crossref API: </b></Typography>
-          {checkStatus.Fetchable.map(pub => <div><Card><CardContent>
-            <Typography>DOI: {pub['DOI']}</Typography>
-            <Typography>Author(s): {pub['Author']}</Typography>
-            <Typography>Type: {pub['Type']}</Typography>
-            <Typography>Created Date: {pub['Created_date']}</Typography>
-            <Typography>Citation: {pub['Citation']}</Typography>
-          </CardContent>
-          </Card>
-            <CheckIcon onClick={checkPub} /></div>)}
-          <br />
-          <Typography><b>{checkStatus.Error.length} DOI(s) Unfetchable via Crossref API: </b></Typography>
-          {checkStatus.Error.map(pub => <Typography>{pub['message']['DOI']}</Typography>)}
-          <br />
-          <Typography><b>{checkStatus.Existing.length} Already Stored DOI(s):</b></Typography>
-          {checkStatus.Existing.map(status => <Typography>{status}</Typography>)}
+          {(isLoading) ? <CircularProgress/>: <br/>}
+          {(checkStatus.Fetchable.length + checkStatus.Existing.length + checkStatus.Error.length>0) ? <div>
+            <Typography><b>{checkStatus.Fetchable.length} DOI(s) Fetchable via Crossref API: </b></Typography>
+            {checkStatus.Fetchable.map(pub => <div><Card><CardContent>
+              <Typography>DOI: {pub['DOI']}</Typography>
+              <Typography>Author(s): {pub['Author']}</Typography>
+              <Typography>Type: {pub['Type']}</Typography>
+              <Typography>Created Date: {pub['Created_date']}</Typography>
+              <Typography>Citation: {pub['Citation']}</Typography>
+            </CardContent>
+            </Card>
+              <CheckIcon onClick={checkPub} /></div>)}
+            <br />
+            <Typography><b>{checkStatus.Error.length} DOI(s) Unfetchable via Crossref API: </b></Typography>
+            {checkStatus.Error.map(pub => <Typography>{pub['message']['DOI']}</Typography>)}
+            <br />
+            <Typography><b>{checkStatus.Existing.length} Already Stored DOI(s):</b></Typography>
+            {checkStatus.Existing.map(status => <Typography>{status}</Typography>)}
+          </div> : <br/>}
           <Button variant="contained" color="secondary" onClick={textAreaCheck}> Check </Button>
         </Container>
         <Container>

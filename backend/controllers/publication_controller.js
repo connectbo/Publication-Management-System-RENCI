@@ -215,6 +215,9 @@ exports.advancedSearch = function (req, res) {
         _edate = tem_edate.substring(0, 10);
     }
 
+
+    // communicate more with Matt. Powerful skills 
+
     Publication.find()
         .and([
             { Title: { $regex: _title, $options: 'i' } },
