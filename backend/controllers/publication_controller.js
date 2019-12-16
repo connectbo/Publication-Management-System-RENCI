@@ -103,6 +103,18 @@ exports.validation = async function (req, res) {
     }
 }
 
+exports.insert_one = async function (req, res){
+    const _info = req.body;
+    const saveResult = new Publication({
+        'Title': _info['title'], 'Authors': _info['author'], 'DOI': _info['doi'], 'Type': _info['type'], 'Created_Date': _info['date']
+    });
+    saveResult.save(function (err) {
+        if (err) throw err;
+    })
+    res.send({"message": 'Inserted'});
+}
+
+
 exports.insert = async function (req, Res) {
     const dois = req.body;
     let insertStatus = {
