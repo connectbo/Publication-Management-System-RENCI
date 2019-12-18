@@ -111,7 +111,7 @@ exports.insert_one = async function (req, res){
     saveResult.save(function (err) {
         if (err) throw err;
     })
-    res.send({"message": 'Inserted'});
+    res.send({"message": 'Your Publication is added to RENCI Database!'});
 }
 
 
