@@ -22,6 +22,69 @@ exports.citation = async function (req, res) {
     })
 }
 
+exports.check = async function (req, res){
+    const uploaded = req.body;
+    let pre_dois = [];
+    for (key in uploaded) {
+        pre_dois = key.split(",");
+    }
+    let dois = [...new Set(pre_dois)];
+    let checkStatus = {
+        'Fetchable': [],
+        'Error': [],
+        'Existing': []
+    }
+    for (let i = 0; i < dois.length; i++) {
+        let _DOI = dois[i];
+        console.log("Processing "+_DOI);
+        let example = new Cite(_DOI)
+        let output = example.format('bibliography', {
+            type: 'string'
+        })
+        let _title = example['data'][0]['title'];
+        let _type = example['data'][0]['type'];
+        let _created;
+        if('created' in example['data'][0]){
+            if('date-time' in example['data'][0]['created']){
+                _created = example['data'][0]['created']['date-time'].substring(0,10);
+            }
+        }
+        else{
+            let toReturn = {
+                "DOI": _DOI,
+                "Error": 'Missing Created Date Value'
+            }
+            checkStatus.Error.push(toReturn);
+            if ((checkStatus.Error.length + checkStatus.Existing.length + checkStatus.Fetchable.length) == dois.length) {
+                console.log(checkStatus);
+                res.send(checkStatus);
+            }
+        }
+        let _author = example['data'][0]['author'];
+
+        Publication.find({ DOI: _DOI}, async function(err, pub){
+            if(err){
+                throw err;
+            }
+            if(pub == undefined || pub == 0){
+                let toReturn = {
+                    'DOI': _DOI,
+                    'Title': _title,
+                    'Type': _type,
+                    'Author': _author,
+                    'Created': _created,
+                    'Citation': output
+                };
+                checkStatus.Fetchable.push(toReturn);
+                if ((checkStatus.Error.length + checkStatus.Existing.length + checkStatus.Fetchable.length) == dois.length) {
+                    console.log(checkStatus);
+                    res.send(checkStatus);
+                }
+            }
+        })
+    }
+}
+
 exports.validation = async function (req, res) {
     const uploaded = req.body;
     let pre_dois = [];
@@ -49,25 +112,25 @@ exports.validation = async function (req, res) {
                 throw err;
             }
             if (pub == undefined || pub == 0) {
-                const apiUrl = 'https://api.crossref.org/v1/works/' + _DOI;
-                fetchResult = await fetch(apiUrl);
-                fetchJSON = await fetchResult.json();
-                if ('author' in fetchJSON['message']) {
-                    const parsedAuthors = fetchJSON['message']['author'];
-                    for (let m = 0; m < parsedAuthors.length; m++) {
-                        fullnameAuthors.push(parsedAuthors[m]['given'] + " " + parsedAuthors[m]['family']);
-                    }
-                }
-                else {
-                    fullnameAuthors = ['Null']
-                }
-                if ('date-time' in fetchJSON['message']) {
-                    created_date = fetchJSON['message']['date-time'].substring(0, 10)
-                }
-                else {
-                    created_date = null;
-                }
                 try {
+                    const apiUrl = 'https://api.crossref.org/v1/works/' + _DOI;
+                    fetchResult = await fetch(apiUrl);
+                    fetchJSON = await fetchResult.json();
+                    if ('author' in fetchJSON['message']) {
+                        const parsedAuthors = fetchJSON['message']['author'];
+                        for (let m = 0; m < parsedAuthors.length; m++) {
+                            fullnameAuthors.push(parsedAuthors[m]['given'] + " " + parsedAuthors[m]['family']);
+                        }
+                    }
+                    else {
+                        fullnameAuthors = ['Null']
+                    }
+                    if ('date-time' in fetchJSON['message']) {
+                        created_date = fetchJSON['message']['date-time'].substring(0, 10)
+                    }
+                    else {
+                        created_date = null;
+                    }
                     let toReturn = {
                         'DOI': _DOI,
                         'Author': fullnameAuthors,
@@ -80,16 +143,18 @@ exports.validation = async function (req, res) {
                         checkStatus.Fetchable.push(toReturn);
                         console.log(_DOI + " checked " + (checkStatus.Error.length + checkStatus.Existing.length + checkStatus.Fetchable.length));
                     }
-                    if (fetchResult.status == '404') {
-                        checkStatus.Error.push(toReturn);
-                        console.log(_DOI + " Error " + (checkStatus.Error.length + checkStatus.Existing.length + checkStatus.Fetchable.length));
-                    }
                     if ((checkStatus.Error.length + checkStatus.Existing.length + checkStatus.Fetchable.length) == dois.length) {
                         res.send(checkStatus);
                     }
                 }
                 catch (err) {
-                    throw err;
+                    if (fetchResult['status'] == '404') {
+                        checkStatus.Error.push(_DOI);
+                        console.log(_DOI + " Error " + (checkStatus.Error.length + checkStatus.Existing.length + checkStatus.Fetchable.length));
+                    }
+                    if ((checkStatus.Error.length + checkStatus.Existing.length + checkStatus.Fetchable.length) == dois.length) {
+                        res.send(new Cite('10.4230/LIPIcs.ECRTS.2017.25'));
+                    }
                 }
             }
             else {
@@ -103,7 +168,7 @@ exports.validation = async function (req, res) {
     }
 }
 
-exports.insert_one = async function (req, res){
+exports.insert_one = async function (req, res) {
     const _info = req.body;
     const saveResult = new Publication({
         'Title': _info['title'], 'Authors': _info['author'], 'DOI': _info['doi'], 'Type': _info['type'], 'Created_Date': _info['date']
@@ -111,7 +176,7 @@ exports.insert_one = async function (req, res){
     saveResult.save(function (err) {
         if (err) throw err;
     })
-    res.send({"message": 'Your Publication is added to RENCI Database!'});
+    res.send({ "message": 'Your Publication is added to RENCI Database!' });
 }
 
 

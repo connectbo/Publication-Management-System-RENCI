@@ -95,9 +95,9 @@ function Add() {
     })
       .then(res => res.json())
       .then(data => {
+        console.log(data)
         setcheckStatus(data);
         setLoading(false);
-        console.log(data);
       })
   }
 
@@ -145,16 +145,16 @@ function Add() {
             <Typography><b>{checkStatus.Fetchable.length} DOI(s) Fetchable via Crossref API: </b></Typography>
             {checkStatus.Fetchable.map(pub => <div><Card><CardContent>
               <Typography>DOI: {pub['DOI']}</Typography>
-              <Typography>Author(s): {pub['Author']}</Typography>
+              {/* <Typography>Author(s): {pub['Author']}</Typography>
               <Typography>Type: {pub['Type']}</Typography>
               <Typography>Created Date: {pub['Created_date']}</Typography>
-              <Typography>Citation: {pub['Citation']}</Typography>
+              <Typography>Citation: {pub['Citation']}</Typography> */}
             </CardContent>
             </Card>
               <CheckIcon onClick={checkPub} /></div>)}
             <br />
             <Typography><b>{checkStatus.Error.length} DOI(s) Unfetchable via Crossref API: </b></Typography>
-            {checkStatus.Error.map(pub => <Typography>{pub['message']['DOI']}</Typography>)}
+            {checkStatus.Error.map(pub => <Typography>{pub['DOI']}</Typography>)}
             <br />
             <Typography><b>{checkStatus.Existing.length} Already Stored DOI(s):</b></Typography>
             {checkStatus.Existing.map(status => <Typography>{status}</Typography>)}
@@ -165,7 +165,7 @@ function Add() {
           <Typography><b>Step 3: Insert into RENCI Database</b></Typography>
           <hr />
           <Typography><b>{insertStatus.length} Inserted DOI(s):</b></Typography>
-          {insertStatus.map(pub => <Typography>{pub}</Typography>)}
+          {insertStatus.map(pub => <Typography>{pub['DOI']}</Typography>)}
           <Button variant="contained" color="secondary" onClick={textAreaSubmit}> Insert {checkStatus.Fetchable.length} Fetchable DOI(s) </Button>
         </Container>
       </Container>

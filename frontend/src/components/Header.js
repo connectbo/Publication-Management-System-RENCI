@@ -25,7 +25,6 @@ function Header() {
                     <strong>RENCI </strong> Publication Management System
           </a>
                 <Button component={NavLink} to="/" color="inherit">Home</Button>
-                <Button component={NavLink} to="/search" color="inherit">Search</Button>
                 <Button component={NavLink} to="/add" color="inherit">Add Via DOI</Button>
                 <Button component={NavLink} to="add_Input" color="inherit">Add Manually</Button>
             </Toolbar>
