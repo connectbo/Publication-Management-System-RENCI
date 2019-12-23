@@ -77,7 +77,6 @@ exports.check = async function (req, res){
                 };
                 checkStatus.Fetchable.push(toReturn);
                 if ((checkStatus.Error.length + checkStatus.Existing.length + checkStatus.Fetchable.length) == dois.length) {
-                    console.log(checkStatus);
                     res.send(checkStatus);
                 }
             }

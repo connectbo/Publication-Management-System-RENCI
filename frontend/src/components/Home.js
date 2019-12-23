@@ -67,7 +67,7 @@ function Home() {
                     <ExpansionPanelDetails>
                         <Container>
                             <Typography className={classes.body}><strong>Author(s): </strong>{pub.Authors.join(", ")}</Typography>
-                            <Typography className={classes.body}>Published on <strong>{pub.Created_Date}</strong>, Category: <strong>{pub.Type}</strong></Typography><hr />
+                            <Typography className={classes.body}>Published on <strong>{pub.Created}</strong>, Category: <strong>{pub.Type}</strong></Typography><hr />
                             <Typography className={classes.body}><strong>Citation: </strong> {pub.Citation}</Typography>
                         </Container>
                     </ExpansionPanelDetails>
