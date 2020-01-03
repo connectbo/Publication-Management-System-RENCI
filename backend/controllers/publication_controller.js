@@ -22,7 +22,7 @@ exports.citation = async function (req, res) {
     })
 }
 
-exports.check = async function (req, res){
+exports.check = async function (req, res) {
     const uploaded = req.body;
     let pre_dois = [];
     for (key in uploaded) {
@@ -36,46 +36,66 @@ exports.check = async function (req, res){
     }
     for (let i = 0; i < dois.length; i++) {
         let _DOI = dois[i];
-        console.log("Processing "+_DOI);
-        let example = new Cite(_DOI)
-        let output = example.format('bibliography', {
-            type: 'string'
-        })
-        let _title = example['data'][0]['title'];
-        let _type = example['data'][0]['type'];
-        let _created;
-        if('created' in example['data'][0]){
-            if('date-time' in example['data'][0]['created']){
-                _created = example['data'][0]['created']['date-time'].substring(0,10);
-            }
-        }
-        else{
-            let toReturn = {
-                "DOI": _DOI,
-                "Error": 'Missing Created Date Value'
-            }
-            checkStatus.Error.push(toReturn);
-            if ((checkStatus.Error.length + checkStatus.Existing.length + checkStatus.Fetchable.length) == dois.length) {
-                console.log(checkStatus);
-                res.send(checkStatus);
-            }
-        }
-        let _author = example['data'][0]['author'];
+        console.log("Processing " + _DOI);
 
-        Publication.find({ DOI: _DOI}, async function(err, pub){
-            if(err){
+        Publication.find({ DOI: _DOI }, async function (err, pub) {
+            if (err) {
                 throw err;
             }
-            if(pub == undefined || pub == 0){
-                let toReturn = {
-                    'DOI': _DOI,
-                    'Title': _title,
-                    'Type': _type,
-                    'Author': _author,
-                    'Created': _created,
-                    'Citation': output
-                };
-                checkStatus.Fetchable.push(toReturn);
+            if (pub == undefined || pub == 0) {
+                try {
+                    let example = new Cite(_DOI)
+                    let output = example.format('bibliography', {
+                        type: 'string'
+                    })
+                    let _title = example['data'][0]['title'];
+                    let _type = example['data'][0]['type'];
+                    let _created;
+                    if ('created' in example['data'][0]) {
+                        if ('date-time' in example['data'][0]['created']) {
+                            _created = example['data'][0]['created']['date-time'].substring(0, 10);
+                        }
+                    }
+                    else {
+                        let toReturn = {
+                            "DOI": _DOI,
+                            "Error": 'Missing Created Date Value'
+                        }
+                        checkStatus.Error.push(toReturn);
+                        if ((checkStatus.Error.length + checkStatus.Existing.length + checkStatus.Fetchable.length) == dois.length) {
+                            console.log(checkStatus);
+                            res.send(checkStatus);
+                        }
+                    }
+                    let lastnameIdx = output.indexOf("(");
+                    let _author = output.substring(0, lastnameIdx - 1);
+                    let toReturn = {
+                        'DOI': _DOI,
+                        'Title': _title,
+                        'Type': _type,
+                        'Author': _author,
+                        'Created': _created,
+                        'Citation': output,
+                        'Checked': true
+                    };
+                    checkStatus.Fetchable.push(toReturn);
+                    if ((checkStatus.Error.length + checkStatus.Existing.length + checkStatus.Fetchable.length) == dois.length) {
+                        res.send(checkStatus);
+                    }
+                }
+                catch(err){
+                    if (fetchResult['status'] == '404') {
+                        checkStatus.Error.push(_DOI);
+                        console.log(_DOI + " Error " + (checkStatus.Error.length + checkStatus.Existing.length + checkStatus.Fetchable.length));
+                    }
+                    if ((checkStatus.Error.length + checkStatus.Existing.length + checkStatus.Fetchable.length) == dois.length) {
+                        res.send(checkStatus);
+                    }
+                }
+            }
+            else{
+                checkStatus.Existing.push(_DOI);
+                console.log(_DOI + " existed " + (checkStatus.Error.length + checkStatus.Existing.length + checkStatus.Fetchable.length));
                 if ((checkStatus.Error.length + checkStatus.Existing.length + checkStatus.Fetchable.length) == dois.length) {
                     res.send(checkStatus);
                 }
@@ -98,20 +118,22 @@ exports.validation = async function (req, res) {
     }
     for (let i = 0; i < dois.length; i++) {
         const _DOI = dois[i];
-        let fetchResult;
-        let fetchJSON;
-        let fullnameAuthors = [];
-        let example = new Cite(_DOI)
-        let output = example.format('bibliography', {
-            type: 'string'
-        })
-        let created_date;
+        console.log(_DOI);
         Publication.find({ DOI: _DOI }, async function (err, pub) {
             if (err) {
                 throw err;
             }
+            console.log(pub);
             if (pub == undefined || pub == 0) {
                 try {
+                    let fetchResult;
+                    let fetchJSON;
+                    let fullnameAuthors = [];
+                    let example = new Cite(_DOI)
+                    let output = example.format('bibliography', {
+                        type: 'string'
+                    })
+                    let created_date;
                     const apiUrl = 'https://api.crossref.org/v1/works/' + _DOI;
                     fetchResult = await fetch(apiUrl);
                     fetchJSON = await fetchResult.json();
@@ -152,7 +174,7 @@ exports.validation = async function (req, res) {
                         console.log(_DOI + " Error " + (checkStatus.Error.length + checkStatus.Existing.length + checkStatus.Fetchable.length));
                     }
                     if ((checkStatus.Error.length + checkStatus.Existing.length + checkStatus.Fetchable.length) == dois.length) {
-                        res.send(new Cite('10.4230/LIPIcs.ECRTS.2017.25'));
+                        res.send(checkStatus);
                     }
                 }
             }
@@ -180,80 +202,52 @@ exports.insert_one = async function (req, res) {
 
 
 exports.insert = async function (req, Res) {
-    const dois = req.body;
+    const info = req.body;
     let insertStatus = {
         'Inserted': [],
         'Inserted with missing value': []
     };
     let tem_category = [];
-    for (let i = 0; i < dois.length; i++) {
-        const _DOI = dois[i];
-        console.log("Processing " + _DOI);
-        let example = new Cite(_DOI)
-        let output = example.format('bibliography', {
-            type: 'string'
-        })
-        console.log("Citation: " + output);
-        Publication.find({ DOI: _DOI }, async function (err, pub) {
-            if (err) {
-                throw err;
-            }
-            const apiUrl = 'https://api.crossref.org/v1/works/' + _DOI;
-            const fetchResult = await fetch(apiUrl);
-            const fetchJSONResult = await fetchResult.json();
-            const parsedData = fetchJSONResult['message'];
-            let fullnameAuthors = [];
-            let citation_author = '';
-            if (!tem_category.includes(parsedData['type'])) {
-                console.log("Pushing.." + parsedData['type'])
-                tem_category.push(parsedData['type']);
-            }
-            try {
-                if ('author' in parsedData) {
-                    const parsedAuthors = fetchJSONResult['message']['author'];
-                    for (let m = 0; m < parsedAuthors.length; m++) {
-                        fullnameAuthors.push(parsedAuthors[m]['given'] + " " + parsedAuthors[m]['family']);
+    for (let i = 0; i < info.length; i++) {
+        const _info = info[i];
+        const saveResult = new Publication({
+            'Title': _info['Title'], 'Authors': _info['Author'], 'DOI': _info['DOI'], 'Type': _info['Type'], 'Created_Date': _info['Created'], 'Citation': _info['Citation']
+        });
+        if (!tem_category.includes(_info['Type'])) {
+            tem_category.push(_info['Type']);
+        }
+        try {
+            saveResult.save(function (err) {
+                if (err) throw err;
+            });
+            insertStatus['Inserted'].push(_info['DOI'])
+            console.log("Inserted " + _info['DOI']);
+        }
+        catch (err) {
+            insertStatus['Inserted with missing value'].push(_info['DOI'])
+            console.log("Inserted with missing value" + _info['DOI']);
+            console.log(err)
+        }
+        if ((insertStatus['Inserted'].length + insertStatus['Inserted with missing value'].length) == info.length) {
+            for (let a = 0; a < tem_category.length; a++) {
+                Category.find({ Category: tem_category[a] }, function (err, categoryTest) {
+                    if (err) {
+                        throw err;
                     }
-                }
-                else {
-                    fullnameAuthors = ['Null']
-                }
-                const saveResult = new Publication({
-                    'Title': parsedData['title'], 'Authors': fullnameAuthors, 'DOI': parsedData['DOI'], 'Type': parsedData['type'], 'Created_Date': parsedData['created']['date-time'].substring(0, 10), 'Citation': output
-                });
-                saveResult.save(function (err) {
-                    if (err) throw err;
-                });
-                insertStatus['Inserted'].push(_DOI)
-                console.log("Inserted " + _DOI);
+                    if (categoryTest == undefined || categoryTest.length == 0) {
+                        console.log("Adding: " + tem_category[a]);
+                        const categoryResult = new Category({
+                            'Category': tem_category[a]
+                        });
+                        categoryResult.save(function (err) {
+                            if (err) throw err;
+                        })
+                    }
+                })
             }
-            catch (err) {
-                insertStatus['Inserted with missing value'].push(_DOI)
-                console.log("Inserted with missing value" + _DOI);
-                console.log(err)
-            }
-            if ((insertStatus['Inserted'].length + insertStatus['Inserted with missing value'].length) == dois.length) {
-                for (let a = 0; a < tem_category.length; a++) {
-                    Category.find({ Category: tem_category[a] }, function (err, categoryTest) {
-                        if (err) {
-                            throw err;
-                        }
-                        console.log(categoryTest);
-                        if (categoryTest == undefined || categoryTest.length == 0) {
-                            console.log("Adding: " + tem_category[a]);
-                            const categoryResult = new Category({
-                                'Category': tem_category[a]
-                            });
-                            categoryResult.save(function (err) {
-                                if (err) throw err;
-                            })
-                        }
-                    })
-                }
-                console.log(insertStatus);
-                Res.send(insertStatus);
-            }
-        })
+            console.log(insertStatus);
+            Res.send(insertStatus);
+        }
     }
 }
 

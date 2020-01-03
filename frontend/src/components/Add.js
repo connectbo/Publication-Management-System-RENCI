@@ -51,10 +51,13 @@ function Add() {
   const [ref, setrefState] = useState('');
   const [textarea, setTextArea] = useState('');
   const [checkStatus, setcheckStatus] = useState({ 'Fetchable': [], 'Error': [], 'Existing': [] });
-  const [insertStatus, setinsertStatus] = useState([]);
+  const [insertStatus, setinsertStatus] = useState({
+    'Inserted': [],
+    'Inserted with missing value': []
+  });
   const [result, setResultState] = useState('');
   const [expanded, setExpanded] = useState(false);
-  const [authorString, setAuthorStringState] = useState('');
+  const [fetchableNum, setFetchable] = useState('');
   const [checked, setChecked] = useState([])
   const [isLoading, setLoading] = useState(false);
 
@@ -94,11 +97,13 @@ function Add() {
       .then(data => {
         console.log(data)
         setcheckStatus(data);
+        setFetchable(data.Fetchable.length);
         setLoading(false);
       })
   }
 
   const textAreaSubmit = event => {
+    
     event.preventDefault();
     fetch(`http://${currentUrl}:5000/insert`, {
       method: 'POST',
@@ -113,19 +118,25 @@ function Add() {
       })
   }
 
-  const handleSubmit = event => {
-    event.preventDefault();
-    fetch(`http://${currentUrl}:5000/reference/${ref}/save=yes`)
-      .then(res => res.json())
-      .then(data => {
-        setResultState(data);
-        setAuthorStringState(data.Authors.join(', '));
-      })
-  }
-
   const handleExpandChange = curr_doi => (event, isExpanded) => {
     setExpanded(isExpanded ? curr_doi : false);
   };
+
+  const handleCheckboxChange = event => {
+    checkStatus.Fetchable.forEach(pub => {
+      if(pub.DOI == event.target.value){
+        pub.Checked = event.target.checked;
+      }
+    })
+    setcheckStatus(checkStatus);
+    let curr_fetchable_num = 0;
+    checkStatus.Fetchable.forEach(pub => {
+      if(pub.Checked == true){
+        curr_fetchable_num+=1;
+      }
+    })
+    setFetchable(curr_fetchable_num);
+  }
 
 
 
@@ -152,7 +163,7 @@ function Add() {
                   expandIcon={<ExpandMoreIcon />}
                   aria-controls="panel1a-content"
                   id="panel1a-header">
-                  <Checkbox></Checkbox>
+                  <Checkbox checked={pub.Checked} onChange={handleCheckboxChange} value={pub.DOI}></Checkbox>
                   <Container>
                     <Typography className={classes.heading}><strong>{pub.Title}</strong></Typography>
                     <Typography block><a href={"https://dx.doi.org/" + pub.DOI}>{pub.DOI}</a></Typography>
@@ -178,9 +189,9 @@ function Add() {
         <Container>
           <Typography><b>Step 3: Insert into RENCI Database</b></Typography>
           <hr />
-          <Typography><b>{insertStatus.length} Inserted DOI(s):</b></Typography>
-          {insertStatus.map(pub => <Typography>{pub['DOI']}</Typography>)}
-          <Button variant="contained" color="secondary" onClick={textAreaSubmit}> Insert {checkStatus.Fetchable.length} Fetchable DOI(s) </Button>
+          <Typography><b>{insertStatus.Inserted.length} Inserted DOI(s):</b></Typography>
+          {insertStatus.Inserted.map(pub => <Typography>{pub}</Typography>)}
+          <Button variant="contained" color="secondary" onClick={textAreaSubmit}> Insert {fetchableNum} Fetchable DOI(s) </Button>
         </Container>
       </Container>
     </div>
