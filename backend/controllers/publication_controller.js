@@ -84,10 +84,8 @@ exports.check = async function (req, res) {
                     }
                 }
                 catch(err){
-                    if (fetchResult['status'] == '404') {
                         checkStatus.Error.push(_DOI);
                         console.log(_DOI + " Error " + (checkStatus.Error.length + checkStatus.Existing.length + checkStatus.Fetchable.length));
-                    }
                     if ((checkStatus.Error.length + checkStatus.Existing.length + checkStatus.Fetchable.length) == dois.length) {
                         res.send(checkStatus);
                     }

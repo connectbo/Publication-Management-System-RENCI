@@ -199,7 +199,7 @@ function Search() {
           <CardContent>
             <Typography className={classes.body}><strong>Title: </strong> {pub.Title}</Typography>
             <Typography className={classes.body}><strong>DOI: </strong><a href={"https://dx.doi.org/" + pub.DOI}>{pub.DOI}</a></Typography>
-            <Typography className={classes.body}><strong>Author(s): </strong>{pub.Authors.join(", ")}</Typography>
+            <Typography className={classes.body}><strong>Author(s): </strong>{pub.Authors}</Typography>
             <Typography className={classes.body}><strong>Created Date: </strong>{pub.Created_Date}</Typography>
             <Typography className={classes.body}><strong>Type: </strong>{pub.Type}</Typography>
             <Typography className={classes.body}><strong>Citation: </strong>{pub.Citation}</Typography>
