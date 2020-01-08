@@ -308,17 +308,10 @@ exports.advancedSearch = function (req, res) {
 
     function generateTypeFinder(TypeString) {
         let TypeFinder = [];
-        for (let i = 0; i < TypeString.length; i++) {
-            switch (TypeString.substring(i, i + 1)) {
-                case 'b':
-                    TypeFinder.push({ Type: 'book-chapter' });
-                    break;
-                case 'j':
-                    TypeFinder.push({ Type: 'journal-article' });
-                    break;
-                case 'p':
-                    TypeFinder.push({ Type: 'proceedings-article' });
-                    break;
+        let TypeJSON = JSON.parse(TypeString);
+        for(let key in TypeJSON){
+            if(TypeJSON[key] === true){
+                TypeFinder.push({Type: `${key}`});
             }
         }
         return TypeFinder;

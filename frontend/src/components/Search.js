@@ -65,7 +65,7 @@ function Search() {
   const [edate, setEDate] = useState('2019-07-09');
   const [categories, setCategories] = useState([]);
   const currentUrl = window.location.hostname;
-  let categoryString = "";
+  let categoryToSend = [];
   let toReport = {};
   let csvContent = "data:application/octet-stream,";
 
@@ -126,14 +126,6 @@ function Search() {
     setcategoryJSON(newcategoryJSON);
   }
 
-  function categorytoString() {
-    for (let category in categoryJSON) {
-      if (categoryJSON[category] === true) {
-        categoryString = categoryString + category.substr(0, 1);
-      }
-    }
-  }
-
   const handleSubmit = event => {
     let toReportString = "Found results: ";
     if (ref !== '') {
@@ -146,8 +138,7 @@ function Search() {
     else {
       setStatusState('Searching by ' + title + " " + author);
       event.preventDefault();
-      categorytoString();
-      fetch(`http://${currentUrl}:5000/search/title=${title}&&author=${author}&&type=${categoryString}&&s_date=${sdate}&&e_date=${edate}`)
+      fetch(`http://${currentUrl}:5000/search/title=${title}&&author=${author}&&type=${JSON.stringify(categoryJSON)}&&s_date=${sdate}&&e_date=${edate}`)
         .then(res => res.json())
         .then(data => {
           setpubArrayState(data);
