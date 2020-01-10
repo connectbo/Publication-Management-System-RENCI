@@ -79,9 +79,9 @@ function Add_Input() {
                     <MenuItem value="">
                         <em>None</em>
                     </MenuItem>
-                    <MenuItem value='proceedings-article'>Proceedings-Article</MenuItem>
-                    <MenuItem value='book-chapter'>Book-Chapter</MenuItem>
-                    <MenuItem value='journal-article'>Journal-Article</MenuItem>
+                    <MenuItem value='paper-conference'>Paper-Conference</MenuItem>
+                    <MenuItem value='chapter'>Chapter</MenuItem>
+                    <MenuItem value='article-journal'>Article-Journal</MenuItem>
                     <MenuItem value='presentation'>Presentation</MenuItem>
                     <MenuItem value='other'>Other</MenuItem>
                 </Select>
