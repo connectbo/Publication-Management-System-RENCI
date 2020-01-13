@@ -126,6 +126,16 @@ function Search() {
     setcategoryJSON(newcategoryJSON);
   }
 
+  function checkCategory(categoryJSON) {
+    let check = false;
+    for(let i in categoryJSON){
+      if(categoryJSON[i] === true){
+        return true;
+      }
+    }
+    return false;;
+  }
+
   const handleSubmit = event => {
     let toReportString = "Found results: ";
     if (ref !== '') {
@@ -138,25 +148,30 @@ function Search() {
     else {
       setStatusState('Searching by ' + title + " " + author);
       event.preventDefault();
-      fetch(`http://${currentUrl}:5000/search/title=${title}&&author=${author}&&type=${JSON.stringify(categoryJSON)}&&s_date=${sdate}&&e_date=${edate}`)
-        .then(res => res.json())
-        .then(data => {
-          setpubArrayState(data);
-          data.forEach(pub => {
-            let curr_type = pub.Type;
-            if (toReport[curr_type]) {
-              toReport[curr_type] += 1;
-            }
-            else {
-              toReport[curr_type] = 1;
-            }
+      if (checkCategory(categoryJSON)) {
+        fetch(`http://${currentUrl}:5000/search/title=${title}&&author=${author}&&type=${JSON.stringify(categoryJSON)}&&s_date=${sdate}&&e_date=${edate}`)
+          .then(res => res.json())
+          .then(data => {
+            setpubArrayState(data);
+            data.forEach(pub => {
+              let curr_type = pub.Type;
+              if (toReport[curr_type]) {
+                toReport[curr_type] += 1;
+              }
+              else {
+                toReport[curr_type] = 1;
+              }
+            })
+            Object.keys(toReport).forEach(key => {
+              toReportString += `${key}: ${toReport[key]} `;
+            })
+            console.log(toReportString);
+            setStatusState(toReportString);
           })
-          Object.keys(toReport).forEach(key => {
-            toReportString += `${key}: ${toReport[key]} `;
-          })
-          console.log(toReportString);
-          setStatusState(toReportString);
-        })
+      }
+      else{
+        setStatusState("Please select at least one category filter to start searching.");
+      }
     }
   }
   return (
@@ -185,18 +200,18 @@ function Search() {
       <Typography className={classes.body}><strong>{status}</strong></Typography>
       <Container>
         <Button className={classes.subButton} color="secondary" onClick={handleExport}>Download Citations</Button>
-        {pubArray.length>0 ?
-        pubArray.map(pub => <Card className={classes.card}>
-          <CardContent>
-            <Typography className={classes.body}><strong>Title: </strong> {pub.Title}</Typography>
-            <Typography className={classes.body}><strong>DOI: </strong><a href={"https://dx.doi.org/" + pub.DOI}>{pub.DOI}</a></Typography>
-            <Typography className={classes.body}><strong>Author(s): </strong>{pub.Authors}</Typography>
-            <Typography className={classes.body}><strong>Created Date: </strong>{pub.Created_Date}</Typography>
-            <Typography className={classes.body}><strong>Type: </strong>{pub.Type}</Typography>
-            <Typography className={classes.body}><strong>Citation: </strong>{pub.Citation}</Typography>
-          </CardContent>
-        </Card>)
-        : <CircularProgress />}
+        {pubArray.length > 0 ?
+          pubArray.map(pub => <Card className={classes.card}>
+            <CardContent>
+              <Typography className={classes.body}><strong>Title: </strong> {pub.Title}</Typography>
+              <Typography className={classes.body}><strong>DOI: </strong><a href={"https://dx.doi.org/" + pub.DOI}>{pub.DOI}</a></Typography>
+              <Typography className={classes.body}><strong>Author(s): </strong>{pub.Authors}</Typography>
+              <Typography className={classes.body}><strong>Created Date: </strong>{pub.Created_Date}</Typography>
+              <Typography className={classes.body}><strong>Type: </strong>{pub.Type}</Typography>
+              <Typography className={classes.body}><strong>Citation: </strong>{pub.Citation}</Typography>
+            </CardContent>
+          </Card>)
+          : <CircularProgress />}
       </Container>
     </div>
   );

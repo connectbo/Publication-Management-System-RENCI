@@ -10,8 +10,6 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails } from '@material-ui/core';
 
-
-
 const useStyles = makeStyles({
   card: {
     marginTop: 10
@@ -39,9 +37,6 @@ const useStyles = makeStyles({
     fontSize: 18,
     padding: '8px 8px',
     display: 'inline'
-  },
-  left: {
-    width: 'auto',
   }
 });
 
@@ -143,7 +138,7 @@ function Add() {
   return (
     <div>
       <Container className={classes.root}>
-        <Container className={classes.left}>
+        <Container>
           <Typography><b>Step 1: Copy and Paste your DOI(s)</b></Typography>
           <hr />
           <textarea className={classes.inputtext} id="user_input" rows='25' cols='30' placeholder='10.1212/wnl.0b013e318221c187&#10;10.1111/j.1752-8062.2011.00324.x&#10;10.1145/2030718.2030727' onChange={handleTextAreaChange}>{textarea}
@@ -154,7 +149,8 @@ function Add() {
           <hr />
           <Typography>In total, {checkStatus.Fetchable.length + checkStatus.Existing.length + checkStatus.Error.length} unique doi(s) are detected. </Typography>
           <br />
-          {(isLoading) ? <CircularProgress /> : <br />}
+          {(isLoading) ? <CircularProgress /> : <Button variant="contained" color="secondary" onClick={textAreaCheck}> Check </Button>}
+          <br/>
           {(checkStatus.Fetchable.length + checkStatus.Existing.length + checkStatus.Error.length > 0) ? <div>
             <Typography><b>{checkStatus.Fetchable.length} DOI(s) Fetchable via Crossref API: </b></Typography>
             {checkStatus.Fetchable.map(pub =>
@@ -184,14 +180,12 @@ function Add() {
             <Typography><b>{checkStatus.Existing.length} Already Stored DOI(s):</b></Typography>
             {checkStatus.Existing.map(status => <Typography>{status}</Typography>)}
           </div> : <br />}
-          <Button variant="contained" color="secondary" onClick={textAreaCheck}> Check </Button>
         </Container>
         <Container>
           <Typography><b>Step 3: Insert into RENCI Database</b></Typography>
           <hr />
           <Typography><b>{insertStatus.Inserted.length} Inserted DOI(s):</b></Typography>
-          {insertStatus.Inserted.map(pub => <Typography>{pub}</Typography>)}
-          <Button variant="contained" color="secondary" onClick={textAreaSubmit}> Insert {fetchableNum} Fetchable DOI(s) </Button>
+          {insertStatus.Inserted.length>0 ? insertStatus.Inserted.map(pub => <Typography>{pub}</Typography>) :           <Button variant="contained" color="secondary" onClick={textAreaSubmit}> Insert {fetchableNum} Fetchable DOI(s) </Button>}
         </Container>
       </Container>
     </div>

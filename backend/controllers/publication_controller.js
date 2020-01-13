@@ -59,7 +59,7 @@ exports.check = async function (req, res) {
                     else {
                         let toReturn = {
                             "DOI": _DOI,
-                            "Error": 'Missing Created Date Value'
+                            "Error": 'Missing Value. Please Add Manually.'
                         }
                         checkStatus.Error.push(toReturn);
                         if ((checkStatus.Error.length + checkStatus.Existing.length + checkStatus.Fetchable.length) == dois.length) {
@@ -83,15 +83,19 @@ exports.check = async function (req, res) {
                         res.send(checkStatus);
                     }
                 }
-                catch(err){
-                        checkStatus.Error.push(_DOI);
-                        console.log(_DOI + " Error " + (checkStatus.Error.length + checkStatus.Existing.length + checkStatus.Fetchable.length));
+                catch (err) {
+                    let toReturn = {
+                        "DOI": _DOI,
+                        "Error": 'Invalid DOI. Please Check Your Input.'
+                    }
+                    checkStatus.Error.push(toReturn);
+                    console.log(_DOI + " Error " + (checkStatus.Error.length + checkStatus.Existing.length + checkStatus.Fetchable.length));
                     if ((checkStatus.Error.length + checkStatus.Existing.length + checkStatus.Fetchable.length) == dois.length) {
                         res.send(checkStatus);
                     }
                 }
             }
-            else{
+            else {
                 checkStatus.Existing.push(_DOI);
                 console.log(_DOI + " existed " + (checkStatus.Error.length + checkStatus.Existing.length + checkStatus.Fetchable.length));
                 if ((checkStatus.Error.length + checkStatus.Existing.length + checkStatus.Fetchable.length) == dois.length) {
@@ -261,9 +265,17 @@ exports.getCategory = function (req, res) {
 exports.advancedSearch = function (req, res) {
     _title = req.params.title;
     _author = req.params.author;
-    _type = req.params.type;
     _sdate = req.params.s_date;
     _edate = req.params.e_date;
+
+    let _type = [];
+    let TypeJSON = JSON.parse(req.params.type);
+    for (let key in TypeJSON) {
+        if (TypeJSON[key] === true) {
+            _type.push({ Type: `${key}` });
+        }
+    }
+    if (_type == []) res.send("Please select at least one category to start searching.");
 
     if (_author === undefined) {
         _author = '';
@@ -271,8 +283,7 @@ exports.advancedSearch = function (req, res) {
     if (_title === undefined) {
         _title = '';
     }
-    if (_type === undefined) {
-        _type = '';
+    if (_type === []) {
     }
     if (_sdate === undefined) {
         _sdate = '1995-12-08';
@@ -285,12 +296,11 @@ exports.advancedSearch = function (req, res) {
 
 
     // communicate more with Matt. Powerful skills 
-
     Publication.find()
         .and([
             { Title: { $regex: _title, $options: 'i' } },
             { Authors: { $regex: _author, $options: 'i' } },
-            { $or: generateTypeFinder(_type) },
+            { $or: _type },
             {
                 Created_Date: {
                     '$gte': _sdate,
@@ -305,17 +315,6 @@ exports.advancedSearch = function (req, res) {
                     throw (err);
                 } res.send(pubs);
             })
-
-    function generateTypeFinder(TypeString) {
-        let TypeFinder = [];
-        let TypeJSON = JSON.parse(TypeString);
-        for(let key in TypeJSON){
-            if(TypeJSON[key] === true){
-                TypeFinder.push({Type: `${key}`});
-            }
-        }
-        return TypeFinder;
-    }
 }
 
 exports.getAll = function (req, res) {
