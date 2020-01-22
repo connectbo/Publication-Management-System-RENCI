@@ -28,6 +28,7 @@ function Add_Input() {
     const [doi, setDOI] = useState('');
     const [title, setTitle] = useState('');
     const [author, setAuthor] = useState('');
+    const [cite, setCite] = useState('');
     const [type, setType] = useState('');
     const [date, setDate] = useState('2001-01-01');
     const [status, setStatus] = useState('');
@@ -59,6 +60,7 @@ function Add_Input() {
                     <TextField id="doi" label="DOI" onChange={doi => { setDOI(doi.target.value); }} />
                     <TextField id="title" label="Title" onChange={title => setTitle(title.target.value)} />
                     <TextField id="author" label="Author(s)" onChange={author => setAuthor(author.target.value)} />
+                    <TextField id="cite" label="Citation" onChange={cite => setCite(cite.target.value)} />
                     <TextField
                         id="date"
                         label="Created Date"
