@@ -9,6 +9,9 @@ import Input from '@material-ui/core/Input';
 import TextField from '@material-ui/core/TextField';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { Checkbox, FormGroup, FormLabel, FormControl, FormControlLabel } from '@material-ui/core';
+import { ResponsivePie } from '@nivo/pie';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import 'react-tabs/style/react-tabs.css';
 
 //get publications from home.renci.org
 
@@ -50,6 +53,13 @@ const useStyles = makeStyles({
   },
   input: {
     marginLeft: 10,
+  },
+  pie_chart: {
+    padding: '12px 12px',
+    height: 250
+  },
+  chart: {
+    padding: '12px 12px'
   }
 });
 
@@ -60,7 +70,7 @@ function Search() {
   const [title, setTitleState] = useState('');
   const [author, setAuthorState] = useState('');
   const [pubArray, setpubArrayState] = useState([]);
-  const [status, setStatusState] = useState('');
+  const [status, setStatusState] = useState([]);
   const [sdate, setSDate] = useState('2001-01-01');
   const [edate, setEDate] = useState('2019-07-09');
   const [categories, setCategories] = useState([]);
@@ -120,7 +130,6 @@ function Search() {
 
   const handleCategoryChange = event => {
     let TargetName = event.target.value;
-    console.log(event.target.checked);
     let newcategoryJSON = JSON.parse(JSON.stringify(categoryJSON));
     newcategoryJSON[TargetName] = event.target.checked;
     setcategoryJSON(newcategoryJSON);
@@ -128,16 +137,27 @@ function Search() {
 
   function checkCategory(categoryJSON) {
     let check = false;
-    for(let i in categoryJSON){
-      if(categoryJSON[i] === true){
+    for (let i in categoryJSON) {
+      if (categoryJSON[i] === true) {
         return true;
       }
     }
-    return false;;
+    return false;
+  }
+
+  function generateHslaColors(saturation, lightness, alpha, amount) {
+    let colors = []
+    let huedelta = Math.trunc(360 / amount)
+
+    for (let i = 0; i < amount; i++) {
+      let hue = i * huedelta
+      colors.push(`hsla(${hue},${saturation}%,${lightness}%,${alpha})`)
+    }
+    return colors;
   }
 
   const handleSubmit = event => {
-    let toReportString = "Found results: ";
+    let toReportJSON = [];
     if (ref !== '') {
       fetch(`http://${currentUrl}:5000/reference/${ref}`)
         .then(res => res.json())
@@ -146,7 +166,6 @@ function Search() {
         })
     }
     else {
-      setStatusState('Searching by ' + title + " " + author);
       event.preventDefault();
       if (checkCategory(categoryJSON)) {
         fetch(`http://${currentUrl}:5000/search/title=${title}&&author=${author}&&type=${JSON.stringify(categoryJSON)}&&s_date=${sdate}&&e_date=${edate}`)
@@ -161,15 +180,16 @@ function Search() {
               else {
                 toReport[curr_type] = 1;
               }
-            })
+            });
+            let hslcolors = generateHslaColors(50, 100, 1.0, Object.keys(toReport).length);
+            let counter = 0;
             Object.keys(toReport).forEach(key => {
-              toReportString += `${key}: ${toReport[key]} `;
+              toReportJSON.push({ "id": key, "label": key, "value": toReport[key], "color": hslcolors[counter++] });
             })
-            console.log(toReportString);
-            setStatusState(toReportString);
+            setStatusState(toReportJSON);
           })
       }
-      else{
+      else {
         setStatusState("Please select at least one category filter to start searching.");
       }
     }
@@ -197,21 +217,46 @@ function Search() {
         <Button className={classes.subButton} variant="contained" color="secondary" onClick={handleSubmit}>
           Search </Button>
       </Container>
-      <Typography className={classes.body}><strong>{status}</strong></Typography>
+      {/* <Typography className={classes.body}><strong>{status}</strong></Typography> */}
+
       <Container>
-        <Button className={classes.subButton} color="secondary" onClick={handleExport}>Download Citations</Button>
-        {pubArray.length > 0 ?
-          pubArray.map(pub => <Card className={classes.card}>
-            <CardContent>
-              <Typography className={classes.body}><strong>Title: </strong> {pub.Title}</Typography>
-              <Typography className={classes.body}><strong>DOI: </strong><a href={"https://dx.doi.org/" + pub.DOI}>{pub.DOI}</a></Typography>
-              <Typography className={classes.body}><strong>Author(s): </strong>{pub.Authors}</Typography>
-              <Typography className={classes.body}><strong>Created Date: </strong>{pub.Created_Date}</Typography>
-              <Typography className={classes.body}><strong>Type: </strong>{pub.Type}</Typography>
-              <Typography className={classes.body}><strong>Citation: </strong>{pub.Citation}</Typography>
-            </CardContent>
-          </Card>)
-          : <CircularProgress />}
+        <Tabs>
+          <TabList>
+            <Tab>Result</Tab>
+            <Tab>Result Data Visualization</Tab>
+            <Tab>Download Citation</Tab>
+          </TabList>
+
+          <TabPanel>
+            {pubArray.length > 0 ?
+              pubArray.map(pub => <Card className={classes.card}>
+                <CardContent>
+                  <Typography className={classes.body}><strong>Title: </strong> {pub.Title}</Typography>
+                  <Typography className={classes.body}><strong>DOI: </strong><a href={"https://dx.doi.org/" + pub.DOI}>{pub.DOI}</a></Typography>
+                  <Typography className={classes.body}><strong>Author(s): </strong>{pub.Authors}</Typography>
+                  <Typography className={classes.body}><strong>Created Date: </strong>{pub.Created_Date}</Typography>
+                  <Typography className={classes.body}><strong>Type: </strong>{pub.Type}</Typography>
+                  <Typography className={classes.body}><strong>Citation: </strong>{pub.Citation}</Typography>
+                </CardContent>
+              </Card>)
+              : <CircularProgress />
+            }
+          </TabPanel>
+          <TabPanel>
+          <Typography className={classes.body}>In total, {pubArray.length} result(s) are found.</Typography>
+            <Container className={classes.pie_chart}>
+              <ResponsivePie className={classes.chart} data={status}
+                innerRadius={0.5}
+                padAngle={0.7}
+                cornerRadius={3}
+                colors={{ scheme: 'nivo' }}
+                animate={true} />
+            </Container>
+          </TabPanel>
+          <TabPanel>
+            <Button className={classes.subButton} color="secondary" onClick={handleExport}>Download Citations</Button>
+          </TabPanel>
+        </Tabs>
       </Container>
     </div>
   );
