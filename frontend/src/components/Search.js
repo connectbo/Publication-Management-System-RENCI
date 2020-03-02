@@ -246,6 +246,7 @@ function Search() {
           <Typography className={classes.body}>In total, {pubArray.length} result(s) are found.</Typography>
             <Container className={classes.pie_chart}>
               <ResponsivePie className={classes.chart} data={status}
+                margin = {{ top: 10 }}
                 innerRadius={0.5}
                 padAngle={0.7}
                 cornerRadius={3}
