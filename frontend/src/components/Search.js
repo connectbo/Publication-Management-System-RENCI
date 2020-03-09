@@ -9,6 +9,8 @@ import Input from '@material-ui/core/Input';
 import TextField from '@material-ui/core/TextField';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { Checkbox, FormGroup, FormLabel, FormControl, FormControlLabel } from '@material-ui/core';
+import Pagination from '@material-ui/lab/Pagination';
+
 import { ResponsivePie } from '@nivo/pie';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
@@ -66,14 +68,21 @@ const useStyles = makeStyles({
 
 function Search() {
   const classes = useStyles();
+
   const [ref, setrefState] = useState('');
   const [title, setTitleState] = useState('');
   const [author, setAuthorState] = useState('');
   const [pubArray, setpubArrayState] = useState([]);
   const [status, setStatusState] = useState([]);
   const [sdate, setSDate] = useState('2001-01-01');
-  const [edate, setEDate] = useState('2019-07-09');
+  const [edate, setEDate] = useState('2020-01-01');
   const [categories, setCategories] = useState([]);
+
+  const [page, setCurrentPage] = useState(1);
+  const [currentPubArray, setcurrentPubArray] = useState([]);
+
+  const pageLimit = 10;
+
   const currentUrl = window.location.hostname;
   let categoryToSend = [];
   let toReport = {};
@@ -83,9 +92,7 @@ function Search() {
     const categoryResults = await fetch(`http://${currentUrl}:5000/category`)
       .then(res => res.json());
     setCategories(categoryResults);
-    const pubData = await fetch(`http://${currentUrl}:5000`)
-      .then(res => res.json())
-      .then(data => setpubArrayState(data.content));
+    handleSubmit();
   }
 
   useEffect(() => { fetchCategories(); }, []);
@@ -135,6 +142,11 @@ function Search() {
     setcategoryJSON(newcategoryJSON);
   }
 
+  const handlePageChange = (event, value) => {
+    setCurrentPage(value);
+    setcurrentPubArray(pubArray.slice((value - 1) * 10, value * 10));
+  }
+
   function checkCategory(categoryJSON) {
     let check = false;
     for (let i in categoryJSON) {
@@ -156,7 +168,8 @@ function Search() {
     return colors;
   }
 
-  const handleSubmit = event => {
+
+  function handleSubmit() {
     let toReportJSON = [];
     if (ref !== '') {
       fetch(`http://${currentUrl}:5000/reference/${ref}`)
@@ -166,12 +179,12 @@ function Search() {
         })
     }
     else {
-      event.preventDefault();
       if (checkCategory(categoryJSON)) {
         fetch(`http://${currentUrl}:5000/search/title=${title}&&author=${author}&&type=${JSON.stringify(categoryJSON)}&&s_date=${sdate}&&e_date=${edate}`)
           .then(res => res.json())
           .then(data => {
             setpubArrayState(data);
+            setcurrentPubArray(data);
             data.forEach(pub => {
               let curr_type = pub.Type;
               if (toReport[curr_type]) {
@@ -217,8 +230,6 @@ function Search() {
         <Button className={classes.subButton} variant="contained" color="secondary" onClick={handleSubmit}>
           Search </Button>
       </Container>
-      {/* <Typography className={classes.body}><strong>{status}</strong></Typography> */}
-
       <Container>
         <Tabs>
           <TabList>
@@ -228,8 +239,9 @@ function Search() {
           </TabList>
 
           <TabPanel>
-            {pubArray.length > 0 ?
-              pubArray.map(pub => <Card className={classes.card}>
+            <Pagination count={Math.ceil(pubArray.length / 10)} color="primary" page={page} onChange={handlePageChange} />
+            {currentPubArray.length > 0 ?
+              currentPubArray.map(pub => <Card className={classes.card}>
                 <CardContent>
                   <Typography className={classes.body}><strong>Title: </strong> {pub.Title}</Typography>
                   <Typography className={classes.body}><strong>DOI: </strong><a href={"https://dx.doi.org/" + pub.DOI}>{pub.DOI}</a></Typography>
@@ -243,10 +255,10 @@ function Search() {
             }
           </TabPanel>
           <TabPanel>
-          <Typography className={classes.body}>In total, {pubArray.length} result(s) are found.</Typography>
+            <Typography className={classes.body}>In total, {pubArray.length} result(s) are found.</Typography>
             <Container className={classes.pie_chart}>
               <ResponsivePie className={classes.chart} data={status}
-                margin = {{ top: 10 }}
+                margin={{ top: 25 }}
                 innerRadius={0.5}
                 padAngle={0.7}
                 cornerRadius={3}
@@ -256,6 +268,11 @@ function Search() {
           </TabPanel>
           <TabPanel>
             <Button className={classes.subButton} color="secondary" onClick={handleExport}>Download Citations</Button>
+            <Container>
+              {pubArray.map(pub =>
+                <Typography className={classes.body}>{pub.Citation}</Typography>
+              )}
+            </Container>
           </TabPanel>
         </Tabs>
       </Container>
