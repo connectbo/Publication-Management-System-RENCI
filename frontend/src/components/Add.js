@@ -56,23 +56,6 @@ function Add() {
   const [checked, setChecked] = useState([])
   const [isLoading, setLoading] = useState(false);
 
-  const handleToggle = value => () => {
-    const currentIndex = checked.indexOf(value);
-    const newChecked = [...checked];
-
-    if (currentIndex === -1) {
-      newChecked.push(value);
-    } else {
-      newChecked.splice(currentIndex, 1);
-    }
-
-    setChecked(newChecked);
-  };
-
-  const handleChange = event => {
-    setrefState(event.target.value);
-  }
-
   const handleTextAreaChange = event => {
     setTextArea(event.target.value);
   }
@@ -98,11 +81,16 @@ function Add() {
   }
 
   const textAreaSubmit = event => {
-    
+    let toSend = [];
+    checkStatus.Fetchable.forEach(pub => {
+      if(pub.Checked){
+        toSend.push(pub);
+      }
+    })
     event.preventDefault();
     fetch(`http://${currentUrl}:5000/insert`, {
       method: 'POST',
-      body: JSON.stringify(checkStatus.Fetchable),
+      body: JSON.stringify(toSend),
       headers: {
         'Content-Type': 'application/json'
       }
