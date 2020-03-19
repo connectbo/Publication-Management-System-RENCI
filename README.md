@@ -72,18 +72,28 @@ The homepage would list all articles already stored in RENCI's database. For tho
 
 By default, when you visit the homepage, you will see a list of publications stored in the RENCI database. Each publication would have a card effect, showing title and doi with a hyperlink to the external publication link. By clicking the card, you will be able to see full information, including the author, category, published date.
 
-### Search with DOI
-You are able to search publications stored in RENCI database by one of the following category, a combination or all of them.
+### Search with up to 5 metrics
+You are able to search for publication in the database, with one or multiple metrics shown below:
 
 1. DOI
 2. Title
 3. Author
 4. Category
-5. Start Date
-6. End Date
+5. Time Period(Start date - End Date)
 
 ### Add Publication
-Entering the publication DOI and you are able to add it to the RENCI database. *Restrictions Apply.*
+Two options are provided to add publications into the database.
+
+#### With DOI
+Step 1: Copy and Paste the publication DOI you want to add. If you have a list of DOIs, please place each doi in a single line in the textarea provided.
+
+Step 2: Click the 'Check' button to see if the publication of this DOI is fetchable. If not, please add manually using the second tab.
+
+Step 3: Read through the details retrieved, see if everything is correct. Insert them into the database when you are ready.
+
+#### Without DOI
+Go to the manually-add page, enter correct publication information in these fields. Make sure the information you provide is correct. The system cannot verify its correctness.
+ *Restrictions Apply.*
 
 ## Structure
 
