@@ -66,10 +66,14 @@ docker-compose down
 ### Backup and Restore
 This application supports backup and restore function on the MongoDB. Use the following code to backup and restore. Notice that the publication collection will be backup from the Docker Container and its image will be stored using the name of 'db.dump' at the root directory.
 
-Backup
-```docker exec mongodb sh -c 'mongodump -d test --authenticationDatabase admin -u root -p example' > db.dump```
-Restore
-```docker exec mongodb sh -c 'mongorestore -d test dump/test/ -u root -p example --authenticationDatabase admin' < db.dump```
+Backup Command
+```
+docker exec mongodb sh -c 'mongodump -d test --authenticationDatabase admin -u root -p example' > db.dump
+```
+Restore Command
+```
+docker exec mongodb sh -c 'mongorestore -d test dump/test/ -u root -p example --authenticationDatabase admin' < db.dump
+```
 
 
 
