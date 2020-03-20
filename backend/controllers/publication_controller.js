@@ -311,7 +311,9 @@ exports.advancedSearch = function (req, res) {
                 if (err) {
                     console.log(err);
                     throw (err);
-                } res.send(pubs);
+                }
+                if(pubs == []) res.send()
+                else res.send(pubs);
             })
 }
 

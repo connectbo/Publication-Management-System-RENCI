@@ -77,6 +77,7 @@ function Search() {
   const [sdate, setSDate] = useState('2001-01-01');
   const [edate, setEDate] = useState('2020-01-01');
   const [categories, setCategories] = useState([]);
+  const [isLoading, setLoading] = useState(false);
 
   const [page, setCurrentPage] = useState(1);
   const [currentPubArray, setcurrentPubArray] = useState([]);
@@ -171,6 +172,7 @@ function Search() {
 
   function handleSubmit() {
     let toReportJSON = [];
+    setLoading(true);
     if (ref !== '') {
       fetch(`http://${currentUrl}:5000/reference/${ref}`)
         .then(res => res.json())
@@ -200,6 +202,7 @@ function Search() {
               toReportJSON.push({ "id": key, "label": key, "value": toReport[key], "color": hslcolors[counter++] });
             })
             setStatusState(toReportJSON);
+            setLoading(false);
           })
       }
       else {
@@ -231,50 +234,52 @@ function Search() {
           Search </Button>
       </Container>
       <Container>
-        <Tabs>
-          <TabList>
-            <Tab>Result</Tab>
-            <Tab>Result Data Visualization</Tab>
-            <Tab>Download Citation</Tab>
-          </TabList>
+        {isLoading == true ? <CircularProgress /> :
+          <Tabs>
+            <TabList>
+              <Tab>Result</Tab>
+              <Tab>Result Data Visualization</Tab>
+              <Tab>Download Citation</Tab>
+            </TabList>
 
-          <TabPanel>
-            <Pagination count={Math.ceil(pubArray.length / 10)} color="primary" page={page} onChange={handlePageChange} />
-            {currentPubArray.length > 0 ?
-              currentPubArray.map(pub => <Card className={classes.card}>
-                <CardContent>
-                  <Typography className={classes.body}><strong>Title: </strong> {pub.Title}</Typography>
-                  <Typography className={classes.body}><strong>DOI: </strong><a href={"https://dx.doi.org/" + pub.DOI}>{pub.DOI}</a></Typography>
-                  <Typography className={classes.body}><strong>Author(s): </strong>{pub.Authors}</Typography>
-                  <Typography className={classes.body}><strong>Created Date: </strong>{pub.Created_Date}</Typography>
-                  <Typography className={classes.body}><strong>Type: </strong>{pub.Type}</Typography>
-                  <Typography className={classes.body}><strong>Citation: </strong>{pub.Citation}</Typography>
-                </CardContent>
-              </Card>)
-              : <CircularProgress />
-            }
-          </TabPanel>
-          <TabPanel>
-            <Typography className={classes.body}>In total, {pubArray.length} result(s) are found.</Typography>
-            <Container className={classes.pie_chart}>
-              <ResponsivePie className={classes.chart} data={status}
-                margin={{ top: 25, bottom: 25}}
-                innerRadius={0.5}
-                padAngle={0.7}
-                cornerRadius={3}
-                colors={{ scheme: 'nivo' }}
-                animate={true} />
-            </Container>
-          </TabPanel>
-          <TabPanel>
-            <Button className={classes.subButton} color="secondary" onClick={handleExport}>Download Citations</Button>
-            <Container>
-              {pubArray.map(pub =>
-                <Typography className={classes.body}>{pub.Citation}</Typography>
-              )}
-            </Container>
-          </TabPanel>
-        </Tabs>
+            <TabPanel>
+              <Pagination count={Math.ceil(pubArray.length / 10)} color="primary" page={page} onChange={handlePageChange} />
+              {currentPubArray.length > 0 ?
+                currentPubArray.map(pub => <Card className={classes.card}>
+                  <CardContent>
+                    <Typography className={classes.body}><strong>Title: </strong> {pub.Title}</Typography>
+                    <Typography className={classes.body}><strong>DOI: </strong><a href={"https://dx.doi.org/" + pub.DOI}>{pub.DOI}</a></Typography>
+                    <Typography className={classes.body}><strong>Author(s): </strong>{pub.Authors}</Typography>
+                    <Typography className={classes.body}><strong>Created Date: </strong>{pub.Created_Date}</Typography>
+                    <Typography className={classes.body}><strong>Type: </strong>{pub.Type}</Typography>
+                    <Typography className={classes.body}><strong>Citation: </strong>{pub.Citation}</Typography>
+                  </CardContent>
+                </Card>)
+                : <Typography className={classes.body}>No results found. </Typography>
+              }
+            </TabPanel>
+            <TabPanel>
+              <Typography className={classes.body}>In total, {pubArray.length} result(s) are found.</Typography>
+              <Container className={classes.pie_chart}>
+                <ResponsivePie className={classes.chart} data={status}
+                  margin={{ top: 25, bottom: 25 }}
+                  innerRadius={0.5}
+                  padAngle={0.7}
+                  cornerRadius={3}
+                  colors={{ scheme: 'nivo' }}
+                  animate={true} />
+              </Container>
+            </TabPanel>
+            <TabPanel>
+              <Button className={classes.subButton} color="secondary" onClick={handleExport}>Download Citations</Button>
+              <Container>
+                {pubArray.map(pub =>
+                  <Typography className={classes.body}>{pub.Citation}</Typography>
+                )}
+              </Container>
+            </TabPanel>
+          </Tabs>
+        }
       </Container>
     </div>
   );
