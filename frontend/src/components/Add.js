@@ -76,6 +76,10 @@ function Add() {
         console.log(data)
         setcheckStatus(data);
         setFetchable(data.Fetchable.length);
+        setinsertStatus({
+          'Inserted': [],
+          'Inserted with missing value': []
+        });
         setLoading(false);
       })
   }
