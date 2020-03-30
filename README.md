@@ -113,44 +113,30 @@ Go to the manually-add page, enter correct publication information in these fiel
 ```
 .
 ├── README.md
-├── backend                                                 ## Express Backend Server
+├── backend
 │   ├── Dockerfile
 │   ├── config
-│   │   ├── db.js                                           ## Connection with MongoDB
-│   │   └── default.json
-│   ├── controllers                                         
-│   │   └── publication_controller.js
+│   ├── controllers
 │   ├── models
-│   │   └── publication
-│   │       └── schema.js                                  
+│   ├── node_modules
 │   ├── package-lock.json
 │   ├── package.json
 │   ├── routes
-│   │   └── publication_router.js
-│   └── server.js                                           
+│   ├── server.js
+│   └── uploads
+├── db.dump
+├── docker-compose.prod.yml
 ├── docker-compose.yml
-└── frontend                                                ## React Frontend Framework
+└── frontend
     ├── Dockerfile
+    ├── Dockerfile-prod
+    ├── build
+    ├── nginx.conf
+    ├── node_modules
     ├── package-lock.json
     ├── package.json
     ├── public
-    │   ├── favicon.ico
-    │   ├── index.html
-    │   └── manifest.json
     └── src
-        ├── App.js
-        ├── App.test.js
-        ├── components                                      
-        │   ├── Header.js
-        │   ├── Home.js
-        │   └── Search.js
-        ├── img
-        │   ├── RENCI\ Appbar.tiff
-        │   └── RENCI-Appbar.jpg
-        ├── index.css
-        ├── index.js
-        ├── logo.svg
-        └── serviceWorker.js
 ```
 
 ## Built With
