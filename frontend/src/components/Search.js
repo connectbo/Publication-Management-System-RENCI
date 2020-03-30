@@ -17,7 +17,7 @@ import 'react-tabs/style/react-tabs.css';
 
 //get publications from home.renci.org
 
-//let num3 = 15
+// let num3 = 9
 // publications = []
 // for (let i = 2010; i <= 2020; i++) {
 //     const idValue = 2021 - i
@@ -217,7 +217,7 @@ function Search() {
         <Typography className={classes.input}><strong>Title</strong></Typography><Input className={classes.input} id="title" type="text" value={title} onChange={handleTitleChange}></Input>
         <Typography className={classes.input}><strong>Author</strong></Typography><Input className={classes.input} id="author" type="text" value={author} onChange={handleAuthorChange}></Input>
         <FormControl className={classes.input}>
-          <FormLabel><strong>Type</strong></FormLabel>
+          <FormLabel><strong>Category Filter</strong></FormLabel>
           <FormGroup>
             {categoryArray.map(cate => <FormControlLabel control={<Checkbox checked={categoryJSON[cate]} onChange={handleCategoryChange} value={cate} />} label={cate} ></FormControlLabel>)}
           </FormGroup>
