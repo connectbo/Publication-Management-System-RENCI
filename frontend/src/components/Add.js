@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Button from '@material-ui/core/Button';
@@ -8,7 +8,10 @@ import CardContent from '@material-ui/core/CardContent';
 import Checkbox from '@material-ui/core/Checkbox';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import 'react-tabs/style/react-tabs.css';
 import { ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails } from '@material-ui/core';
+import {useDropzone} from 'react-dropzone';
 
 const useStyles = makeStyles({
   card: {
@@ -45,6 +48,7 @@ function Add() {
   const currentUrl = window.location.hostname;
   const [ref, setrefState] = useState('');
   const [textarea, setTextArea] = useState('');
+  const [tabValue, setTabValue] = useState(0);
   const [checkStatus, setcheckStatus] = useState({ 'Fetchable': [], 'Error': [], 'Existing': [] });
   const [insertStatus, setinsertStatus] = useState({
     'Inserted': [],
@@ -55,6 +59,13 @@ function Add() {
   const [fetchableNum, setFetchable] = useState('');
   const [checked, setChecked] = useState([])
   const [isLoading, setLoading] = useState(false);
+
+  const onDrop = useCallback(acceptedFiles => {}, []);
+  const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop});
+
+  const handleTabChange = event => {
+    setTabValue(event.value);
+  }
 
   const handleTextAreaChange = event => {
     setTextArea(event.target.value);
@@ -131,10 +142,28 @@ function Add() {
     <div>
       <Container className={classes.root}>
         <Container>
-          <Typography><b>Step 1: Copy and Paste your DOI(s)</b></Typography>
+          <Typography><b>Step 1: Import your DOI(s)</b></Typography>
           <hr />
-          <textarea className={classes.inputtext} id="user_input" rows='25' cols='30' placeholder='10.1212/wnl.0b013e318221c187&#10;10.1111/j.1752-8062.2011.00324.x&#10;10.1145/2030718.2030727' onChange={handleTextAreaChange}>{textarea}
-          </textarea>
+          <Tabs value={tabValue} onChange={handleTabChange}>
+            <TabList>
+              <Tab>via Textarea</Tab>
+              <Tab>via File Upload</Tab>
+            </TabList>
+          <TabPanel>
+            <textarea className={classes.inputtext} id="user_input" rows='25' cols='30' placeholder='10.1212/wnl.0b013e318221c187&#10;10.1111/j.1752-8062.2011.00324.x&#10;10.1145/2030718.2030727' onChange={handleTextAreaChange}>{textarea}
+            </textarea>
+          </TabPanel>
+          <TabPanel>
+            <div {...getRootProps()}>
+              <input {...getInputProps()} />
+              {
+                isDragActive ?
+                <p>Drop the files here ...</p> :
+                <p>Drag 'n' drop some files here, or click to select files</p>
+              }
+            </div>
+          </TabPanel>
+          </Tabs>
         </Container>
         <Container>
           <Typography><b>Step 2: DOI Validation</b></Typography>
