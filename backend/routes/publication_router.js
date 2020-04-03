@@ -24,6 +24,9 @@ PubRouter.get('/', PubController.getAll);
 //module multer is used to handle multi-part/data file
 PubRouter.post('/insert', upload.single('dois'), PubController.insert)
 PubRouter.post('/insert_manually', PubController.insert_one)
+
+//validation
 PubRouter.post('/check', upload.single('dois'), PubController.check)
+PubRouter.post('/fileCheck', upload.single('myDOI'), PubController.fileCheck)
 
 module.exports = PubRouter;

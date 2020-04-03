@@ -11,7 +11,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import { ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails } from '@material-ui/core';
-import {useDropzone} from 'react-dropzone';
+import { useDropzone } from 'react-dropzone';
 
 const useStyles = makeStyles({
   card: {
@@ -54,14 +54,17 @@ function Add() {
     'Inserted': [],
     'Inserted with missing value': []
   });
+  const [file, setFile] = useState([]);
   const [result, setResultState] = useState('');
   const [expanded, setExpanded] = useState(false);
   const [fetchableNum, setFetchable] = useState('');
   const [checked, setChecked] = useState([])
   const [isLoading, setLoading] = useState(false);
 
-  const onDrop = useCallback(acceptedFiles => {}, []);
-  const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop});
+  const onDrop = useCallback(acceptedFiles => {
+    setFile(acceptedFiles);
+  }, []);
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   const handleTabChange = event => {
     setTabValue(event.value);
@@ -84,7 +87,6 @@ function Add() {
     })
       .then(res => res.json())
       .then(data => {
-        console.log(data)
         setcheckStatus(data);
         setFetchable(data.Fetchable.length);
         setinsertStatus({
@@ -95,10 +97,30 @@ function Add() {
       })
   }
 
+  const uploadFileCheck = event => {
+    setLoading(true);
+    const formData = new FormData()
+    formData.append('myDOI', file[0]);
+    fetch(`http://${currentUrl}:5000/fileCheck`, {
+      method: 'POST',
+      body: formData
+    })
+      .then(res => res.json())
+      .then(data => {
+        setcheckStatus(data);
+        setFetchable(data.Fetchable.length);
+        setinsertStatus({
+          'Inserted': [],
+          'Inserted with missing value': []
+        });
+        setLoading(false);
+      });
+  }
+
   const textAreaSubmit = event => {
     let toSend = [];
     checkStatus.Fetchable.forEach(pub => {
-      if(pub.Checked){
+      if (pub.Checked) {
         toSend.push(pub);
       }
     })
@@ -122,15 +144,15 @@ function Add() {
 
   const handleCheckboxChange = event => {
     checkStatus.Fetchable.forEach(pub => {
-      if(pub.DOI == event.target.value){
+      if (pub.DOI == event.target.value) {
         pub.Checked = event.target.checked;
       }
     })
     setcheckStatus(checkStatus);
     let curr_fetchable_num = 0;
     checkStatus.Fetchable.forEach(pub => {
-      if(pub.Checked == true){
-        curr_fetchable_num+=1;
+      if (pub.Checked == true) {
+        curr_fetchable_num += 1;
       }
     })
     setFetchable(curr_fetchable_num);
@@ -149,20 +171,21 @@ function Add() {
               <Tab>via Textarea</Tab>
               <Tab>via File Upload</Tab>
             </TabList>
-          <TabPanel>
-            <textarea className={classes.inputtext} id="user_input" rows='25' cols='30' placeholder='10.1212/wnl.0b013e318221c187&#10;10.1111/j.1752-8062.2011.00324.x&#10;10.1145/2030718.2030727' onChange={handleTextAreaChange}>{textarea}
-            </textarea>
-          </TabPanel>
-          <TabPanel>
-            <div {...getRootProps()}>
-              <input {...getInputProps()} />
-              {
-                isDragActive ?
-                <p>Drop the files here ...</p> :
-                <p>Drag 'n' drop some files here, or click to select files</p>
-              }
-            </div>
-          </TabPanel>
+            <TabPanel>
+              <textarea className={classes.inputtext} id="user_input" rows='25' cols='30' placeholder='10.1212/wnl.0b013e318221c187&#10;10.1111/j.1752-8062.2011.00324.x&#10;10.1145/2030718.2030727' onChange={handleTextAreaChange}>{textarea}
+              </textarea>
+            </TabPanel>
+            <TabPanel>
+              <div {...getRootProps()}>
+                <input {...getInputProps()} />
+                {
+                  isDragActive ?
+                    <p>Drop the files here ...</p> :
+                    <p>Drag 'n' drop some files here, or click to select files</p>
+                }
+              </div>
+              <Button color="secondary" onClick={uploadFileCheck}>Check</Button>
+            </TabPanel>
           </Tabs>
         </Container>
         <Container>
@@ -171,7 +194,7 @@ function Add() {
           <Typography>In total, {checkStatus.Fetchable.length + checkStatus.Existing.length + checkStatus.Error.length} unique doi(s) are detected. </Typography>
           <br />
           {(isLoading) ? <CircularProgress /> : <Button variant="contained" color="secondary" onClick={textAreaCheck}> Check </Button>}
-          <br/>
+          <br />
           {(checkStatus.Fetchable.length + checkStatus.Existing.length + checkStatus.Error.length > 0) ? <div>
             <Typography><b>{checkStatus.Fetchable.length} DOI(s) Fetchable via Crossref API: </b></Typography>
             {checkStatus.Fetchable.map(pub =>
@@ -206,7 +229,7 @@ function Add() {
           <Typography><b>Step 3: Insert into RENCI Database</b></Typography>
           <hr />
           <Typography><b>{insertStatus.Inserted.length} Inserted DOI(s):</b></Typography>
-          {insertStatus.Inserted.length>0 ? insertStatus.Inserted.map(pub => <Typography>{pub}</Typography>) :           <Button variant="contained" color="secondary" onClick={textAreaSubmit}> Insert {fetchableNum} Fetchable DOI(s) </Button>}
+          {insertStatus.Inserted.length > 0 ? insertStatus.Inserted.map(pub => <Typography>{pub}</Typography>) : <Button variant="contained" color="secondary" onClick={textAreaSubmit}> Insert {fetchableNum} Fetchable DOI(s) </Button>}
         </Container>
       </Container>
     </div>
