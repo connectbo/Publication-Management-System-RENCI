@@ -38,3 +38,17 @@ services:
       - REACT_APP_PORT=${REACT_APP_PORT}
     ports:
       - $REACT_APP_PORT:3000
+    
+  admin:
+    container_name: admin
+    build:
+      context: ./frontend/
+      dockerfile: Dockerfile
+    volumes:
+      - ./frontend:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      - REACT_APP_PORT=${REACT_APP_PORT}
+    ports:
+      - $ADMIN_PORT:3001
+
