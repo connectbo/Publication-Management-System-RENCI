@@ -45,10 +45,10 @@ services:
       context: ./frontend/
       dockerfile: Dockerfile
     volumes:
-      - ./frontend:/usr/src/app
+      - ./admin:/usr/src/app
       - /usr/src/app/node_modules
     environment:
-      - REACT_APP_PORT=${REACT_APP_PORT}
+      - ADMIN_PORT=${ADMIN_PORT}
     ports:
       - $ADMIN_PORT:3001
 
