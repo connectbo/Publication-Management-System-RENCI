@@ -15,7 +15,7 @@ services:
   backend:
     container_name: express
     build:
-      context: ./backend/
+      context: ./backend
       dockerfile: Dockerfile
     volumes:
       - ./backend:/usr/src/app
@@ -29,7 +29,7 @@ services:
   frontend:
     container_name: frontend
     build:
-      context: ./frontend/
+      context: frontend
       dockerfile: Dockerfile
     volumes:
       - ./frontend:/usr/src/app
@@ -42,7 +42,7 @@ services:
   admin:
     container_name: admin
     build:
-      context: ./frontend/
+      context: admin
       dockerfile: Dockerfile
     volumes:
       - ./admin:/usr/src/app
@@ -50,5 +50,6 @@ services:
     environment:
       - ADMIN_PORT=${ADMIN_PORT}
     ports:
-      - $ADMIN_PORT:3001
+      - $ADMIN_PORT:3000
+    stdin_open: true
 
