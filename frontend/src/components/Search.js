@@ -58,7 +58,7 @@ const useStyles = makeStyles({
   },
   pie_chart: {
     padding: '12px 12px',
-    height: 250
+    height: 350
   },
   chart: {
     padding: '12px 12px'
@@ -261,12 +261,19 @@ function Search() {
             <TabPanel>
               <Typography className={classes.body}>In total, {pubArray.length} result(s) are found.</Typography>
               <Container className={classes.pie_chart}>
-                <ResponsivePie className={classes.chart} data={status}
-                  margin={{ top: 25, bottom: 25 }}
+                <ResponsivePie 
+                  className={classes.chart} 
+                  data={status}
+                  margin={{ top: 25, bottom: 25, left: 25, right: 25 }}
                   innerRadius={0.5}
                   padAngle={0.7}
                   cornerRadius={3}
                   colors={{ scheme: 'nivo' }}
+                  borderWidth={1}
+                  borderColor={{ theme: 'background' }}
+                  radialLabelsLinkOffset={4}
+                  radialLabelsTextColor="#333333"
+                  radialLabelLinkColor="black"
                   animate={true} />
               </Container>
             </TabPanel>
