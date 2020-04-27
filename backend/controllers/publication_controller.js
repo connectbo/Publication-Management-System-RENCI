@@ -268,6 +268,14 @@ exports.validation = async function (req, res) {
 
 exports.insert_one = async function (req, res) {
             const _info = req.body;
+            Category.find({ Category: _info['type'] }, function(err, categoryTest){
+                if(categoryTest == undefined || categoryTest == 0){
+                    const newCategory = new Category({'Category': _info['type']});
+                    newCategory.save(function (err){
+                        if(err) throw err;
+                    })
+                }
+            })
             const saveResult = new Publication({
                 'Title': _info['title'], 'Authors': _info['author'], 'DOI': _info['doi'], 'Type': _info['type'], 'Created_Date': _info['date']
             });
