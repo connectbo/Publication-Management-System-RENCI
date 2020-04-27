@@ -4,18 +4,6 @@ const fetch = require("node-fetch");
 const Cite = require('citation-js');
 const fs = require('fs');
 
-exports.test = async function (req, res) {
-    let example = new Cite('10.1109/tvcg.2013.24')
-    try {
-        let output = example.format('bibliography', {
-            type: 'string'
-        })
-        res.send(output);
-    }
-    catch (err) {
-        console.log(err);
-    }
-}
 
 exports.citation = async function (req, res) {
     Publication.find({}, function (err, pub) {
@@ -28,7 +16,6 @@ exports.citation = async function (req, res) {
 
 
 exports.fileCheck = async function (req, res) {
-
     fs.readFile(req.file.path, 'utf-8', function (err, data) {
         let dois = data.split('\n');
         let checkStatus = {

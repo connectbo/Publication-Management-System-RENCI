@@ -85,6 +85,8 @@ function Add_Input() {
                     <MenuItem value='chapter'>Chapter</MenuItem>
                     <MenuItem value='Article-Journal'>Article-Journal</MenuItem>
                     <MenuItem value='presentation'>Presentation</MenuItem>
+                    <MenuItem value='poster'>Poster</MenuItem>
+                    <MenuItem value='software'>Software Release</MenuItem>
                     <MenuItem value='other'>Other</MenuItem>
                 </Select>
             </Container>

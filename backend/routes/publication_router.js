@@ -4,7 +4,29 @@ const PubRouter = express.Router();
 const multer = require('multer');
 const upload = multer({ dest: 'uploads/' });
 
-PubRouter.get('/test', PubController.test);
+// const passport = require('passport');
+// const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+// passport.use(new GoogleStrategy({
+//     clientID:'998739880330-h14pcufmrjt863dbrof672tqttcub1be.apps.googleusercontent.com',
+//     clientSecret:'gMLQ_hxrw4NwDK6gKz7926yp',
+//     callbackURL: "http://localhost:5000/auth/google/callback"
+//     },
+//     function(accessToken, refreshToken, profile, done){
+//         User.findOrCreate({ googleId: profile.id }, function(err, user){
+//             return done(err, user);
+//         });
+//     }
+// ));
+
+// PubRouter.get('/auth/google',
+//   passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login'] }));
+
+// PubRouter.get('/auth/google/callback', 
+//     passport.authenticate('google', { failureRedirect :'/login'}),
+//     function(req, res){
+//         console.log(req);
+//         res.redirect('/');
+// });
 
 //search router  
 PubRouter.get('/search/title=:title?&&author=:author?&&type=:type?&&s_date=:s_date?&&e_date=:e_date?', PubController.advancedSearch);

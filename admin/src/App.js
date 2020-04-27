@@ -8,6 +8,9 @@ function App() {
         <p>
           Welcome to RENCI PubAdmin Page. Please login to use this service.
         </p>
+        <form>
+          <input></input>
+        </form>
       </header>
     </div>
   );
