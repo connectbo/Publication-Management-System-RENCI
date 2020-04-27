@@ -149,8 +149,9 @@ function Search() {
   }
 
   function checkCategory(categoryJSON) {
-    let check = false;
     for (let i in categoryJSON) {
+      console.log(i);
+      console.log(categoryJSON[i]);
       if (categoryJSON[i] === true) {
         return true;
       }
@@ -206,7 +207,9 @@ function Search() {
           })
       }
       else {
-        setStatusState("Please select at least one category filter to start searching.");
+        setpubArrayState([]);
+        setcurrentPubArray([]);
+        setLoading(false);
       }
     }
   }
