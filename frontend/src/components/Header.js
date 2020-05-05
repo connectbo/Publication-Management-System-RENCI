@@ -11,13 +11,16 @@ const useStyles = makeStyles({
         flex: 1,
         textDecoration: 'none',
         color: 'white',
+    },
+    header:{
+        backgroundColor: '#00758d'
     }
 });
 
 function Header() {
     const classes = useStyles();
     return (
-        <AppBar position="static">
+        <AppBar className={classes.header} position="static">
             <Toolbar variant="dense">
                 <IconButton edge='start' color="inherit" aria-label="Menu">
                 </IconButton>
@@ -26,7 +29,7 @@ function Header() {
           </a>
                 <Button component={NavLink} to="/" color="inherit">Home</Button>
                 <Button component={NavLink} to="/add" color="inherit">Add Via DOI</Button>
-                <Button component={NavLink} to="add_Input" color="inherit">Add Manually</Button>
+                {/* <Button component={NavLink} to="add_Input" color="inherit">Add Manually</Button> */}
             </Toolbar>
         </AppBar>
     )

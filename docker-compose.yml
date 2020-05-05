@@ -39,17 +39,17 @@ services:
     ports:
       - $REACT_APP_PORT:3000
     
-  admin:
-    container_name: admin
-    build:
-      context: admin
-      dockerfile: Dockerfile
-    volumes:
-      - ./admin:/usr/src/app
-      - /usr/src/app/node_modules
-    environment:
-      - ADMIN_PORT=${ADMIN_PORT}
-    ports:
-      - $ADMIN_PORT:3000
-    stdin_open: true
+  # admin:
+  #   container_name: admin
+  #   build:
+  #     context: admin
+  #     dockerfile: Dockerfile
+  #   volumes:
+  #     - ./admin:/usr/src/app
+  #     - /usr/src/app/node_modules
+  #   environment:
+  #     - ADMIN_PORT=${ADMIN_PORT}
+  #   ports:
+  #     - $ADMIN_PORT:3000
+  #   stdin_open: true
 

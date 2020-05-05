@@ -15,27 +15,6 @@ import { ResponsivePie } from '@nivo/pie';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 
-//get publications from home.renci.org
-
-// let num3 = 9
-// publications = []
-// for (let i = 2010; i <= 2020; i++) {
-//     const idValue = 2021 - i
-//     const titleID = `#titl${ num3 }-${ idValue }_`
-//     const bodyID = `#tbod${ num3 }-${ idValue }__`
-//     const year = document.querySelector(titleID).querySelector('#group0').innerText.match(/Year : (\d{4})/)[1]
-//     publications[year] = []
-//     const body = document.querySelector(bodyID).nextElementSibling
-//     const entries = body.querySelectorAll('.ms-itmhover')
-//     entries.forEach(row => {
-//         title = row.querySelector('.ms-vb').innerText
-//         type = row.querySelector('.ms-vb2').innerText
-//         citation = row.querySelector('.ms-rtestate-field').innerText
-//         const publication = { title: title, type: type, citation: citation, }
-//         publications[year].push(publication)
-//     })
-// }
-
 const useStyles = makeStyles({
   body: {
     fontSize: 18,
@@ -45,7 +24,10 @@ const useStyles = makeStyles({
     margin: '10px 5px',
   },
   subButton: {
-    marginLeft: 10,
+    marginLeft: 30,
+    marginTop:10,
+    color: 'white',
+    backgroundColor: '#078AC1'
   },
   root: {
     padding: '12px 12px',
@@ -233,7 +215,7 @@ function Search() {
             shrink: true,
           }}></TextField>
         </FormControl>
-        <Button className={classes.subButton} variant="contained" color="secondary" onClick={handleSubmit}>
+        <Button className={classes.subButton} variant="contained" color='primary' onClick={handleSubmit}>
           Search </Button>
       </Container>
       <Container>
@@ -281,7 +263,7 @@ function Search() {
               </Container>
             </TabPanel>
             <TabPanel>
-              <Button className={classes.subButton} color="secondary" onClick={handleExport}>Download Citations</Button>
+              <Button className={classes.subButton} variant="contained" color='primary' onClick={handleExport}>Download Citations</Button>
               <Container>
                 {pubArray.map(pub =>
                   <Typography className={classes.body}>{pub.Citation}</Typography>
