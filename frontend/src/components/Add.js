@@ -8,6 +8,8 @@ import CardContent from '@material-ui/core/CardContent';
 import Checkbox from '@material-ui/core/Checkbox';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import Box from '@material-ui/core/Box';
+
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import { ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails } from '@material-ui/core';
@@ -40,6 +42,12 @@ const useStyles = makeStyles({
     fontSize: 18,
     padding: '8px 8px',
     display: 'inline'
+  },
+  button: {
+    color:'#078AC1'
+  },
+  dropzone: {
+    border: 1
   }
 });
 
@@ -176,15 +184,14 @@ function Add() {
               </textarea>
             </TabPanel>
             <TabPanel>
-              <div {...getRootProps()}>
+              <Box className="dropzone" {...getRootProps()}>
                 <input {...getInputProps()} />
                 {
                   isDragActive ?
                     <p>Drop the files here ...</p> :
-                    <p>Drag 'n' drop some files here, or click to select files</p>
+                    <p>Click here to Select Files</p>
                 }
-              </div>
-              <Button color="secondary" onClick={uploadFileCheck}>Check</Button>
+              </Box>
             </TabPanel>
           </Tabs>
         </Container>
@@ -193,10 +200,10 @@ function Add() {
           <hr />
           <Typography>In total, {checkStatus.Fetchable.length + checkStatus.Existing.length + checkStatus.Error.length} unique doi(s) are detected. </Typography>
           <br />
-          {(isLoading) ? <CircularProgress /> : <Button variant="contained" color="secondary" onClick={textAreaCheck}> Check </Button>}
+          {(isLoading) ? <CircularProgress /> : <Button variant="contained" className="button" color="primary" onClick={textAreaCheck}> Check </Button>}
           <br />
           {(checkStatus.Fetchable.length + checkStatus.Existing.length + checkStatus.Error.length > 0) ? <div>
-            <Typography><b>{checkStatus.Fetchable.length} DOI(s) Fetchable via Crossref API: </b></Typography>
+            <Typography><b>{checkStatus.Fetchable.length} DOI(s) Fetchable using RESTful API: </b></Typography>
             {checkStatus.Fetchable.map(pub =>
               <ExpansionPanel className={classes.card} expanded={expanded === pub.DOI} onChange={handleExpandChange(pub.DOI)}>
                 <ExpansionPanelSummary
@@ -218,7 +225,7 @@ function Add() {
                 </ExpansionPanelDetails>
               </ExpansionPanel>)}
             <br />
-            <Typography><b>{checkStatus.Error.length} DOI(s) Unfetchable via Crossref API: </b></Typography>
+            <Typography><b>{checkStatus.Error.length} DOI(s) Unfetchable using RESTful API: </b></Typography>
             {checkStatus.Error.map(pub => <div><Typography>{pub['DOI']}</Typography><Typography>Error: {pub['Error']}</Typography></div>)}
             <br />
             <Typography><b>{checkStatus.Existing.length} Already Stored DOI(s):</b></Typography>
@@ -229,7 +236,8 @@ function Add() {
           <Typography><b>Step 3: Insert into RENCI Database</b></Typography>
           <hr />
           <Typography><b>{insertStatus.Inserted.length} Inserted DOI(s):</b></Typography>
-          {insertStatus.Inserted.length > 0 ? insertStatus.Inserted.map(pub => <Typography>{pub}</Typography>) : <Button variant="contained" color="secondary" onClick={textAreaSubmit}> Insert {fetchableNum} Fetchable DOI(s) </Button>}
+          <br />
+          {insertStatus.Inserted.length > 0 ? insertStatus.Inserted.map(pub => <Typography>{pub}</Typography>) : <Button variant="contained" className="button" color="primary" onClick={textAreaSubmit}> Insert {fetchableNum} Fetchable DOI(s) </Button>}
         </Container>
       </Container>
     </div>
