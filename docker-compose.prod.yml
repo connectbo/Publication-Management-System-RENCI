@@ -1,6 +1,13 @@
 version: "3"
 
 services:
+  mongodb:
+    container_name: mongodb
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: comms
+      MONGO_INITDB_ROOT_PASSWORD: StaySafeAndKeepWorking
   backend:
     container_name: pmt-backend
     build:

@@ -8,7 +8,8 @@ import CardContent from '@material-ui/core/CardContent';
 import Checkbox from '@material-ui/core/Checkbox';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import Box from '@material-ui/core/Box';
+
+import Alert from '@material-ui/lab/Alert';
 
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
@@ -47,7 +48,11 @@ const useStyles = makeStyles({
     color:'#078AC1'
   },
   dropzone: {
-    border: 1
+    backgroundColor:'#078AC1'
+  },
+  instruction: {
+    paddingLeft:20,
+    paddingTop:20
   }
 });
 
@@ -70,7 +75,12 @@ function Add() {
   const [isLoading, setLoading] = useState(false);
 
   const onDrop = useCallback(acceptedFiles => {
-    setFile(acceptedFiles);
+    if(acceptedFiles[0].type == "text/plain"){
+      setFile(acceptedFiles);
+    }
+    else{
+      alert("Please select a text file(.txt).")
+    }
   }, []);
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
@@ -82,10 +92,19 @@ function Add() {
     setTextArea(event.target.value);
   }
 
-  const textAreaCheck = event => {
+  const check = event =>{
+    event.preventDefault();
+    if(file.length == 0){
+      textAreaCheck();
+    }
+    else{
+      uploadFileCheck();
+    }
+  }
+
+  function textAreaCheck(){
     setLoading(true);
     const lines = textarea.split('\n');
-    event.preventDefault();
     fetch(`http://${currentUrl}:5000/check`, {
       method: 'POST',
       body: lines,
@@ -105,7 +124,7 @@ function Add() {
       })
   }
 
-  const uploadFileCheck = event => {
+  function uploadFileCheck(){
     setLoading(true);
     const formData = new FormData()
     formData.append('myDOI', file[0]);
@@ -170,6 +189,7 @@ function Add() {
 
   return (
     <div>
+      <Alert severity="info"><b>Instructions: </b> You can add a publication by providing its DOI. If you do not have an DOI, please visit this <a href="https://docs.google.com/forms/d/e/1FAIpQLSdtJQ2h8qalkr6r1jIBhmJs88M_t_GVqOekdcX6zGVtgcBZAQ/viewform?usp=sf_link" target="_blank">link</a> to request one.</Alert>
       <Container className={classes.root}>
         <Container>
           <Typography><b>Step 1: Import your DOI(s)</b></Typography>
@@ -180,18 +200,22 @@ function Add() {
               <Tab>via File Upload</Tab>
             </TabList>
             <TabPanel>
-              <textarea className={classes.inputtext} id="user_input" rows='25' cols='30' placeholder='10.1212/wnl.0b013e318221c187&#10;10.1111/j.1752-8062.2011.00324.x&#10;10.1145/2030718.2030727' onChange={handleTextAreaChange}>{textarea}
+              <textarea className={classes.inputtext} id="user_input" rows='25' cols='30' placeholder='10.1212/wnl.0b013e318221c187&#10;10.1111/j.1752.00324.x&#10;10.1145/2030718.2030727' onChange={handleTextAreaChange}>{textarea}
               </textarea>
             </TabPanel>
             <TabPanel>
-              <Box className="dropzone" {...getRootProps()}>
-                <input {...getInputProps()} />
+              <Alert severity="info">Note: Please put a list of DOIs in a text file(.txt), and make sure each line begins with a DOI.</Alert>
+              <br />
+              <div {...getRootProps()}>
+                <input className="dropzone" {...getInputProps()} />
                 {
                   isDragActive ?
                     <p>Drop the files here ...</p> :
-                    <p>Click here to Select Files</p>
+                    <Button>Upload File</Button>
                 }
-              </Box>
+                <Typography>{(file.length > 0) ? "File Name: "+file[0].name : ""}</Typography>
+                <Typography>{(file.length > 0) ? "File Type: "+file[0].type : ""}</Typography>
+              </div>
             </TabPanel>
           </Tabs>
         </Container>
@@ -200,7 +224,7 @@ function Add() {
           <hr />
           <Typography>In total, {checkStatus.Fetchable.length + checkStatus.Existing.length + checkStatus.Error.length} unique doi(s) are detected. </Typography>
           <br />
-          {(isLoading) ? <CircularProgress /> : <Button variant="contained" className="button" color="primary" onClick={textAreaCheck}> Check </Button>}
+          {(isLoading) ? <CircularProgress /> : <Button variant="contained" className="button" color="primary" onClick={check}> Check </Button>}
           <br />
           {(checkStatus.Fetchable.length + checkStatus.Existing.length + checkStatus.Error.length > 0) ? <div>
             <Typography><b>{checkStatus.Fetchable.length} DOI(s) Fetchable using RESTful API: </b></Typography>
