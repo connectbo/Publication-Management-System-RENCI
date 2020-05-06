@@ -300,6 +300,7 @@ exports.insert = async function (req, Res) {
                 });
                 if (!tem_category.includes(_info['Type'])) {
                     tem_category.push(_info['Type']);
+                    console.log(_info['Type'] + _info['DOI'])
                 }
                 try {
                     saveResult.save(function (err) {
