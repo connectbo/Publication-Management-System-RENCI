@@ -30,6 +30,7 @@ services:
 
   backend:
     container_name: pmt-backend
+    restart: unless-stopped
     build:
       context: ./backend/
       dockerfile: Dockerfile
@@ -42,6 +43,6 @@ services:
       NODE_ENV: production
     ports:
       - $API_PORT:$API_PORT
+    restart: always
     depends_on:
       - mongodb
-
