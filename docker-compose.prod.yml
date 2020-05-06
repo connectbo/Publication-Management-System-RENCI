@@ -12,6 +12,22 @@ services:
       MONGO_INITDB_ROOT_USERNAME: comms
       MONGO_INITDB_ROOT_PASSWORD: StaySafeAndKeepWorking
 
+  frontend:
+    container_name: pmt-frontend
+    build:
+      context: ./frontend/
+      dockerfile: Dockerfile-prod
+      args:
+        NODE_ENV: production
+    volumes:
+      - ./frontend:/usr/src/app
+    environment:
+      NODE_ENV: production
+    ports:
+      - 80:80
+    depends_on:
+      - backend
+
   backend:
     container_name: pmt-backend
     build:
@@ -29,18 +45,3 @@ services:
     depends_on:
       - mongodb
 
-  frontend:
-    container_name: pmt-frontend
-    build:
-      context: ./frontend/
-      dockerfile: Dockerfile-prod
-      args:
-        NODE_ENV: production
-    volumes:
-      - ./frontend:/usr/src/app
-    environment:
-      NODE_ENV: production
-    ports:
-      - 80:80
-    depends_on:
-      - backend
