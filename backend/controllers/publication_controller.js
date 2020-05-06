@@ -44,6 +44,21 @@ exports.fileCheck = async function (req, res) {
                             if ('date-time' in example['data'][0]['created']) {
                                 _created = example['data'][0]['created']['date-time'].substring(0, 10);
                             }
+                            let lastnameIdx = output.indexOf("(");
+                            let _author = output.substring(0, lastnameIdx - 1);
+                            let toReturn = {
+                                'DOI': _DOI,
+                                'Title': _title,
+                                'Type': _type,
+                                'Author': _author,
+                                'Created': _created,
+                                'Citation': output,
+                                'Checked': true
+                            };
+                            checkStatus.Fetchable.push(toReturn);
+                            if ((checkStatus.Error.length + checkStatus.Existing.length + checkStatus.Fetchable.length) == dois.length) {
+                                res.send(checkStatus);
+                            }
                         }
                         else {
                             let toReturn = {
@@ -55,21 +70,6 @@ exports.fileCheck = async function (req, res) {
                                 console.log(checkStatus);
                                 res.send(checkStatus);
                             }
-                        }
-                        let lastnameIdx = output.indexOf("(");
-                        let _author = output.substring(0, lastnameIdx - 1);
-                        let toReturn = {
-                            'DOI': _DOI,
-                            'Title': _title,
-                            'Type': _type,
-                            'Author': _author,
-                            'Created': _created,
-                            'Citation': output,
-                            'Checked': true
-                        };
-                        checkStatus.Fetchable.push(toReturn);
-                        if ((checkStatus.Error.length + checkStatus.Existing.length + checkStatus.Fetchable.length) == dois.length) {
-                            res.send(checkStatus);
                         }
                     }
                     catch (err) {
@@ -130,6 +130,21 @@ exports.check = async function (req, res) {
                                 if ('date-time' in example['data'][0]['created']) {
                                     _created = example['data'][0]['created']['date-time'].substring(0, 10);
                                 }
+                                let lastnameIdx = output.indexOf("(");
+                                let _author = output.substring(0, lastnameIdx - 1);
+                                let toReturn = {
+                                'DOI': _DOI,
+                                'Title': _title,
+                                'Type': _type,
+                                'Author': _author,
+                                'Created': _created,
+                                'Citation': output,
+                                'Checked': true
+                                };
+                                checkStatus.Fetchable.push(toReturn);
+                                 if ((checkStatus.Error.length + checkStatus.Existing.length + checkStatus.Fetchable.length) == dois.length) {
+                                    res.send(checkStatus);
+                                }
                             }
                             else {
                                 let toReturn = {
@@ -141,21 +156,6 @@ exports.check = async function (req, res) {
                                     console.log(checkStatus);
                                     res.send(checkStatus);
                                 }
-                            }
-                            let lastnameIdx = output.indexOf("(");
-                            let _author = output.substring(0, lastnameIdx - 1);
-                            let toReturn = {
-                                'DOI': _DOI,
-                                'Title': _title,
-                                'Type': _type,
-                                'Author': _author,
-                                'Created': _created,
-                                'Citation': output,
-                                'Checked': true
-                            };
-                            checkStatus.Fetchable.push(toReturn);
-                            if ((checkStatus.Error.length + checkStatus.Existing.length + checkStatus.Fetchable.length) == dois.length) {
-                                res.send(checkStatus);
                             }
                         }
                         catch (err) {
