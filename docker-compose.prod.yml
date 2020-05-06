@@ -1,13 +1,17 @@
 version: "3"
 
+volumes:
+  mongodb:
+
 services:
   mongodb:
     container_name: mongodb
     image: mongo
     restart: always
     environment:
-      MONGO_INITDB_ROOT_USERNAME: comms
+      MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: StaySafeAndKeepWorking
+
   backend:
     container_name: pmt-backend
     build:
@@ -22,6 +26,8 @@ services:
       NODE_ENV: production
     ports:
       - $API_PORT:$API_PORT
+    depends_on:
+      - mongodb
 
   frontend:
     container_name: pmt-frontend

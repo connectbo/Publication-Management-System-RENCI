@@ -18,9 +18,3 @@ const connectDB = async() => {
 }
 
 module.exports = connectDB;
-
-
-//Backup and Restore:
-
-//docker exec mongodb sh -c 'mongodump -d test --authenticationDatabase admin -u root -p example' > db.dump
-//docker exec mongodb sh -c 'mongorestore -d test dump/test/ -u root -p example --authenticationDatabase admin' < db.dump
