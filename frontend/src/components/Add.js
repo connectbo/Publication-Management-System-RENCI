@@ -45,7 +45,7 @@ const useStyles = makeStyles({
     display: 'inline'
   },
   button: {
-    color:'#078AC1'
+    backgroundColor:'#078AC1'
   },
   dropzone: {
     backgroundColor:'#078AC1'
@@ -224,9 +224,10 @@ function Add() {
           <hr />
           <Typography>In total, {checkStatus.Fetchable.length + checkStatus.Existing.length + checkStatus.Error.length} unique doi(s) are detected. </Typography>
           <br />
-          {(isLoading) ? <CircularProgress /> : <Button variant="contained" className="button" color="primary" onClick={check}> Check </Button>}
+          {(isLoading) ? <CircularProgress /> : <Button variant="contained" className={classes.button} color="primary" onClick={check}> Check </Button>}
           <br />
           {(checkStatus.Fetchable.length + checkStatus.Existing.length + checkStatus.Error.length > 0) ? <div>
+          <br />
             <Typography><b>{checkStatus.Fetchable.length} DOI(s) Fetchable using RESTful API: </b></Typography>
             {checkStatus.Fetchable.map(pub =>
               <ExpansionPanel className={classes.card} expanded={expanded === pub.DOI} onChange={handleExpandChange(pub.DOI)}>
@@ -261,7 +262,7 @@ function Add() {
           <hr />
           <Typography><b>{insertStatus.Inserted.length} Inserted DOI(s):</b></Typography>
           <br />
-          {insertStatus.Inserted.length > 0 ? insertStatus.Inserted.map(pub => <Typography>{pub}</Typography>) : <Button variant="contained" className="button" color="primary" onClick={textAreaSubmit}> Insert {fetchableNum} Fetchable DOI(s) </Button>}
+          {insertStatus.Inserted.length > 0 ? insertStatus.Inserted.map(pub => <Typography>{pub}</Typography>) : <Button variant="contained" className={classes.button} color="primary" onClick={textAreaSubmit}> Insert {fetchableNum} Fetchable DOI(s) </Button>}
         </Container>
       </Container>
     </div>
