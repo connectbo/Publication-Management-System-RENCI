@@ -117,6 +117,7 @@ exports.check = async function (req, res) {
                     if (err) {
                         throw err;
                     }
+                    console.log(pub);
                     if (pub == undefined || pub == 0) {
                         try {
                             let example = new Cite(_DOI)
@@ -303,7 +304,7 @@ exports.insert = async function (req, Res) {
                     console.log(_info['Type'] + _info['DOI'])
                 }
                 try {
-                    saveResult.save(function (err) {
+                    await saveResult.save(function (err) {
                         if (err) throw err;
                     });
                     insertStatus['Inserted'].push(_info['DOI'])
@@ -403,6 +404,9 @@ exports.advancedSearch = function (req, res) {
 
 exports.getAll = function (req, res) {
             let toSend = {};
+            Publication.find({}, function(err, result) {
+                console.log(result);
+            });
             return Publication.countDocuments(function (err, counts) {
                 if (err) {
                     console.log(err);

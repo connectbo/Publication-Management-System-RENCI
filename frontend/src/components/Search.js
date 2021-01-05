@@ -57,7 +57,7 @@ function Search() {
   const [pubArray, setpubArrayState] = useState([]);
   const [status, setStatusState] = useState([]);
   const [sdate, setSDate] = useState('2001-01-01');
-  const [edate, setEDate] = useState('2020-01-01');
+  const [edate, setEDate] = useState('2021-01-01');
   const [categories, setCategories] = useState([]);
   const [isLoading, setLoading] = useState(false);
 
