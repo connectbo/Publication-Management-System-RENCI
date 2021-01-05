@@ -12,22 +12,6 @@ services:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: example
 
-  frontend:
-    container_name: pmt-frontend
-    build:
-      context: ./frontend/
-      dockerfile: Dockerfile-prod
-      args:
-        NODE_ENV: production
-    volumes:
-      - ./frontend:/usr/src/app
-    environment:
-      NODE_ENV: production
-    ports:
-      - 80:80
-    depends_on:
-      - backend
-
   backend:
     container_name: pmt-backend
     restart: on-failure
@@ -46,3 +30,19 @@ services:
     restart: always
     depends_on:
       - mongodb
+      
+  frontend:
+    container_name: pmt-frontend
+    build:
+      context: ./frontend/
+      dockerfile: Dockerfile-prod
+      args:
+        NODE_ENV: production
+    volumes:
+      - ./frontend:/usr/src/app
+    environment:
+      NODE_ENV: production
+    ports:
+      - 80:80
+    depends_on:
+      - backend
