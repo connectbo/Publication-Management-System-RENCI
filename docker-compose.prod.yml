@@ -19,8 +19,6 @@ services:
       NODE_ENV: production
     ports:
       - $API_PORT:$API_PORT
-    depends_on:
-      - mongodb
 
   frontend:
     container_name: pmt-frontend
