@@ -11,7 +11,7 @@ app.use(cors());
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
-app.use('/', PubRouter);
+app.use('/*', PubRouter);
 
 const API_PORT = process.env.API_PORT || 5050;
 

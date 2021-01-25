@@ -4,17 +4,9 @@ volumes:
   mongodb:
 
 services:
-  mongodb:
-    container_name: mongodb
-    image: mongo
-    restart: always
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
-
   backend:
     container_name: pmt-backend
-    restart: on-failure
+    restart: always
     build:
       context: ./backend/
       dockerfile: Dockerfile
@@ -27,10 +19,9 @@ services:
       NODE_ENV: production
     ports:
       - $API_PORT:$API_PORT
-    restart: always
     depends_on:
       - mongodb
-      
+
   frontend:
     container_name: pmt-frontend
     build:
