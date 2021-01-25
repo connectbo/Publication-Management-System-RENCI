@@ -339,6 +339,7 @@ exports.insert = async function (req, Res) {
         }
 
 exports.getCategory = function (req, res) {
+        console.log("Visit getCategory")
             Category.find({}, function (err, allCategory) {
                 if (err) {
                     throw err;

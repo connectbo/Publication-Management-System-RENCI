@@ -25,7 +25,7 @@ const useStyles = makeStyles({
   },
   subButton: {
     marginLeft: 30,
-    marginTop:10,
+    marginTop: 10,
     color: 'white',
     backgroundColor: '#078AC1'
   },
@@ -83,12 +83,15 @@ function Search() {
   const [categoryJSON, setcategoryJSON] = useState({});
   const [categoryArray, setcategoryArray] = useState([]);
   if (Object.keys(categoryJSON).length === 0) {
-    categories.forEach(function (category) {
-      let curr_cate = category['Category'];
-      categoryJSON[curr_cate] = true;
-      categoryArray.push(curr_cate);
-      setcategoryArray(categoryArray);
-    })
+    if (categories.length !== 0) {
+      console.log(categories);
+      categories.forEach(function (category) {
+        let curr_cate = category['Category'];
+        categoryJSON[curr_cate] = true;
+        categoryArray.push(curr_cate);
+        setcategoryArray(categoryArray);
+      })
+    }
   }
 
   const handleExport = () => {
@@ -196,8 +199,8 @@ function Search() {
     }
   }
 
-// basic working design
-// backend api work
+  // basic working design
+  // backend api work
 
 
   return (
@@ -251,8 +254,8 @@ function Search() {
             <TabPanel>
               <Typography className={classes.body}>In total, {pubArray.length} result(s) are found.</Typography>
               <Container className={classes.pie_chart}>
-                <ResponsivePie 
-                  className={classes.chart} 
+                <ResponsivePie
+                  className={classes.chart}
                   data={status}
                   margin={{ top: 25, bottom: 25, left: 25, right: 25 }}
                   innerRadius={0.5}
