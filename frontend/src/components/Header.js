@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { Link } from '@reach/router';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import AppBar from '@material-ui/core/AppBar';
@@ -27,8 +27,10 @@ function Header() {
                 <a href="/" color="inherit" className={classes.barTitle}>
                     <strong>RENCI </strong> Publication Management System
           </a>
-                <Button component={NavLink} to="/" color="inherit">Home</Button>
-                <Button component={NavLink} to="/add" color="inherit">Add</Button>
+                <Button component={Link} to="/" color="inherit">Home</Button>
+                <Button component={Link} to="/publications" color="inherit">Publications</Button>
+                <Button component={Link} to="/add" color="inherit">Add</Button>
+                <Button component={Link} to="/login" color="inherit">Admin</Button>
                 {/* <Button component={NavLink} to="add_Input" color="inherit">Add Manually</Button> */}
             </Toolbar>
         </AppBar>

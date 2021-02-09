@@ -173,6 +173,8 @@ function Search() {
           .then(data => {
             setpubArrayState(data);
             setcurrentPubArray(data);
+            setCurrentPage(1);
+            setcurrentPubArray(data.slice((1 - 1) * 10, 1 * 10));
             data.forEach(pub => {
               let curr_type = pub.Type;
               if (toReport[curr_type]) {

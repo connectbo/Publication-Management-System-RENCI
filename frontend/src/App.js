@@ -2,22 +2,25 @@ import React from 'react';
 import Header from './components/Header';
 import Search from './components/Search';
 import Add from './components/Add';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import Add_Input from './components/Add_Input';
+import { Router } from '@reach/router';
+// import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import Admin from './components/Admin';
+import Home from './views/Home';
+import AdminLogin from './views/AdminLogin';
 
 function App() {
 
   return (
-    <Router>
       <div>
         <Header />
-        <Switch>
-          <Route path="/add" component={Add} />
-          <Route path='/add_input' component={Add_Input} />
-          <Route exact path="/" component={Search} />
-        </Switch>
+        <Router>
+          <Add path="/add" />
+          <Admin path='/admin' />
+          <AdminLogin path='/login' />
+          <Search path='/publications' />
+          <Home path="/" />
+        </Router>
       </div>
-    </Router>
   );
 }
 

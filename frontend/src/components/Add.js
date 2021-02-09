@@ -45,14 +45,14 @@ const useStyles = makeStyles({
     display: 'inline'
   },
   button: {
-    backgroundColor:'#078AC1'
+    backgroundColor: '#078AC1'
   },
   dropzone: {
-    backgroundColor:'#078AC1'
+    backgroundColor: '#078AC1'
   },
   instruction: {
-    paddingLeft:20,
-    paddingTop:20
+    paddingLeft: 20,
+    paddingTop: 20
   }
 });
 
@@ -75,10 +75,10 @@ function Add() {
   const [isLoading, setLoading] = useState(false);
 
   const onDrop = useCallback(acceptedFiles => {
-    if(acceptedFiles[0].type == "text/plain"){
+    if (acceptedFiles[0].type == "text/plain") {
       setFile(acceptedFiles);
     }
-    else{
+    else {
       alert("Please select a text file(.txt).")
     }
   }, []);
@@ -92,17 +92,17 @@ function Add() {
     setTextArea(event.target.value);
   }
 
-  const check = event =>{
+  const check = event => {
     event.preventDefault();
-    if(file.length == 0){
+    if (file.length == 0) {
       textAreaCheck();
     }
-    else{
+    else {
       uploadFileCheck();
     }
   }
 
-  function textAreaCheck(){
+  function textAreaCheck() {
     setLoading(true);
     const lines = textarea.split('\n');
     fetch(`http://${currentUrl}:5000/check`, {
@@ -124,7 +124,7 @@ function Add() {
       })
   }
 
-  function uploadFileCheck(){
+  function uploadFileCheck() {
     setLoading(true);
     const formData = new FormData()
     formData.append('myDOI', file[0]);
@@ -162,6 +162,7 @@ function Add() {
       .then(res => res.json())
       .then(data => {
         setinsertStatus(data);
+        alert(`${data.Inserted.length} publication added successfully.`)
       })
   }
 
@@ -213,8 +214,8 @@ function Add() {
                     <p>Drop the files here ...</p> :
                     <Button>Upload File</Button>
                 }
-                <Typography>{(file.length > 0) ? "File Name: "+file[0].name : ""}</Typography>
-                <Typography>{(file.length > 0) ? "File Type: "+file[0].type : ""}</Typography>
+                <Typography>{(file.length > 0) ? "File Name: " + file[0].name : ""}</Typography>
+                <Typography>{(file.length > 0) ? "File Type: " + file[0].type : ""}</Typography>
               </div>
             </TabPanel>
           </Tabs>
@@ -227,7 +228,7 @@ function Add() {
           {(isLoading) ? <CircularProgress /> : <Button variant="contained" className={classes.button} color="primary" onClick={check}> Check </Button>}
           <br />
           {(checkStatus.Fetchable.length + checkStatus.Existing.length + checkStatus.Error.length > 0) ? <div>
-          <br />
+            <br />
             <Typography><b>{checkStatus.Fetchable.length} DOI(s) Fetchable using RESTful API: </b></Typography>
             {checkStatus.Fetchable.map(pub =>
               <ExpansionPanel className={classes.card} expanded={expanded === pub.DOI} onChange={handleExpandChange(pub.DOI)}>
@@ -251,7 +252,7 @@ function Add() {
               </ExpansionPanel>)}
             <br />
             <Typography><b>{checkStatus.Error.length} DOI(s) Unfetchable using RESTful API: </b></Typography>
-            {checkStatus.Error.map(pub => <div><Typography>{pub['DOI']}</Typography><Typography>Error: {pub['Error']}</Typography></div>)}
+            {checkStatus.Error.map(pub => <div><Typography>{pub['DOI']}</Typography><Typography>Please contact <u>comms@renci.org</u> to add this publication.</Typography></div>)}
             <br />
             <Typography><b>{checkStatus.Existing.length} Already Stored DOI(s):</b></Typography>
             {checkStatus.Existing.map(status => <Typography>{status}</Typography>)}
@@ -262,7 +263,7 @@ function Add() {
           <hr />
           <Typography><b>{insertStatus.Inserted.length} Inserted DOI(s):</b></Typography>
           <br />
-          {insertStatus.Inserted.length > 0 ? insertStatus.Inserted.map(pub => <Typography>{pub}</Typography>) : <Button variant="contained" className={classes.button} color="primary" onClick={textAreaSubmit}> Insert {fetchableNum} Fetchable DOI(s) </Button>}
+          {insertStatus.Inserted.length > 0 ? insertStatus.Inserted.map(pub => <Typography>{pub} - Success</Typography>) : <Button variant="contained" className={classes.button} color="primary" onClick={textAreaSubmit}> Insert {fetchableNum} Fetchable DOI(s) </Button>}
         </Container>
       </Container>
     </div>
