@@ -120,6 +120,7 @@ exports.check = async function (req, res) {
         'Error': [],
         'Existing': []
     }
+    if(dois.length == 0) res.send(checkStatus);
     for (let i = 0; i < dois.length; i++) {
         let _DOI = dois[i];
         console.log("Processing " + _DOI);
