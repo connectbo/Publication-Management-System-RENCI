@@ -25,7 +25,7 @@ const useStyles = makeStyles(theme => ({
 
 function Admin() {
     const classes = useStyles();
-    const [auth, setAuth] = useState(localStorage.getItem('authenticate') !== null ? true : false);
+    const [auth, setAuth] = useState(localStorage.getItem('authenticate') !== null);
     const currentUrl = window.location.hostname;
     const [doi, setDOI] = useState('');
     const [title, setTitle] = useState('');
@@ -34,7 +34,6 @@ function Admin() {
     const [type, setType] = useState('');
     const [date, setDate] = useState('2001-01-01');
     const [status, setStatus] = useState('');
-
 
     const insertHandler = event => {
         let toSend = {
@@ -89,13 +88,21 @@ function Admin() {
                             <MenuItem value="">
                                 <em>None</em>
                             </MenuItem>
-                            <MenuItem value='paper-conference'>Paper-Conference</MenuItem>
-                            <MenuItem value='chapter'>Chapter</MenuItem>
-                            <MenuItem value='Article-Journal'>Article-Journal</MenuItem>
+                            <MenuItem value='Article-Journal'>Journal Article</MenuItem>
+                            <MenuItem value='paper-conference'>Conference Proceedings</MenuItem>
+                            <MenuItem value='poster'>Poster</MenuItem>
                             <MenuItem value='presentation'>Presentation</MenuItem>
                             <MenuItem value='poster'>Poster</MenuItem>
                             <MenuItem value='software'>Software Release</MenuItem>
-                            <MenuItem value='other'>Other</MenuItem>
+                            <MenuItem value='book'>Book</MenuItem>
+                            <MenuItem value='book-chapter'>Book Chapter</MenuItem>
+                            <MenuItem value='web-article'>Web Article</MenuItem>
+                            <MenuItem value='white-paper'>White Paper</MenuItem>
+                            <MenuItem value='technical-paper'>Technical Paper</MenuItem>
+                            <MenuItem value='thesis'>Thesis/Dissertation</MenuItem>
+                            <MenuItem value='report'>Report</MenuItem>
+                            <MenuItem value='patent'>Patent application</MenuItem>
+                            <MenuItem value='advance'>Advance Citation (A DOI will be created for this item)</MenuItem>
                         </Select>
                         <Typography>{status}</Typography>
                         <br/>

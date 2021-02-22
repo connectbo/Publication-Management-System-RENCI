@@ -28,6 +28,10 @@ function AdminLogin() {
     const currentUrl = window.location.hostname;
     const [status, setStatus] = useState();
 
+    if(localStorage.getItem('authenticate') !== null){
+        navigate('/admin', { replace: true });
+    }
+
     const Authenticate = () => {
         let username = document.getElementById('username').value;
         let password = document.getElementById('password').value;
