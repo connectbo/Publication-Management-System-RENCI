@@ -7,7 +7,7 @@ const publication_schema = Schema({
     DOI: String, 
     Type: String,
     Created_Date: String,
-    Citation: String
+    Citation: String,
 });
 
 module.exports = mongoose.model('Publication', publication_schema);
