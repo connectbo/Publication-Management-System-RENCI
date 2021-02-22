@@ -14,8 +14,9 @@ const useStyles = makeStyles({
 
 function Home() {
     const classes = useStyles();
-    const [doiText, setDoiText] = useState("I have a DOI")
-    const [nondoiText, setNonDoiText] = useState("I do not have a DOI")
+    const [text_left, setTextLeft] = useState("I have a DOI")
+    const [text_middle, setTextMiddle] = useState("I will have a DOI.")
+    const [text_right, setTextRight] = useState("Need RENCI to make a DOI.")
 
     return (
         <Container>
@@ -30,8 +31,10 @@ function Home() {
             </div>
             <br />
             <div className="home-option-container">
-                <a className="home-have-doi" href="add"><div className="home-text" onMouseEnter={() => { setDoiText("Have DOI? Let's get started.") }} onMouseOut={() => {setDoiText("I have a DOI.")}}>{doiText}</div></a>
-                <a className="home-non-doi" href="https://docs.google.com/forms/d/e/1FAIpQLSdtJQ2h8qalkr6r1jIBhmJs88M_t_GVqOekdcX6zGVtgcBZAQ/viewform?usp=sf_link" target="_blank"><div className="home-text" onMouseEnter={() => { setNonDoiText("Don't have DOI? Please fill out this form.") }} onMouseOut={() => {setNonDoiText("I don't have a DOI.")}}>{nondoiText}</div></a>
+                <a className="home-have-doi" href="add"><div className="home-text" onMouseEnter={() => { setTextLeft("Have DOI? Let's get started.") }} onMouseOut={() => {setTextLeft("I have a DOI.")}}>{text_left}</div></a>
+                <a className="home-non-doi" href="" target="_blank"><div className="home-text" onMouseEnter={() => { setTextMiddle("Please fill out this form.") }} onMouseOut={() => {setTextMiddle("I will have a DOI.")}}>{text_middle}</div></a>
+                <a className="home-non-doi" href="https://docs.google.com/forms/d/e/1FAIpQLSdtJQ2h8qalkr6r1jIBhmJs88M_t_GVqOekdcX6zGVtgcBZAQ/viewform?usp=sf_link" target="_blank"><div className="home-text" onMouseEnter={() => { setTextRight("Please fill out this form.") }} onMouseOut={() => {setTextRight("Need RENCI to make a DOI.")}}>{text_right}</div></a>
+
             </div>
         </Container>
     )
