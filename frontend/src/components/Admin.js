@@ -33,6 +33,7 @@ function Admin() {
     const [cite, setCite] = useState('');
     const [type, setType] = useState('');
     const [date, setDate] = useState('2001-01-01');
+    const [add_status, setAddStatus] = useState('');
     const [status, setStatus] = useState('');
 
     const insertHandler = event => {
@@ -41,8 +42,10 @@ function Admin() {
             'title': title,
             'author': author,
             'type': type,
-            'date': date
+            'date': date,
+            'status': status
         }
+        console.log(toSend);
         fetch(`http://${currentUrl}:5000/insert_manually`, {
             method: 'POST',
             body: JSON.stringify(toSend),
@@ -50,7 +53,7 @@ function Admin() {
         })
             .then(res => res.json())
             .then(res => {
-                setStatus(res['message']);
+                setAddStatus(res['message']);
             })
     }
 
@@ -102,10 +105,17 @@ function Admin() {
                             <MenuItem value='thesis'>Thesis/Dissertation</MenuItem>
                             <MenuItem value='report'>Report</MenuItem>
                             <MenuItem value='patent'>Patent application</MenuItem>
-                            <MenuItem value='advance'>Advance Citation (A DOI will be created for this item)</MenuItem>
                         </Select>
-                        <Typography>{status}</Typography>
-                        <br/>
+                        Status: <Select
+                            labelId="status"
+                            id="status"
+                            value={status}
+                            onChange={e => setStatus(e.target.value)}>
+                            <MenuItem value='published'>Published</MenuItem>
+                            <MenuItem value='advanced'>Advanced Citation</MenuItem>
+                        </Select>
+                        <Typography>{add_status}</Typography>
+                        <br />
                         <Button className={classes.insert_btn} variant="outlined" color="secondary" onClick={insertHandler}>Insert</Button>
                     </form>
                 </Container> : <Typography>Please <Link to='/login'>log in</Link> to use this feature.</Typography>}
