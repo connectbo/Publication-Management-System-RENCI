@@ -29,7 +29,7 @@ const upload = multer({ dest: 'uploads/' });
 // });
 
 //search router  
-PubRouter.get('/search/title=:title?&&author=:author?&&type=:type?&&s_date=:s_date?&&e_date=:e_date?', PubController.advancedSearch);
+PubRouter.get('/search/title=:title?&&author=:author?&&type=:type?&&s_date=:s_date?&&e_date=:e_date?&&status=:status?', PubController.advancedSearch);
 
 PubRouter.get('/category', PubController.getCategory);
 
