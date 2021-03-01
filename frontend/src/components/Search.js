@@ -9,6 +9,7 @@ import Input from '@material-ui/core/Input';
 import TextField from '@material-ui/core/TextField';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { Checkbox, FormGroup, FormLabel, FormControl, FormControlLabel } from '@material-ui/core';
+import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
 import Pagination from '@material-ui/lab/Pagination';
 
 import { ResponsivePie } from '@nivo/pie';
@@ -55,13 +56,18 @@ function Search() {
   const [title, setTitleState] = useState('');
   const [author, setAuthorState] = useState('');
   const [pubArray, setpubArrayState] = useState([]);
-  const [status, setStatusState] = useState([]);
+  const [dataVisualizationStatus, setDataVisualizationStatus] = useState([]);
   const [sdate, setSDate] = useState('2001-01-01');
   const [edate, setEDate] = useState('2021-01-01');
+  const [status, setStatus] = useState({
+    published: true,
+    advanced: true
+  });
   const [categories, setCategories] = useState([]);
   const [isLoading, setLoading] = useState(false);
 
   const [page, setCurrentPage] = useState(1);
+  const [categoryForm, setCategoryForm] = useState(false);
   const [currentPubArray, setcurrentPubArray] = useState([]);
 
   const pageLimit = 10;
@@ -133,6 +139,11 @@ function Search() {
     setcurrentPubArray(pubArray.slice((value - 1) * 10, value * 10));
   }
 
+  const handleCategoryFormClose = () => {
+    setCategoryForm(false);
+    handleSubmit();
+  }
+
   function checkCategory(categoryJSON) {
     for (let i in categoryJSON) {
       console.log(i);
@@ -168,7 +179,7 @@ function Search() {
     }
     else {
       if (checkCategory(categoryJSON)) {
-        fetch(`http://${currentUrl}:5000/search/title=${title}&&author=${author}&&type=${JSON.stringify(categoryJSON)}&&s_date=${sdate}&&e_date=${edate}`)
+        fetch(`http://${currentUrl}:5000/search/title=${title}&&author=${author}&&type=${JSON.stringify(categoryJSON)}&&s_date=${sdate}&&e_date=${edate}&&status=${JSON.stringify(status)}`)
           .then(res => res.json())
           .then(data => {
             setpubArrayState(data);
@@ -189,7 +200,7 @@ function Search() {
             Object.keys(toReport).forEach(key => {
               toReportJSON.push({ "id": key, "label": key, "value": toReport[key], "color": hslcolors[counter++] });
             })
-            setStatusState(toReportJSON);
+            setDataVisualizationStatus(toReportJSON);
             setLoading(false);
           })
       }
@@ -212,10 +223,20 @@ function Search() {
         <Typography className={classes.input}><strong>Title</strong></Typography><Input className={classes.input} id="title" type="text" value={title} onChange={handleTitleChange}></Input>
         <Typography className={classes.input}><strong>Author</strong></Typography><Input className={classes.input} id="author" type="text" value={author} onChange={handleAuthorChange}></Input>
         <FormControl className={classes.input}>
-          <FormLabel><strong>Category Filter</strong></FormLabel>
-          <FormGroup>
+          <FormLabel><strong>Category</strong></FormLabel>
+          <Button className={classes.subButton} variant="contained" color='primary' onClick={() => setCategoryForm(true)}>Select Category</Button>
+          <Dialog open={categoryForm} onClose={() => setCategoryForm(false)}>
+            <DialogTitle>Category Selector</DialogTitle>
+            <DialogContent>
+              {categoryArray.map(this_category => <FormControlLabel control={<Checkbox checked={categoryJSON[this_category]} onChange={handleCategoryChange} value={this_category} />} label={this_category}></FormControlLabel>)}
+            </DialogContent>
+            <DialogActions>
+              <Button className={classes.subButton} onClick={handleCategoryFormClose}>Save</Button>
+            </DialogActions>
+          </Dialog>
+          {/* <FormGroup>
             {categoryArray.map(cate => <FormControlLabel control={<Checkbox checked={categoryJSON[cate]} onChange={handleCategoryChange} value={cate} />} label={cate} ></FormControlLabel>)}
-          </FormGroup>
+          </FormGroup> */}
         </FormControl>
         <FormControl>
           <TextField className={classes.input} id="sdate" label="Start Date" type="date" value={sdate} onChange={handle_sdate_Change} InputLabelProps={{
@@ -225,8 +246,15 @@ function Search() {
             shrink: true,
           }}></TextField>
         </FormControl>
+        <FormControl className={classes.input}>
+          <FormLabel><strong>Status</strong></FormLabel>
+          <FormGroup>
+            <FormControlLabel control={<Checkbox checked={status['published']} onChange={() => setStatus({...status, published: !status.published})} value="published" />} label="Published"></FormControlLabel>
+            <FormControlLabel control={<Checkbox checked={status['advanced']} onChange={() => setStatus({...status, advanced: !status.advanced})} value="advanced" />} label="Advanced"></FormControlLabel>
+          </FormGroup>
+        </FormControl>
         <Button className={classes.subButton} variant="contained" color='primary' onClick={handleSubmit}>
-          Search </Button>
+        Search </Button>
       </Container>
       <Container>
         {isLoading == true ? <CircularProgress /> :
@@ -258,7 +286,7 @@ function Search() {
               <Container className={classes.pie_chart}>
                 <ResponsivePie
                   className={classes.chart}
-                  data={status}
+                  data={dataVisualizationStatus}
                   margin={{ top: 25, bottom: 25, left: 25, right: 25 }}
                   innerRadius={0.5}
                   padAngle={0.7}
@@ -283,7 +311,7 @@ function Search() {
           </Tabs>
         }
       </Container>
-    </div>
+    </div >
   );
 }
 
