@@ -120,7 +120,7 @@ exports.check = async function (req, res) {
         'Error': [],
         'Existing': []
     }
-    if(dois.length == 0) res.send(checkStatus);
+    if (dois.length == 0) res.send(checkStatus);
     for (let i = 0; i < dois.length; i++) {
         let _DOI = dois[i];
         console.log("Processing " + _DOI);
@@ -281,6 +281,7 @@ exports.validation = async function (req, res) {
 
 exports.insert_one = async function (req, res) {
     const _info = req.body;
+    console.log(_info['status'])
     Category.find({ Category: _info['type'] }, function (err, categoryTest) {
         if (categoryTest == undefined || categoryTest == 0) {
             const newCategory = new Category({ 'Category': _info['type'] });
@@ -290,7 +291,7 @@ exports.insert_one = async function (req, res) {
         }
     })
     const saveResult = new Publication({
-        'Title': _info['title'], 'Authors': _info['author'], 'DOI': _info['doi'], 'Type': _info['type'], 'Created_Date': _info['date']
+        'Title': _info['title'], 'Authors': _info['author'], 'DOI': _info['doi'], 'Type': _info['type'], 'Created_Date': _info['date'], 'Status': _info['status']
     });
     saveResult.save(function (err) {
         if (err) throw err;
@@ -309,7 +310,7 @@ exports.insert = async function (req, Res) {
     for (let i = 0; i < info.length; i++) {
         const _info = info[i];
         const saveResult = new Publication({
-            'Title': _info['Title'], 'Authors': _info['Author'], 'DOI': _info['DOI'], 'Type': _info['Type'], 'Created_Date': _info['Created'], 'Citation': _info['Citation']
+            'Title': _info['Title'], 'Authors': _info['Author'], 'DOI': _info['DOI'], 'Type': _info['Type'], 'Created_Date': _info['Created'], 'Citation': _info['Citation'], 'Status': 'published'
         });
         if (!tem_category.includes(_info['Type'])) {
             tem_category.push(_info['Type']);
@@ -366,6 +367,22 @@ exports.advancedSearch = function (req, res) {
     _sdate = req.params.s_date;
     _edate = req.params.e_date;
 
+    let _status = [];
+    let StatusJSON = JSON.parse(req.params.status);
+    for (let key in StatusJSON) {
+        if (StatusJSON[key] === true) {
+            _status.push({ Status: `${key}` });
+        }
+    }
+
+    if (_status.length === 0) {
+        console.log(_status)
+        _status = {
+            Status: 'none'
+        }
+    }
+
+
     let _type = [];
     let TypeJSON = JSON.parse(req.params.type);
     for (let key in TypeJSON) {
@@ -373,15 +390,17 @@ exports.advancedSearch = function (req, res) {
             _type.push({ Type: `${key}` });
         }
     }
-    if (_type == []) res.send("Please select at least one category to start searching.");
-
+    if (_type == []) {
+        console.log(_type)
+        _type = {
+            Type: 'none'
+        }
+    }
     if (_author === undefined) {
         _author = '';
     }
     if (_title === undefined) {
         _title = '';
-    }
-    if (_type === []) {
     }
     if (_sdate === undefined) {
         _sdate = '1995-12-08';
@@ -397,6 +416,7 @@ exports.advancedSearch = function (req, res) {
             { Title: { $regex: _title, $options: 'i' } },
             { Authors: { $regex: _author, $options: 'i' } },
             { $or: _type },
+            { $or: _status },
             {
                 Created_Date: {
                     '$gte': _sdate,
