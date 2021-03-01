@@ -8,6 +8,7 @@ const publication_schema = Schema({
     Type: String,
     Created_Date: String,
     Citation: String,
+    Status: String
 });
 
 module.exports = mongoose.model('Publication', publication_schema);
